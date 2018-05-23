@@ -1,0 +1,22 @@
+﻿
+@model MANvFAT_Football.Models.Repositories.AuditLogsExt
+<table class="table table-striped">
+    <tr>
+        <th>Log Date/Time</th>
+        <td>@Model.LogDate.ToString("dd/MMM/yyyy HH:mm:ss")</td>
+    </tr>
+    <tr>
+        <th>Username</th>
+        <td>@Model.Username</td>
+    </tr>
+    <tr>
+        <th>Audit Log Short Description</th>
+        <td>@Model.AuditLogShortDesc</td>
+    </tr>
+    <tr>
+        <th>Audit Log Long Description</th>
+        <td>
+            @Html.Raw(Model.AuditLogLongDesc)
+        </td>
+    </tr>
+</table>

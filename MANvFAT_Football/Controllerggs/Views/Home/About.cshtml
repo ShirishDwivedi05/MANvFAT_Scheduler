@@ -1,0 +1,214 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+@Styles.Render("~/Content/css-registration")
+<div id="home-slider" style="display:none;"></div>
+
+@*@{
+        string _Is64BitProcess = ((bool)ViewBag.Is64BitProcess ? "Yes" : "No");
+        string _Is64BitOperatingSystem = ((bool)ViewBag.Is64BitOperatingSystem ? "Yes" : "No");
+
+    }
+
+    Is64BitProcess: @Html.Label(_Is64BitProcess)
+
+    Is64BitOperatingSystem: @Html.Label(_Is64BitOperatingSystem)*@
+
+
+<div class="Reg home-splash">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <section id="aboutus" class="clsAbout">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>
+                                About MAN v FAT Football
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <h2>WANT TO JOIN MAN v FAT FOOTBALL?</h2>
+                        <p>MAN v FAT Football is for men everywhere who love football and who want to lose weight. During the leagues MAN v FAT supports you to lose weight and each week as well as playing a 30-minute football match, you also weigh in before the game. You and your team earn bonus goals from the weigh-in results which are added to the score on the football pitch. Uniquely, MAN v FAT Football rewards players not just for winning games but for losing weight.</p>
+
+                        <p><b>If you're a bloke who enjoys football and wants to lose weight then this is for you. If you want more information or to ask any questions then <a href="https://talk.manvfat.com/t/what-is-man-v-fat-football-faq/8027" target="_blank">take a look here.</a></b></p>
+                        <h2>WANT TO BRING A LEAGUE TO YOUR AREA?</h2>
+                        <p>MAN v FAT Football leagues started in the UK in January 2016 as a scheme with Solihull Council. In that scheme 95% of players lost weight and 62% hit their 5% weight loss target. We're using all of the information we've collected to improve the performance of the leagues and to help even more men. We are the first weight loss scheme to ever be officially endorsed by the Football Association. Due to popular demand the leagues are now launching all around the UK.</p>
+                        <p>If you are a football club, company or local authority who would like to work with us to bring MAN v FAT Football to your area then please contact us on <a href="mailto:football@manvfat.com">football@manvfat.com</a> or call us on <a href="tel:08451630042">0845 163 0042</a>. </p>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <br />
+                <div>
+                    <section id="faqs" class="clsFaqs">
+                        <h2>Your questions answered</h2>
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <span><i class="fa fa-futbol-o" aria-hidden="true"></i></span>
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            What is MAN v FAT Football?
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        <p class="lead">Weigh, play, lose, win</p>
+                                        <p>
+                                            MAN v FAT Football is a football league only for guys who want to lose weight. Every player is
+                                            in the same situation and wants the same thing - to enjoy football, lose weight and get healthier.
+                                            Uniquely, the league is decided not just on points won, but pounds lost. We give support to
+                                            every player with unique resources, inspiration and 24/7 support to help you lose weight, get
+                                            fitter and enjoy the beautiful game.
+                                        </p>
+                                        <strong>Read one of our player’s views on the league <a href="https://manvfat.com/whats-it-like-to-be-part-of-a-man-v-fat-football-league/" target="_blank" title="Read one of our player’s views on the league here">here</a></strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingTwo">
+                                    <span><i class="fa fa-gbp" aria-hidden="true"></i></span>
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            How much does it cost?
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="panel-body">
+                                        <p>
+                                            <b>For live leagues</b> (these are leagues that are currently running) it costs £9.99 to register as a player, or £17.99 with a copy of the five star rated The MAN v FAT Weight Loss Manual (RRP £12.99). You then sign up to a league and pay £25 per month.
+                                        </p>
+                                        <p>
+                                            <b>For planned leagues</b> (these are leagues that will become live leagues when we have enough players signed up to start them) it costs £1 to register as a player. We take this payment to reserve your place and so that we can verify your identity. When we have enough players to start the league you would be charged the remaining £8.99 to register fully and when your league started you would pay £25 per month. If you cancel the direct debit mandate with us then we assume that you do not want to be part of the league any more and you are deleted from the system.
+                                        </p>
+                                        <p>
+                                            <b>If you are joining a free league</b> then you pay nothing to register or play - your costs have already been covered by a funder, most often your local authority or a national funding body such as Sport England. Sometimes the funder asks us to take a deposit for players to ensure that they turn up - if this is the case then this deposit will be refunded providing you attend (which seems fair!)
+                                        </p>
+                                        <p>
+                                            The cost to your health of not signing up is potentially tragic.
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingThree">
+                                    <span><i class="fa fa-question-circle-o" aria-hidden="true"></i></span>
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            How much will I lose?
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="panel-body">
+                                        That depends on how much you put into the league and how much of the support you take (the
+                                        more, the better!) In an assessed 14 week pilot scheme run by Solihull Council, players lost 22lbs
+                                        on average, with 62% hitting their 5% body weight target. The maximum weight lost by one
+                                        player was 67lbs and the maximum bodyweight percentage lost was 26%. 95% of players lose
+                                        weight.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingFour">
+                                    <span><i class="fa fa-users" aria-hidden="true"></i></span>
+
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            Why do men join the leagues?
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                                    <div class="panel-body">
+                                        Because they love football and hate being fat. They see all the things that their weight is cheating
+                                        them of: the ability to play with their children (or how it’s embarrassing their kids), how much
+                                        their body hurts with aching joints, snoring and wheezing every time they climb the stairs, never
+                                        finding any clothes that fit... the list goes on. All of them join with the motivation to lose weight
+                                        and do so in a way that is truly enjoyable and inspiring.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingFive">
+                                    <span><i class="fa fa-times" aria-hidden="true"></i></span>
+
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            What if I am not fit enough to play?
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                                    <div class="panel-body">
+                                        Because the leagues are not just decided on the games won on the pitch, but also on the weight
+                                        lost off it, you can join a team as a non-playing member. This means that you weigh in every
+                                        week and support your team. Your weight loss counts towards your team’s success. When you’ve
+                                        lost enough weight to feel comfortable joining in then you can get involved on the pitch.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingSix">
+                                    <span><i class="fa fa-user-plus" aria-hidden="true"></i></span>
+
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Can I join on my own?
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                                    <div class="panel-body">
+                                        Approximately 80% of players do. We put you into teams and help you to get to know the other players. Equally, if you have friends, colleagues or family who also want to lose weight then join with them and you can be in the same team. We even pay you a fiver for every player you introduce to the league.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingSeven">
+                                    <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                            Where do you have leagues?
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                                    <div class="panel-body">
+                                        We have a number of live leagues and free leagues all over the country. Take a look at the leagues page on this site to get a full run-down. We also have a number of Planned leagues where we are recruiting players and will launch a league in that area when we have enough guys signed up. Give us a call if you're a football club, company or local authority who wants to bring a league to your area - <a href="tel:08451630042">0845 163 0042</a>.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingEight">
+                                    <span><i class="fa fa-commenting" aria-hidden="true"></i></span>
+
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                            I have another question
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+                                    <div class="panel-body">
+                                        Take a look at our full list of FAQ <a href="http://bit.ly/MVFFFAQ" target="_blank">here</a>. If that doesn't answer your question give us a call on <a href="tel:08451630042">0845 163 0042</a> or email us on <a href="mailto:football@manvfat.com">football@manvfat.com</a> and we’ll do our best to help.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!-- End Container -->
+        </div>
+    </div>
+</div>
+

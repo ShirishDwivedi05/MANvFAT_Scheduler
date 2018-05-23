@@ -1,0 +1,121 @@
+﻿@model MANvFAT_Football.Models.Repositories.StatEmail
+<html>
+<head>
+    <link href="http://test.manvfatfootball.org/Content/bootstrap.min.css" rel="stylesheet">
+    <script src="http://test.manvfatfootball.org/Scripts/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <div class="row">
+        @*<div class="col-md-8 col-md-offset-2">*@
+            <div style="width: 66.66666667%; margin-left: 16.66666667%;">
+
+                @foreach (var item in Model.ListStatEmail_League)
+            {
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <table class="table table-striped table-responsive">
+                                <tr>
+                                    <th colspan="3" class="text-center text-success text"><h1>@item.LeagueName</h1></th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Total Players Registered </td>
+                                    <td>@item.TotalRegisteredPlayers</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Total Paid</td>
+                                    <td>@item.TotalPaidPlayers</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Total Un-Paid</td>
+                                    <td>@item.TotalUnPaidPlayers</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Player Paid</h2>
+                            <table class="table table-striped table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item_paid in item.ListLeaguePaidPlayers)
+                                    {
+                                        <tr>
+                                            <td>@item_paid.FullName</td>
+                                            <td>@item_paid.EmailAddress</td>
+                                            <td>@item_paid.Mobile</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Player Un-Paid</h2>
+                            <table class="table table-striped table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item_unpaid in item.ListLeagueUnPaidPlayers)
+                                    {
+                                        <tr>
+                                            <td>@item_unpaid.FullName</td>
+                                            <td>@item_unpaid.EmailAddress</td>
+                                            <td>@item_unpaid.Mobile</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                }
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Player Deleted</h2>
+                        <table class="table table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListPlayersDeleted)
+                                {
+                                    <tr>
+                                        <td>@item.FullName</td>
+                                        <td>@item.EmailAddress</td>
+                                        <td>@item.Mobile</td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+</body>
+</html>

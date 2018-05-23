@@ -1,0 +1,59 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.MessagesExt>
+@using MANvFAT_Football.Models.Enumerations
+
+@if (Model.Count > 0)
+{
+    TypeOfMessage _typeOfMsg = Model.FirstOrDefault().TypeOfMsg;
+    <div class="row">
+        <div class="col-md-12">
+            @if (_typeOfMsg == TypeOfMessage.Error)
+            {
+                <div class="text-danger">Please Correct the following to continue</div>
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach (var item in Model)
+                        {
+                            <li>@item.Message</li>
+                        }
+                    </ul>
+                </div>
+            }
+            else if (_typeOfMsg == TypeOfMessage.Success)
+            {
+
+                <div class="alert alert-success">
+                    <ul>
+                        @foreach (var item in Model)
+                        {
+                            <li>@item.Message</li>
+                        }
+                    </ul>
+                </div>
+            }
+            else if (_typeOfMsg == TypeOfMessage.Warning)
+            {
+
+                <div class="alert alert-warning">
+                    <ul>
+                        @foreach (var item in Model)
+                        {
+                            <li>@item.Message</li>
+                        }
+                    </ul>
+                </div>
+            }
+            else if (_typeOfMsg == TypeOfMessage.Information)
+            {
+
+                <div class="alert alert-info">
+                    <ul>
+                        @foreach (var item in Model)
+                        {
+                            <li>@item.Message</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+}

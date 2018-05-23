@@ -1,0 +1,56 @@
+﻿
+<script>
+    function LeagueImport_OnSuccess(e) {
+
+            $(".clsSuccessUpload").slideDown();
+    }
+
+    function LeagueImport_OnError(e) {
+        var response = e.response.data();
+        alert("ERROR e = " + response);
+    }
+
+    function LeagueImport_OnProgress(e) {
+            // Array with information about the uploaded files
+            //var files = e.files;
+
+            //console.log(e.percentComplete);
+        $(".clsSuccessUpload").slideUp();
+        }
+
+</script>
+
+<h2>Import League Data</h2>
+<div class="alert alert-info">
+    Click "Select Excel File..." button or Drag &amp; Drop Excel file, System Upload the file and start Processing
+</div>
+<div class="text-warning">
+    Only Excel Extensions i.e. ".xls or .xlsx" are allowed
+</div>
+
+
+
+@(Html.Kendo().Upload()
+    .Name("LeagueExcelFile")
+    .Multiple(false)
+    .ShowFileList(true).Messages(m => m.DropFilesHere("Drop here the Excel file to upload & System will start processing"))
+    .Messages(m => m.Select("Select Excel File..."))
+    .Async(a => a
+    .Save("SaveLeagueExcelImportFile", "Leagues")
+    .AutoUpload(true)
+
+
+
+    )
+    .Events(ev => ev.Error("onError").Success("LeagueImport_OnSuccess").Progress("LeagueImport_OnProgress"))
+
+)
+
+
+<div class="alert alert-success clsSuccessUpload" style="display:none;">
+    <h1>
+        League Data from uploaded Excel file Successfully Processed and Imported to Database.
+    </h1>
+</div>
+
+

@@ -1,0 +1,300 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+<script type="text/javascript">
+
+    function RefreshPlayerWeightLogsGrid(e) {
+        $("#PlayerWeightLogsGrid").data("kendoGrid").dataSource.read();
+    }
+
+</script>
+
+<style>
+    .k-grid .k-hierarchy-col {
+        width: 10px;
+    }
+
+    #PlayerWeightLogsGrid {
+        font-size: 10px;
+    }
+
+    .clsLessZero {
+        background-color: indianred;
+        color: white;
+    }
+
+    .clsHighZero {
+        background-color: limegreen;
+        color: black;
+    }
+
+    .clsEqualNull {
+        background-color: black;
+        color: white;
+        text-align: center;
+    }
+
+    .clsEqualsDraw {
+        background-color: lightyellow;
+        color: black;
+    }
+
+    .clsEqualZero {
+    }
+
+    .clsClientFooter {
+        text-align: right;
+    }
+
+    .clsGrpFooter {
+        text-align: right;
+    }
+
+    .k-edit-cell {
+        color: black !important;
+    }
+
+    .flgWarning {
+        color: orange;
+    }
+
+    .flgDanger {
+        color: red;
+    }
+
+    .flgSuccess {
+        color: green;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.HiddenFor(m=>m.PlayerWeightLogStats.RegWeight)
+        @Html.HiddenFor(m => m.PlayerWeightLogStats.Reg_BMI)
+
+        <table class="table table-strip table-hover">
+            <tr>
+                <th style="width:400px !important; ">Total Lost Since Joining MVFF</th>
+                <td>@Model.PlayerWeightLogStats.TotalLossToDate.Value.ToString("N2") KG</td>
+            </tr>
+            <tr>
+                <th>Total percentage lost since joining MVFF</th>
+                <td>@Model.PlayerWeightLogStats.TotalPercentageToDate.Value.ToString("N2") %</td>
+            </tr>
+            <tr>
+                <th>BMI change total </th>
+                <td>@Model.PlayerWeightLogStats.BMIToDate.Value.ToString("N2")</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+@(Html.Kendo().Grid<MANvFAT_Football.Models.SelectPlayerWeightWeekLog_Result>
+    ()
+    .Name("PlayerWeightLogsGrid")
+    .DataSource(dataSource => dataSource
+    .Ajax().Events(ev => ev.Sync("RefreshPlayerWeightLogsGrid"))
+    .PageSize(100)
+    .Aggregates(a => {
+
+
+        a.Add(sum => sum.Wk1).Sum();
+        a.Add(sum => sum.Wk2).Sum();
+        a.Add(sum => sum.Wk3).Sum();
+        a.Add(sum => sum.Wk4).Sum();
+        a.Add(sum => sum.Wk5).Sum();
+        a.Add(sum => sum.Wk6).Sum();
+        a.Add(sum => sum.Wk7).Sum();
+        a.Add(sum => sum.Wk8).Sum();
+        a.Add(sum => sum.Wk9).Sum();
+        a.Add(sum => sum.Wk10).Sum();
+        a.Add(sum => sum.Wk11).Sum();
+        a.Add(sum => sum.Wk12).Sum();
+        a.Add(sum => sum.Wk13).Sum();
+        a.Add(sum => sum.Wk14).Sum();
+
+        a.Add(sum => sum.LossWk1).Sum();
+        a.Add(sum => sum.LossWk2).Sum();
+        a.Add(sum => sum.LossWk3).Sum();
+        a.Add(sum => sum.LossWk4).Sum();
+        a.Add(sum => sum.LossWk5).Sum();
+        a.Add(sum => sum.LossWk6).Sum();
+        a.Add(sum => sum.LossWk7).Sum();
+        a.Add(sum => sum.LossWk8).Sum();
+        a.Add(sum => sum.LossWk9).Sum();
+        a.Add(sum => sum.LossWk10).Sum();
+        a.Add(sum => sum.LossWk11).Sum();
+        a.Add(sum => sum.LossWk12).Sum();
+        a.Add(sum => sum.LossWk13).Sum();
+        a.Add(sum => sum.LossWk14).Sum();
+
+        a.Add(sum => sum.TotalLost).Sum();
+    })
+    .Group(g=>g.Add(grp=>grp.TeamName))
+    .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => {
+        model.Id(p => p.PlayerWeightLogID);
+
+    })
+    .Read(read => read.Action("_ReadPlayerWeightLogs", "PlayerWeightWeeks", new { ParamPlayerID = Model.PlayerID }))
+
+
+    .ServerOperation(false)
+    .Batch(true)
+
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.LeagueStartDate).Title("Date").Format("{0:dd/MM/yyyy HH:mm}").Locked(true).Width(100);
+        columns.Bound(p => p.LeagueName).Title("League").Locked(true).Width(200);
+        columns.Bound(p => p.TeamName).Title("Team").Locked(true).Width(100);
+
+        columns.Bound(p => p.RegWeight).Title("Reg").Locked(true).Width(80).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}");
+
+        columns.Bound(p => p.LossPercent).Title("% Lost").Locked(true).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}").Width(100);
+        columns.Bound(p => p.Five_BWV).Title("5% BWV").Locked(true).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}").Width(100);
+        columns.Bound(p => p.Ten_BWV).Title("10% BWV").Locked(true).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}").Width(100);
+        columns.Bound(p => p.CurrentBMI).Title("Current BMI").Locked(true).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}").Width(120);
+
+        columns.Bound(p => p.TotalLost).Title("Total Lost").Locked(true).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+        .ClientTemplate("#if(TotalLost!=null){if(TotalLost<0){#<div class='clsLessZero'>#= kendo.toString(TotalLost,'N2')#</div>#}else if(TotalLost==0){#<div class='clsEqualZero'>#= kendo.toString(TotalLost,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(TotalLost,'N2')#</div> #}}#").Format("{0:N2}")
+                    .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+              .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(100);
+
+
+
+        columns.Bound(p => p.Wk1).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}").Width(60)
+        .ClientTemplate("#if(Wk1==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk1,'N2')#</div>#}#");
+
+
+        columns.Bound(p => p.LossWk1).Title("Loss").HtmlAttributes(new { @style = "text-align:right" })
+        .ClientTemplate("#if(LossWk1!=null){if(LossWk1<0){#<div class='clsLessZero'>#= kendo.toString(LossWk1,'N2')#</div>#}else if(LossWk1==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk1,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk1,'N2')#</div> #}}#").Format("{0:N2}").Width(70)
+        .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>");
+
+        columns.Bound(p => p.Wk2).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}").Width(60)
+         .ClientTemplate("#if(Wk2==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk2,'N2')#</div>#}#");
+
+        columns.Bound(p => p.LossWk2).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+              .ClientTemplate("#if(LossWk2!=null){if(LossWk2<0){#<div class='clsLessZero'>#= kendo.toString(LossWk2,'N2')#</div>#}else if(LossWk2==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk2,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk2,'N2')#</div> #}}#").Format("{0:N2}")
+               .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+
+        columns.Bound(p => p.Wk3).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+        .ClientTemplate("#if(Wk3==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk3,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk3).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk3!=null){if(LossWk3<0){#<div class='clsLessZero'>#= kendo.toString(LossWk3,'N2')#</div>#}else if(LossWk3==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk3,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk3,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk4).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+         .ClientTemplate("#if(Wk4==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk4,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk4).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk4!=null){if(LossWk4<0){#<div class='clsLessZero'>#= kendo.toString(LossWk4,'N2')#</div>#}else if(LossWk4==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk4,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk4,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk5).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+                 .ClientTemplate("#if(Wk5==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk5,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk5).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk5!=null){if(LossWk5<0){#<div class='clsLessZero'>#= kendo.toString(LossWk5,'N2')#</div>#}else if(LossWk5==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk5,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk5,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk6).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+         .ClientTemplate("#if(Wk6==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk6,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk6).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk6!=null){if(LossWk6<0){#<div class='clsLessZero'>#= kendo.toString(LossWk6,'N2')#</div>#}else if(LossWk6==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk6,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk6,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk7).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+         .ClientTemplate("#if(Wk7==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk7,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk7).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+             .ClientTemplate("#if(LossWk7!=null){if(LossWk7<0){#<div class='clsLessZero'>#= kendo.toString(LossWk7,'N2')#</div>#}else if(LossWk7==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk7,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk7,'N2')#</div> #}}#").Format("{0:N2}")
+              .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk8).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+        .ClientTemplate("#if(Wk8==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk8,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk8).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+             .ClientTemplate("#if(LossWk8!=null){if(LossWk8<0){#<div class='clsLessZero'>#= kendo.toString(LossWk8,'N2')#</div>#}else if(LossWk8==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk8,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk8,'N2')#</div> #}}#").Format("{0:N2}")
+              .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk9).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+        .ClientTemplate("#if(Wk9==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk9,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk9).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk9!=null){if(LossWk9<0){#<div class='clsLessZero'>#= kendo.toString(LossWk9,'N2')#</div>#}else if(LossWk9==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk9,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk9,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk10).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+          .ClientTemplate("#if(Wk10==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk10,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk10).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk10!=null){if(LossWk10<0){#<div class='clsLessZero'>#= kendo.toString(LossWk10,'N2')#</div>#}else if(LossWk10==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk10,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk10,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk11).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+          .ClientTemplate("#if(Wk11==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk11,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk11).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+           .ClientTemplate("#if(LossWk11!=null){if(LossWk11<0){#<div class='clsLessZero'>#= kendo.toString(LossWk11,'N2')#</div>#}else if(LossWk11==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk11,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk11,'N2')#</div> #}}#").Format("{0:N2}")
+            .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk12).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+          .ClientTemplate("#if(Wk12==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk12,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk12).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk12!=null){if(LossWk12<0){#<div class='clsLessZero'>#= kendo.toString(LossWk12,'N2')#</div>#}else if(LossWk12==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk12,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk12,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk13).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+          .ClientTemplate("#if(Wk13==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk13,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk13).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk13!=null){if(LossWk13<0){#<div class='clsLessZero'>#= kendo.toString(LossWk13,'N2')#</div>#}else if(LossWk13==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk13,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk13,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+        columns.Bound(p => p.Wk14).HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+          .ClientTemplate("#if(Wk14==null){#<div class='clsEqualNull'>Missed</div>#}else{#<div>#= kendo.toString(Wk14,'N2')#</div>#}#").Width(70);
+
+        columns.Bound(p => p.LossWk14).Title("Loss").HtmlAttributes(new { @style = "text-align:right" }).Format("{0:N2}")
+            .ClientTemplate("#if(LossWk14!=null){if(LossWk14<0){#<div class='clsLessZero'>#= kendo.toString(LossWk14,'N2')#</div>#}else if(LossWk14==0){#<div class='clsEqualZero'>#= kendo.toString(LossWk14,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(LossWk14,'N2')#</div> #}}#").Format("{0:N2}")
+             .ClientFooterTemplate("<div class='clsClientFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>")
+          .ClientGroupFooterTemplate("<div class='clsGrpFooter'>#if(sum!=null){if(sum<0){#<div class='clsLessZero'>#= kendo.toString(sum,'N2')#</div>#}else if(sum==0){#<div class='clsEqualZero'>#= kendo.toString(sum,'N2')#</div>#} else {#<div class='clsHighZero'>#= kendo.toString(sum,'N2')#</div> #}}#</div>").Width(70);
+
+
+
+        columns.Bound(p => p.PlayerID).Hidden(true);
+
+    })
+
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 50, 100, 200 }))
+    .Sortable()
+    .Groupable()
+    .Selectable()
+    //.Events(ev=>ev.DataBinding("PlayerWeightsGrid_OnDataBinding"))
+    .Navigatable()
+        .Scrollable(scr => scr.Height(700))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+
+)
+
+

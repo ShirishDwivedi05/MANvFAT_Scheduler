@@ -1,0 +1,19 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+
+<script>
+    $(document).ready(function () {
+
+        LoadNotifications();
+
+    });
+
+    function LoadNotifications() {
+        $(".clsNotificationsData").load("/Member/GetPlayerNotifications/" + $("#hdnDashboardURL").val(),
+            { PlayerID: $("#hdnPlayerID").val() }).show();
+    }
+
+ 
+
+</script>
+
+<div class="clsNotificationsData"></div>

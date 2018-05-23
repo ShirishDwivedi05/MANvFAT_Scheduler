@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("Team1_ID")
+              .HtmlAttributes(new { style = "width:100%" })
+              .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("TeamName")
+              .DataValueField("Team1_ID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                  read.Action("GetTeams1", "DropDownLists");
+              });
+
+})
+)

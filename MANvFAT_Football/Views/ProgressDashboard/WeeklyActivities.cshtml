@@ -1,0 +1,72 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+
+
+        <div class="food_hdr">
+            <h3>WEEKLY ACTIVITY</h3>
+            <div class="arrow-links">
+                <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp2"></i>
+            </div>
+            <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+        </div>
+      
+
+         <div class="food_sec_in collapse_in2 collapse in" id="collp2"> 
+             <div class="coll-2-content">
+
+                 <div class="box">
+                     <a href="#" onclick="return PreviousWeek();">
+                         <i class="fas fa-angle-left"></i>
+                     </a>
+
+                     <h3>
+                         <a href="#" onclick="SetCurrentWeek();"><span class="spCurrentWeek" id="weekheader">Week</span></a>
+                     </h3>
+                     <a href="#" onclick="return NextWeek();">
+                         <i class="fas fa-angle-right "></i>
+                     </a>
+
+                     <i class="fas fa-share-alt pull-right clsCursorPointer clsShare" data-toggle="collapse" data-target="#collpShare"></i>
+
+                     <div class="input-append pull-right calandar-put" style="margin-right:20px;">
+
+                         @Html.Kendo().DatePicker().Name("dt_WeeklyActivity").HtmlAttributes(new { style = "width:0px;margin-top:10px!important; padding:0px!important" }).Events(ev => ev.Change("GetWeeklyActivityData")).Value(DateTime.Now.Date).Format("dd MMM yyyy")
+                     </div>
+                     </div>
+                     @*<h3>WEEK 4</h3>
+                     <i class="fas fa-share-alt pull-right"></i>
+                     <div id="datetimepicker1" class="input-append pull-right calandar-put">
+                         <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text" />
+                         <span class="add-on">
+                             <i data-time-icon="far fa-clock" data-date-icon="far fa-calendar-alt" class="fas fa-calendar-alt pull-right">
+                             </i>
+                         </span>
+                     </div>*@
+                     @*<h5 class="pull-right">PLANNED: <span>30MIN </span></h5>
+                     <div class="gap10"></div>
+                     <div class="date-picker">
+                         <span class="sp_btnCurrentWeek"><input type="button" id="btnTodayDate" class="btn btn-primary btn-sm" value="Today" onclick="SetCurrentWeek();" /></span>
+                         <button type="button" class="btn btn-primary btn-xs" onclick="return PreviousWeek();"><span class="glyphicon glyphicon-chevron-left"></span></button>
+
+                         @Html.Kendo().DatePicker().Name("dt_WeeklyActivity").Events(ev => ev.Change("GetWeeklyActivityData")).Value(DateTime.Now.Date).Format("dd MMM yyyy")
+
+                         <button type="button" class="btn btn-primary btn-xs" onclick="return NextWeek();"><span class="glyphicon glyphicon-chevron-right"></span></button>
+
+                         <span class="fa fa-share-alt clsWeeklyShare" onclick="ShowShareDiv(2);"></span>
+                         <span class="fa fa-eye clsWeeklyData" onclick="ShowActivityDiv(2);"></span>
+
+                     </div>*@
+
+                     <div class="clsWeeklyActivityData food_list">
+
+                     </div>
+
+                 </div>
+            <!-- End Container -->
+        </div>
+   
+
+
+
+
+
+

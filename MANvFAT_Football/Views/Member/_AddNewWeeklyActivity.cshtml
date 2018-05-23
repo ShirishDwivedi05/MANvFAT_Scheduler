@@ -1,0 +1,92 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerWeeklyActivityExt
+
+<script>
+    $(document).ready(function () {
+
+        ApplyAutoComplete('@Model.PlayerWeeklyActivityID');
+    });
+</script>
+
+@{
+    var txtActivity_ID = "txtActivity_" + Model.PlayerWeeklyActivityID + "_" + Model.ActivityDate.ToString("dd MMM yyyy");
+    var chkCompleted_ID = "chkCompleted_" + Model.PlayerWeeklyActivityID + "_" + Model.ActivityDate.ToString("dd MMM yyyy");
+}
+<div class="clearfix" id="divWeeklyActivity_@Model.PlayerWeeklyActivityID" style="padding:13px!important">
+
+    <input id="hdntxtActivity_@Model.PlayerWeeklyActivityID" value="" type="hidden">
+    <input type="hidden" id="hdnActivityTimeID_@Model.PlayerWeeklyActivityID" value="0" />
+    <input id="hdnchkCompeleted_@Model.PlayerWeeklyActivityID" type="hidden">
+    <!--new section-->
+    <div id="main_container" style="width:100%">
+        <div style="width:100%">
+            <input class="clstxtActivity clsActivity k-textbox inp-change-background form-control k-input clsActivity_@Model.PlayerWeeklyActivityID" id="txtActivity_@Model.PlayerWeeklyActivityID" name="txtActivity_@Model.PlayerWeeklyActivityID" onblur="SaveWData('@txtActivity_ID');" style="width:100%">
+        </div>
+        <div style="width:45%;float:left">
+            @(Html.Kendo().DropDownList()
+                            .Name("ActivityTimeID_" + Model.PlayerWeeklyActivityID)
+                            .OptionLabel("Enter activity length")
+                            .HtmlAttributes(new { @id = "ActivityTimeID_" + Model.PlayerWeeklyActivityID, @class = "clstxtActivity clsActivity k-textbox inp-change-background form-control k-input" })
+                            .DataValueField("Value")
+                            .DataTextField("Text")
+                            .Events(ev => ev.Change("ActivityTimeID_OnChange"))
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetWeeklyActivityTime", "DropDownLists", new { ParamActivityTime = Model.ActivityTime });
+                                });
+                            })
+            )
+        </div>
+        <div style="width:45%;float:left">
+            @(Html.Kendo().DropDownList()
+                                              .Name("ddlCompleted_" + Model.PlayerWeeklyActivityID)
+                                              .DataTextField("Text")
+                                              .DataValueField("Value")
+                                             .HtmlAttributes(new { @id = "ddlCompleted_" + @Model.PlayerWeeklyActivityID, @class = "k-textbox inp-change-background form-control k-input ddl_target" })
+                                              .BindTo(new List<SelectListItem>()
+                                              {
+                                                  new SelectListItem() {
+                                                    Text = "Status", Value ="false"
+                                                  },
+                                                  new SelectListItem() {
+                                                    Text = "Achieved", Value ="true"
+                                                  },
+                                                  new SelectListItem() {
+                                                    Text = "Not Completed", Value ="false"
+                                                  }
+                                              })
+
+            )
+        </div>
+        <div style="width:10%;float:left">
+            <span id="remove_@Model.PlayerWeeklyActivityID" class="glyphicon glyphicon-remove-sign text-danger clsRemoveActivity" title="Click to remove this activity" onclick="RemoveActivity('@Model.PlayerWeeklyActivityID')"></span>
+
+
+        </div>
+    </div>
+    <!--new section end-->
+    <div class="date-and-time">
+        @*<div class="date">
+                    <span class="date-weekday">&nbsp;</span>
+                    <span class="date-daymonth">&nbsp;</span>
+                </div>
+                <div class="time-spent">
+                    <label class="sr-only" for="">Time:</label>
+
+
+                </div>
+
+            </div>*@
+
+
+
+        <span id="saved_txtActivity_@Model.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+        <input style="display:none" class="" id="chkCompleted_@Model.PlayerWeeklyActivityID" name="chkCompleted_@Model.PlayerWeeklyActivityID" onchange="SaveWData('@txtActivity_ID');" value="true" type="checkbox" @if (Model.Completed) { <text> checked="checked" </text>     }>
+
+        <label class="" for="chkCompleted_@Model.PlayerWeeklyActivityID"></label>
+        <span id="saved_ActivityTimeID_@Model.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+        <span id="saved_chkCompeleted_@Model.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+    </div>
+
+</div>

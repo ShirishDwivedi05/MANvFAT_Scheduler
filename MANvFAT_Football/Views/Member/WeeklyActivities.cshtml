@@ -1,0 +1,71 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+
+
+        <div class="food_hdr">
+            <h3>WEEKLY ACTIVITY</h3>
+            <div class="arrow-links">
+                <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp2"></i>
+            </div>
+            <a href="#"><i class="fas fa-question-circle pull-right"  data-toggle="collapse" data-target="#weekly_help_section"></i></a>
+      
+        </div>
+      
+
+         <div class="food_sec_in collapse_in2 collapse in" id="collp2"> 
+             <div class="coll-2-content">
+                 <div class="food_sec_in2 collapse_in11 collapse" id="weekly_help_section">
+                     <div class="fram-box clearfix">
+                         <div class="frame-head clearfix">
+                             <h2>HOW TO TRACK YOUR Weekly <br>FOOD AND DRINK INTAKE</h2>
+                             <a href="#">
+                                 <i class="fas fa-times fa-times2 pull-right" data-toggle="collapse" data-target="#weekly_help_section"></i>
+                             </a>
+                         </div>
+                         <div class="fram-content" id="scroll-1">
+                             <div class="col-lg-12 clearfix">
+                                 <iframe width="100%" height="315" src="https://www.youtube.com/embed/Rsi0Uqla5cE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                 <div class="gap10"></div>
+                                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+                                 <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                 <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley. </p>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+
+                 <div class="box">
+                     <a href="#" onclick="return PreviousWeek();">
+                         <i class="fas fa-angle-left"></i>
+                     </a>
+
+                     <h3>
+                         <a href="#" onclick="SetCurrentWeek();"><span class="spCurrentWeek" id="weekheader">Week</span></a>
+                     </h3>
+                     <a href="#" onclick="return NextWeek();">
+                         <i class="fas fa-angle-right "></i>
+                     </a>
+
+                     <i class="fas fa-share-alt pull-right clsCursorPointer clsShare" data-toggle="collapse" data-target="#collpShare"></i>
+
+                     <div class="input-append pull-right calandar-put" style="margin-right:20px;">
+
+                         @Html.Kendo().DatePicker().Name("dt_WeeklyActivity").HtmlAttributes(new { style = "width:0px;margin-top:10px!important; padding:0px!important" }).Events(ev => ev.Change("GetWeeklyActivityData")).Value(DateTime.Now.Date).Format("dd MMM yyyy")
+                     </div>
+                     </div>
+                   
+
+                     <div class="clsWeeklyActivityData food_list">
+
+                     </div>
+
+                 </div>
+            <!-- End Container -->
+        </div>
+   
+
+
+
+
+
+

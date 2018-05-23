@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "Header Text";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="marbot10">
+    <h1>Header Text</h1>
+</div>
+
+<div class="alert alert-warning">
+    <h2>
+        Please enter the header text
+    </h2>
+</div>
+
+<script type="text/javascript">
+
+    function RefreshHeaderTextGrid(e) {
+        this.read();
+    }
+
+
+</script>
+
+<style>
+    .k-grid .k-hierarchy-col {
+        width: 10px;
+    }
+</style>
+
+@(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.HeaderTextsExt>()
+        .Name("HeaderTextGrid")
+        .DataSource(dataSource => dataSource
+                .Ajax().Events(ev => ev.Sync("RefreshHeaderTextGrid"))
+        .PageSize(25)
+        .Sort(sort => sort.Add(m => m.HeaderText))
+                .Events(ev => ev.Error("DisplayGridError"))
+        .Model(model => model.Id(p => p.HeaderTextID))
+            .Create(update => update.Action("_Create", "HeaderText"))
+                            .Read(read => read.Action("_Read", "HeaderText"))
+                            .Update(update => update.Action("_Update", "HeaderText"))
+                            .Destroy(update => update.Action("_Destroy", "HeaderText"))
+        .ServerOperation(false)
+        )
+
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.HeaderText).Width(200);
+            columns.Bound(p => p.Link).Width(100);
+            columns.Bound(p => p.DisplayDate).Width(50);
+            columns.Bound(p => p.Display).Width(50);
+            columns.Command(command =>
+            {
+                command.Edit().UpdateText("Insert/Update").HtmlAttributes(new { @class = "btn btn-primary" });
+                command.Destroy().HtmlAttributes(new { @class = "btn btn-danger" });
+            }).Width(172);
+        })
+        .ToolBar(tool =>
+        {
+            tool.Custom().Name("cmdAddNewRecord")
+            .Text("+ Add New Record")
+            .HtmlAttributes(new { @id = "cmdAddNewRecord", @class = "btn btn-primary" });
+        })
+        .Scrollable()
+        .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+        .Sortable()
+        .Navigatable()
+            .Scrollable(scr => scr.Height(350))
+        .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+
+)
+
+<script>
+    $("#cmdAddNewRecord").click(function (e) {
+
+        var table = $("#HeaderTextGrid").data("kendoGrid");
+        var sorting = table.dataSource.sort();
+
+        if (sorting) {
+            table.dataSource.sort(null);
+        }
+        table.addRow();
+        e.preventDefault();
+        //put custom logic here
+
+    });
+</script>
+
+@Scripts.Render("~/bundles/Grid_Resizer-js")

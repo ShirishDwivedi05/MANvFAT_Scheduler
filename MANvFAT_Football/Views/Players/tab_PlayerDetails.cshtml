@@ -1,0 +1,202 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+<style type="text/css">
+    .table th {
+        width: 200px !important;
+    }
+
+    .txtBoxWidth {
+        width: 300px !important;
+        height: 20px !important;
+    }
+
+    
+    #PlayerTeamID-list {
+        /*set the Dropdown list width so it can display items in one line*/
+        width: 700px !important;
+    }
+
+</style>
+
+
+
+<table class="table table-striped">
+ 
+    <tr>
+        <th>@Html.LabelFor(model => model.FirstName, new { @class = "control-label" })<span class="text-danger">*</span></th>
+        <td>
+            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control txtBoxWidth" })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.LastName, new { @class = "control-label" })<span class="text-danger">*</span></th>
+        <td>@Html.TextBoxFor(model => model.LastName, new { @class = "form-control txtBoxWidth" }) @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.EmailAddress, new { @class = "control-label" }) <span class="text-danger">*</span></th>
+        <td>@Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control txtBoxWidth" })  @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.DOB, new { @class = "control-label" }) <span class="text-danger">*</span></th>
+        <td>@Html.Kendo().DatePickerFor(model => model.DOB)  @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.Weight, new { @class = "control-label" }) <span class="text-danger">*</span></th>
+        <td>@Html.Kendo().NumericTextBoxFor(model => model.Weight)  @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.HeightID, new { @class = "control-label" })<span class="text-danger">*</span></th>
+        <td>
+            @(Html.Kendo().DropDownList()
+                                    .Name("HeightID")
+                                    .OptionLabel("-- Select Height --")
+                                    .Filter(FilterType.StartsWith)
+                                    .BindTo(Model.Heights)
+                                    .HtmlAttributes(new { @style = "width:325px" })
+            )<br />
+            @Html.ValidationMessageFor(model => model.HeightID, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+  
+    <tr>
+        <th>@Html.LabelFor(model => model.PositionID, new { @class = "control-label" })<span class="text-danger">*</span></th>
+        <td>
+            @(Html.Kendo().DropDownList()
+                                    .Name("PositionID")
+                                    .OptionLabel("-- Select What's your preferred position? --")
+                                    .Filter(FilterType.StartsWith)
+                                    .BindTo(Model.PreferredPositions)
+                                    .HtmlAttributes(new { @style = "width:325px" })
+            )<br />
+            @Html.ValidationMessageFor(model => model.PositionID, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.SelectedLeagueID, new { @class = "control-label" })</th>
+        <td>
+            @if (Model.SelectedLeagueID.HasValue)
+            {
+                @(Html.Kendo().DropDownList()
+                                            .Name("SelectedLeagueID")
+                                            .OptionLabel("-- Select League? --")
+                                            .Filter(FilterType.StartsWith)
+                                            .BindTo(Model.RegLeagues)
+                                            .HtmlAttributes(new { @style = "width:325px" })
+                )<br />
+                @Html.ValidationMessageFor(model => model.SelectedLeagueID, "", new { @class = "text-danger" })
+            }
+            else
+            {
+                <text>
+                    <div title="League '@Model.SelectedLeagueName' for this player is assigned by Admin, Now you can't edit it from here.'">@Model.SelectedLeagueName</div>
+                </text>
+            }
+
+            @if ((bool)ViewBag.IsAdmin && Model.SelectedLeagueCoachUserID.HasValue)
+            {
+                <button onclick="return cmdRemovePlayerFromLeague('@Model.PlayerID');" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-scissors"></span> Remove Player From League</button>
+            }
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.PlayerTeamID, new { @class = "control-label" })</th>
+        <td>
+            @(Html.Kendo().DropDownList()
+                                        .Name("PlayerTeamID")
+                                        .OptionLabel("-- Non-Teamed Player --")
+                                        .Filter(FilterType.Contains)
+                                        .BindTo(Model.Teams)
+                                        .HtmlAttributes(new { @style = "width:325px" })
+            )<br />
+            @Html.ValidationMessageFor(model => model.PlayerTeamID, "", new { @class = "text-danger" })
+
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.BMI, new { @class = "control-label" })</th>
+        <td>
+            @Html.DisplayTextFor(model => model.BMI)
+            @Html.ValidationMessageFor(model => model.BMI, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.RegWeight, new { @class = "control-label" })</th>
+        <td>
+            @Html.DisplayTextFor(model => model.RegWeight)
+            @Html.ValidationMessageFor(model => model.RegWeight, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.BodyFat, new { @class = "control-label" })</th>
+        <td>
+            @Html.DisplayTextFor(model => model.BodyFat)%
+            @Html.ValidationMessageFor(model => model.BodyFat, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.Active, new { @class = "control-label" })</th>
+        <td>
+            @Html.CheckBoxFor(model => model.Active, new { @checked = "checked" }) <br />
+            @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.Featured, new { @class = "control-label" })</th>
+        <td>
+            @Html.CheckBoxFor(model => model.Featured, new { @checked = "checked" }) <br />
+            @Html.ValidationMessageFor(model => model.Featured, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+
+    <tr>
+        <th>@Html.LabelFor(model => model.RegistrationDate, new { @class = "control-label" })</th>
+        <td>
+            @Model.RegistrationDate.ToString("dd/MM/yyyy")
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.ReferralCode, new { @class = "control-label" })</th>
+        <td>
+            @Model.ReferralCode
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(model => model.IsFunded, new { @class = "control-label" })</th>
+        <td>
+            @if(Model.IsFunded) {<text>Yes</text> } else { <text>No</text> }
+        </td>
+    </tr>
+    @if (Model.LinkedProfilePlayerID.HasValue)
+    {
+    <tr>
+        <th>@Html.LabelFor(model => model.LinkedProfilePlayerID, new { @class = "control-label" })</th>
+        <td>
+            @Html.HiddenFor(model => model.LinkedProfilePlayerID)
+            @if (!string.IsNullOrEmpty(Model.LinkedProfilePlayerEmailAddress))
+            {
+                <text>
+            <a title="Click here to open Player's profile" href="/Players/Details/@Model.LinkedProfilePlayerID" target="_blank">@Model.LinkedProfilePlayerName (@Model.LinkedProfilePlayerEmailAddress)</a>
+            <button type="button" class="btn btn-sm btn-danger" title="Click to remove this Linked Profile" onclick="return cmdRemoveLinkedProfile();"><span class="glyphicon glyphicon-remove-sign"></span></button>
+            </text>
+            }
+        </td>
+    </tr>
+    }
+    
+    <tr>
+        <th>@Html.LabelFor(model => model.AdvertisementID, "How did you hear about MAN v FAT Football?", new { @class = "control-label" })</th>
+        <td>
+            @Model.Advertisement
+        </td>
+    </tr>
+    @if (Model.AdvertisementOther)
+    {
+        <tr>
+            <th>@Html.LabelFor(model => model.AdvertisementOtherDetails, "Other Details", new { @class = "control-label" })</th>
+            <td>
+                @Model.AdvertisementOtherDetails
+            </td>
+        </tr>
+    }
+</table>

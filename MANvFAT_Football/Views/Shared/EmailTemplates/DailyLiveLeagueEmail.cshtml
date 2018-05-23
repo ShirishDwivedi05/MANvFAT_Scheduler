@@ -1,0 +1,161 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.DailyLiveLeagueStats>
+
+@{ 
+    var Result_A = Model.Where(m => m.TotalTeamedPlayers >= 75);
+    var Result_B = Model.Where(m => m.TotalTeamedPlayers >= 55 && m.TotalTeamedPlayers <= 74);
+    var Result_C = Model.Where(m => m.TotalTeamedPlayers <= 54);
+}
+
+<style type="text/css">
+    .tblDailyLiveLeagues {
+        width: 1000px;
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+        .tblDailyLiveLeagues th {
+            text-align: center;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .tblDailyLiveLeagues td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+    .tdLeft {
+        text-align: left;
+        width: 400px;
+    }
+
+    .tdRight {
+        text-align: center;
+    }
+
+    .bg_Amber {
+        background-color: orange;
+        color: black;
+    }
+
+    .bg_Green {
+        background-color: green;
+        color: white;
+    }
+
+    .bg_Red {
+        background-color: red;
+        color: white;
+    }
+</style>
+<div>
+    <h2>Teamed Players 75+</h2>
+</div>
+<table class="tblDailyLiveLeagues">
+    <thead>
+        <tr>
+            <th>League Name</th>
+            <th>Current Week</th>
+            <th>Total Players</th>
+            <th>Teamed Players</th>
+            <th>Ghost Players</th>
+            <th>Non-Teamed Players </th>
+            <th>Yesterday<br />Registered</th>
+            <th>Yesterday<br />Paid to Register</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Result_A)
+        {<text>
+        <tr>
+            <td class="tdLeft"><a href="@item.LeagueLink" title="Click to open League Details" target="_blank">@item.LeagueName</a></td>
+            <td class="tdRight">@item.LeagueCurrentWeek_RegDate</td>
+            <td class="tdRight">@item.TotalLeaguePlayers</td>
+            <td class="tdRight @item.TeamPlayers_Cell_BG">@item.TotalTeamedPlayers</td>
+            <td class="tdRight">@item.TotalLeagueGhostPlayers</td>
+            <td class="tdRight">@item.TotalNonTeamedPlayers</td>
+            <td class="tdRight">@item.TotalRegisteredYesterday</td>
+            <td class="tdRight">@item.TotalPaidToRegisterYesterday</td>
+
+        </tr>
+
+        </text>}
+       
+    </tbody>
+</table>
+<hr />
+<div>
+    <h2>Teamed Players between 55 and 74</h2>
+</div>
+<table class="tblDailyLiveLeagues">
+    <thead>
+        <tr>
+            <th>League Name</th>
+            <th>Current Week</th>
+            <th>Total Players</th>
+            <th>Teamed Players</th>
+            <th>Ghost Players</th>
+            <th>Non-Teamed Players </th>
+            <th>Yesterday<br />Registered</th>
+            <th>Yesterday<br />Paid to Register</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Result_B)
+        {<text>
+            <tr>
+                <td class="tdLeft"><a href="@item.LeagueLink" title="Click to open League Details" target="_blank">@item.LeagueName</a></td>
+                <td class="tdRight">@item.LeagueCurrentWeek_RegDate</td>
+                <td class="tdRight">@item.TotalLeaguePlayers</td>
+                <td class="tdRight @item.TeamPlayers_Cell_BG">@item.TotalTeamedPlayers</td>
+                <td class="tdRight">@item.TotalLeagueGhostPlayers</td>
+                <td class="tdRight">@item.TotalNonTeamedPlayers</td>
+                <td class="tdRight">@item.TotalRegisteredYesterday</td>
+                <td class="tdRight">@item.TotalPaidToRegisterYesterday</td>
+
+            </tr>
+
+        </text>}
+
+    </tbody>
+</table>
+
+<hr />
+<div>
+    <h2>Teamed Players Less than 55</h2>
+</div>
+<table class="tblDailyLiveLeagues">
+    <thead>
+        <tr>
+            <th>League Name</th>
+            <th>Current Week</th>
+            <th>Total Players</th>
+            <th>Teamed Players</th>
+            <th>Ghost Players</th>
+            <th>Non-Teamed Players </th>
+            <th>Yesterday<br />Registered</th>
+            <th>Yesterday<br />Paid to Register</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Result_C)
+        {<text>
+            <tr>
+                <td class="tdLeft"><a href="@item.LeagueLink" title="Click to open League Details" target="_blank">@item.LeagueName</a></td>
+                <td class="tdRight">@item.LeagueCurrentWeek_RegDate</td>
+                <td class="tdRight">@item.TotalLeaguePlayers</td>
+                <td class="tdRight @item.TeamPlayers_Cell_BG">@item.TotalTeamedPlayers</td>
+                <td class="tdRight">@item.TotalLeagueGhostPlayers</td>
+                <td class="tdRight">@item.TotalNonTeamedPlayers</td>
+                <td class="tdRight">@item.TotalRegisteredYesterday</td>
+                <td class="tdRight">@item.TotalPaidToRegisterYesterday</td>
+
+            </tr>
+
+        </text>}
+
+    </tbody>
+</table>

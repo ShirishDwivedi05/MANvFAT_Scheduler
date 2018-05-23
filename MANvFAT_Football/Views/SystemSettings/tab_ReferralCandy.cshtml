@@ -1,0 +1,19 @@
+﻿@model MANvFAT_Football.Models.Repositories.SystemSettingsExt
+
+<table class="table">
+    <tr>
+        <th>@Html.LabelFor(m => m.ReferralCandy_AccessID, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().TextBoxFor(m => m.ReferralCandy_AccessID).HtmlAttributes(new { @style = "width: 400px;" })
+            @Html.ValidationMessageFor(m => m.ReferralCandy_AccessID, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+
+    <tr>
+        <th>@Html.LabelFor(m => m.ReferralCandy_SecreteKey, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().TextBoxFor(m => m.ReferralCandy_SecreteKey).HtmlAttributes(new { @style = "width: 400px;" })
+            @Html.ValidationMessageFor(m => m.ReferralCandy_SecreteKey, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+</table>

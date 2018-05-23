@@ -1,0 +1,249 @@
+﻿@if (Request.IsAuthenticated)
+{
+    //Following logic used to Display Back button on Menu Bar by getting string data from View bag set when calling that View from Controller
+    int menuItem = 0;
+    string[] menuParam = new string[2];
+    if (ViewData["BacktoButtonOnMenu"] != null)
+    {
+        menuParam = ViewData["BacktoButtonOnMenu"].ToString().ToLower().Split('_');
+
+        if (menuParam[0].Equals("displayclientmenu"))
+        {
+            menuItem = 1; //if it is on Client Edit Screen
+        }
+        else if (menuParam[0].Equals("clientdetails"))
+        {
+            menuItem = 2;
+        }
+        else
+        {
+            menuItem = 0;
+        }
+    }
+
+    //Following set in BaseController
+    bool IsAdmin = Convert.ToBoolean(ViewBag.IsAdmin);
+    bool IsLeagueViewer = Convert.ToBoolean(ViewBag.IsLeagueViewer);
+    bool IsCoach = Convert.ToBoolean(ViewBag.IsCoach);
+    bool DownForMaintenance = Convert.ToBoolean(ViewBag.DownForMaintenance);
+    string DownForMaintenance_Time = Convert.ToString(ViewBag.DownForMaintenance_Time);
+    int TotalNewAlerts = Convert.ToInt32(ViewBag.TotalNewAlerts);
+    <text>
+        <style>
+            /* this css Class will be used to fix the navigation header*/
+            .FixHeader {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 99999;
+                -webkit-transform: translate3d(0,0,0);
+                -o-transform: translate3d(0,0,0);
+            }
+
+            .navbar {
+            }
+        </style>
+
+    <style>
+        .clsAlertMenu {
+            background: orange !important;
+            border-radius: 30px;
+            color: white !important;
+        }
+
+            .clsAlertMenu a {
+                color: white !important;
+            }
+
+                .clsAlertMenu a:hover {
+                    color: black !important;
+                }
+    </style>
+
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">
+
+                        @*<div class="col-sm-2">
+                                <img src="~/Images/manvfat_football_logo.png" style="width:50%; margin-top:-6%;" />
+                            </div>
+                            <div class="col-sm-10">*@
+                        MANvFAT Football
+                        @*</div>*@
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav" style="margin-top:7px;">
+
+                        <li><a href="/Admin">Home</a></li>
+                        @if (!IsLeagueViewer)
+    {
+
+                    <li><a href="/Leagues">Leagues</a></li>
+                    <li><a href="/Teams">Teams</a></li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Players<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/Players">Players List</a></li>
+                            @if (IsAdmin)
+        {
+                    <li><a href="/Players/NoTeamedPlayers">No Teamed Players</a></li>
+                    <li><a href="/PlayersArchive/Index">Players Archive</a></li>
+                    <li><a href="/Players/OnMaintenance">Player On Maintenance</a></li>
+                    <li><a href="/FacebookLeads/Index">Facebook Leads</a></li>
+}
+                        </ul>
+                    </li>
+if (IsAdmin && MANvFAT_Football.Helpers.SecurityUtils.Enable_PremiumDashboard)
+{
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Premium Dashboard<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/MemberToolsBenefits/Index">Tool &amp; Benefits</a></li>
+                            <li><a href="/DashboardNotifications/Index">Dashboard Notifications</a></li>
+                        </ul>
+                    </li>
+}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reports<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+
+                            @if (IsAdmin)
+        {
+                    <li><a href="/Reports/PaymentsCancelled_Failed">Payment Cancelled/Failed</a></li>
+                    <li><a href="/Reports/League_PaidOut">League Financial Report</a></li>
+}
+                            <li><a href="/Reports/Top25PlayerTeams">Top 25 Players &amp; Teams</a></li>
+                            <li><a href="/Reports/TopTeamPerformance">Top Team Performance</a></li>
+                            <li><a href="/Reports/LeagueStats_Archive">League Stats (Archived)</a></li>
+                            <li><a href="/Reports/ReferralReport">Referral Report</a></li>
+                            <li><a href="/Reports/ReferralReport_ReferralCandy">Referral Report - Referral Candy</a></li>
+                            <li><a href="/Reports/FacebookLeadReport">Facebook Lead Report</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="/Dashboard">Dashboard</a></li>
+if (IsAdmin || IsCoach)
+{
+
+
+                    <li @if (TotalNewAlerts > 0) { <text> class="clsAlertMenu" </text> } id="liAlertMenu">
+                        <a href="/Alerts/Index">
+                            Alerts
+
+                            <sapn id="spTotalNewAlerts">
+                                @if (TotalNewAlerts > 0) //Only Display Blinking if number of Alerts are greater than Zero
+            {<text>
+                        (@TotalNewAlerts)
+                    </text>}
+                            </sapn>
+                        </a>
+                    </li>
+
+                    @Scripts.Render("~/bundles/Alerts_Global-js")
+}
+
+                    @*<li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reports<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li><a href="#">Report 1</a></li>
+            <li><a href="#">Report 2</a></li>
+            <li><a href="#">Report 3</a></li>
+            <li><a href="#">Report 4</a></li>
+        </ul>
+    </li>*@
+
+                    @*<li><a href="#">Audit Log</a></li>*@
+if (IsAdmin)
+{
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Maintenance<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+
+                            <li><a href="/Maintenance/Users">Users</a></li>
+                            <li><a title="Click to see Signed/Unsigned Documents" href="/Documents">Documents</a></li>
+                            <li><a href="/TrainingVideos/Index">Training Videos</a></li>
+                            <li><a href="/NAGs">NAGs</a></li>
+                            <li><a href="/Maintenance/DocumentTypes">Document Types</a></li>
+                            <li><a href="/Maintenance/Countries">Countries</a></li>
+                            @*<li><a href="/News">Latest NEWS</a></li>*@
+                            <li><a href="/Maintenance/Heights">Heights</a></li>
+                            <li><a href="/FacebookAds/Index">Facebook Ads</a></li>
+
+                            <li><a href="/Maintenance/EmailDomainRestrictions">Email Domain Restrictions</a></li>
+                            <li><a href="/SystemSettings/SystemMessage">System Message</a></li>
+                            <li><a href="/SystemSettings">System Settings</a></li>
+                        </ul>
+                    </li>
+}
+}
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Help<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+
+                                <li><a href="/Help/TrainingVideos">Training Videos</a></li>
+                                <li><a href="/Help/WhoShouldIContact">Who Should I Contact?</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Report<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+
+                                <li><a target="_blank" href="https://docs.google.com/forms/d/13IHapQtFgJ2VDZK6msunk_CZ1tOgvTdZ9zPV-Jf31Gs/edit">An Incident at a League</a></li>
+                                <li><a target="_blank" href="https://docs.google.com/forms/d/1PG3V6eu7bsXx9_sPs51H3JOtwxaQEDcV1ncaUMVlECk">A Health and Safety risk</a></li>
+                                <li><a target="_blank" href="http://bit.ly/MVFFBUGS">A Technical Bug</a></li>
+                            </ul>
+                        </li>
+                        @if (IsCoach)
+                        {
+                        <li><a href="/Admin/HistoricalSystemMessages">System Messages</a></li>
+                        }
+
+
+
+
+                    </ul>
+
+                    @Html.Partial("_LoginPartial")
+                </div>
+                @if (DownForMaintenance)
+                {
+                <div class="text-center">
+                    <div style="color:red; font-size:20px;" class="blink_me clsSiteMaintenance">The Site will be offline at ( @DownForMaintenance_Time ) for Maintenance , Please Save your Work.</div>
+                </div>
+                }
+            </div>
+        </nav>
+    </text>
+}
+else
+{
+    <text>
+
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">MANvFAT Football@*<img src="/Images/logo.png" style="width:20%" alt="Template" />*@</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </nav>
+    </text>
+}

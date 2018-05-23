@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    function RefreshGrid(e) {
+           this.read();
+        }
+
+        function BeforeSave_Users(e) {
+            var _Role = e.container.find("input[name=RoleID]").val();
+
+            if (_Role == "") {
+                OpenAlertModal("Error", "Please Select Role for this User", "btn-danger", BootstrapDialog.TYPE_DANGER);
+                e.preventDefault();
+                return false;
+            }
+        }
+
+        function OnInsertEdit(e) {
+            if (e.model.isNew()) {
+                e.container.find("input[name=Locked]").prop("checked", false).trigger('change');
+                e.container.find("input[name=DailyStatEmails]").prop("checked", true).trigger('change');
+              }
+        }
+
+</script>
+
+<h1>Users</h1>
+<hr />
+
+@(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.UsersExt>()
+    .Name("Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax().Events(ev => ev.Sync("RefreshGrid"))
+    .PageSize(25)
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.UserID))
+    .Create(update => update.Action("_Create", "Users"))
+                .Read(read => read.Action("_Read", "Users"))
+                .Update(update => update.Action("_Update", "Users"))
+                .Destroy(update => update.Action("_Destroy", "Users"))
+    .ServerOperation(false)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.FullName).Title("Full Name").Width(100);
+        columns.Bound(p => p.Role).EditorTemplateName("UserRoles").Title("Role").Width(100);
+        columns.Bound(p => p.EmailAddress).Title("Email Address").Width(100);
+        columns.Bound(p => p.Password).ClientTemplate("*****").Title("Password").Width(100);
+        columns.Bound(p => p.DailyStatEmails).ClientTemplate("#if(DailyStatEmails){#Yes#}else{#No#}#").Title("Stat. Emails?").Width(100);
+        columns.Bound(p => p.DailyLiveLeagueNumEmails).ClientTemplate("#if(DailyLiveLeagueNumEmails){#Yes#}else{#No#}#").Title("Live League Emails?").Width(100);
+        columns.Bound(p => p.Mobile).Title("Mobile").Width(100);
+        columns.Bound(p => p.Address).Title("Address").Width(100);
+        columns.Bound(p => p.Locked).ClientTemplate("#if(Locked){#Yes#}else{#No#}#").Title("Locked").Width(100);
+        columns.Bound(p => p.Deleted).ClientTemplate("#if(Deleted){#Yes#}else{#No#}#").Title("Deleted").Width(100);
+
+        columns.Command(command =>
+        {
+            command.Edit().UpdateText("Insert/Update").HtmlAttributes(new { @class = "btn btn-primary" });
+            command.Destroy().HtmlAttributes(new { @class = "btn btn-danger" });
+        }).Width(172);
+    })
+    .ToolBar(tool =>
+    {
+        tool.Custom().Name("cmdAddNewRecord")
+        .Text("+ Add New Record")
+        .HtmlAttributes(new { @id = "cmdAddNewRecord", @class = "btn btn-primary" });
+    })
+       .ClientDetailTemplateId("tmpUserAuthLeagues")
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Navigatable()
+    .Scrollable(scr => scr.Height(650))
+    .Events(ev => ev.Save("BeforeSave_Users").Edit("OnInsertEdit"))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+
+)
+
+<script>
+        $("#cmdAddNewRecord").click(function (e) {
+
+            var table = $("#Grid").data("kendoGrid");
+            var sorting = table.dataSource.sort();
+
+            if (sorting) {
+                table.dataSource.sort(null);
+            }
+            table.addRow();
+            e.preventDefault();
+            //put custom logic here
+        });
+</script>
+
+<script id="tmpUserAuthLeagues" type="text/kendo-tmpl">
+
+    @(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.UsersAuthLeaguesExt>()
+             .Name("UserAuthLeagues_#=UserID#")
+    .DataSource(dataSource => dataSource
+            .Ajax().Events(ev => ev.Sync("RefreshGrid"))
+    .PageSize(25)
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.UserAuthLeagueID))
+                                    .Create(update => update.Action("_Create", "UsersAuthLeagues", new { ParamUserID = "#=UserID#" }))
+                                                    .Read(read => read.Action("_Read", "UsersAuthLeagues", new { ParamUserID = "#=UserID#" }))
+                            .Update(update => update.Action("_Update", "UsersAuthLeagues"))
+                            .Destroy(update => update.Action("_Destroy", "UsersAuthLeagues"))
+    .ServerOperation(false)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.LeagueName).EditorTemplateName("Leagues").Width(100);
+        columns.Bound(p => p.UserID).Hidden(true);
+
+        columns.Command(command =>
+        {
+            command.Edit().UpdateText("Insert/Update").HtmlAttributes(new { @class = "btn btn-primary" });
+            command.Destroy().HtmlAttributes(new { @class = "btn btn-danger" });
+        }).Width(172);
+    })
+    .ToolBar(tool =>
+    {
+        tool.Create().Text("Add New Record").HtmlAttributes(new { @class = "btn btn-primary" });
+    })
+     .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Navigatable()
+    .Scrollable()
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+             .ToClientTemplate()
+    )
+
+</script>
+
+
+@Scripts.Render("~/bundles/Grid_Resizer-js")

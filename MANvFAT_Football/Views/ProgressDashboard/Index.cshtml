@@ -1,0 +1,2189 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+@{
+    Layout = null;
+
+    var notifications = ViewBag.Notifications  as List<MANvFAT_Football.Models.Repositories.PlayerDashboardNotificationExt>;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- title -->
+    <title>MAN v FAT Progress&reg;</title>
+    <!-- Links -->
+    <!-- Bootstrap-->
+    <script src="~/Content/ProgressDashbaord/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+
+    <link href="~/Content/kendo/2017.3.1026/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/kendo/2017.3.1026/kendo.bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/kendo/2017.3.1026/kendo.all.min.js"></script>
+    <script src="~/Scripts/kendo/2017.3.1026/kendo.aspnetmvc.min.js"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,,400,500,600" rel="stylesheet">
+    <link href="~/Content/ProgressDashbaord/css/bootstrap.css" rel="stylesheet">
+    <link href="~/Content/ProgressDashbaord/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/Content/ProgressDashbaord/css/jquery.mCustomScrollbar.css">
+    <link href="~/Content/ProgressDashbaord/css/style.css" rel="stylesheet">
+
+    <link href="~/Content/ProgressDashbaord/css/KendoUI-Custom.css" rel="stylesheet">
+
+    <!-- All plugins min -->
+    <script type="text/javascript" src="~/Content/ProgressDashbaord/js/plugins.min.js"></script>
+    <!-- plugin js  -->
+    <script type="text/javascript" src="~/Content/ProgressDashbaord/js/plugin.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/index.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/script2.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/charts.js"></script>
+    <!-- weight js  -->
+    <script src="~/Content/ProgressDashbaord/js/weight/hammer.min.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/weight/rxcss.min.js"></script>
+    <script type="text/javascript" src="~/Content/ProgressDashbaord/js/weight/Rx.umd.js"></script>
+    <script type="text/javascript" src="~/Content/ProgressDashbaord/js/weight/weight-calc.js"></script>
+   
+
+    @Scripts.Render("~/bundles/ProgressDashboard-js")
+
+    <script>
+  
+        $(document).ready(function () {
+
+            //Apply the Green Background with tick when user click or focus within the text box
+            $('.inp-change-background').on('change blur', function () {
+
+                var $this = $(this);
+                var value = $.trim($this.val());
+
+                $this.toggleClass('filled-background', value.length !== 0);
+            }).change();
+
+            //Clear the Green Background with tick when user click or focus within the text box
+            $('.inp-change-background').on('click focus', function () {
+                $(this).addClass('form-control');
+                $(this).removeClass('filled-background');
+            });
+
+            //$(document).ready(function () {
+
+            //    $('#datetimepicker2').datetimepicker({ language: 'en', pick12HourFormat: true, format: 'dd/mm/yyyy' });
+
+
+
+
+
+            //    //$('#datetimepicker2').on('changeDate', function (ev) {
+
+            //    //    $("#hdnSelectedDate").val('08/05/2018');
+            //    //    SetDailyActivity()
+            //    //});
+
+
+            //    $('#nextWeek').on("click", function () {
+            //        var dt = new Date($('#hdnWeeekDate').val());
+            //        dt.setDate(dt.getDate() + 7); // add 7 days
+            //        $('#hdnWeeekDate').val(getDateFormat(dt));
+            //    });
+
+            //    $('#prevWeek').on("click", function () {
+
+            //        var dt = new Date($('#hdnWeeekDate').val());
+            //        dt.setDate(dt.getDate() - 7); // add 7 days
+            //        $('#hdnWeeekDate').val(getDateFormat(dt));
+
+
+            //    });
+            //    SetDailyActivity();
+            //});
+
+            //function SetDailyActivity() {
+            //    var hide_Effect = "left";
+            //    var show_Effect = "right";
+            //    $(".clsActivityData").show("slide", { direction: show_Effect }, 500).load("/ProgressDashboard/_GetPlayerDailyActivity/" + $("#hdnDashboardURL").val(), { PlayerID: $("#hdnPlayerID").val(), ActivityDate: $("#hdnSelectedDate").val() }).show("slide", { direction: show_Effect }, 500);
+
+            //}
+            //function SaveData(id) {
+            //    var ProceedToSave = false;
+
+            //    var New_val = $("#" + id).val();
+            //    var Old_val = $("#hdn" + id).val();
+
+
+            //    if (New_val != Old_val) {
+            //        ProceedToSave = true;
+            //        // $("#" + id).css("background-color", "green");
+
+            //        // $("#saved_" + id).show("pulsate").hide("pulsate");
+            //        //$("#saved_" + id).show("bounce", { times: 3 }, "slow").hide("bounce", { times: 3 }, "slow");
+            //        //$("#saved_" + id).show("puff", { times: 3 }, "slow").hide("puff", { times: 3 }, "slow");
+            //    }
+
+
+            //    //  alert("id = " + id+" New_val = " + New_val + " Old_val = " + Old_val+ " Proceed = "+ProceedToSave);
+
+            //    if (ProceedToSave) {
+            //        var PlayerDailyActivityExt = {
+            //            PlayerDailyActivityID: $("#hdnPlayerDailyActivityID").val(),
+            //            PlayerID: $("#hdnPlayerID").val(),
+            //            ActivityDate: $("#hdnActivityDate").val(),
+            //            Breakfast: $("#Breakfast").val(),
+            //            Lunch: $("#Lunch").val(),
+            //            Dinner: $("#Dinner").val(),
+            //            Snacks: $("#Snacks").val(),
+            //            Drink: $("#Drink").val(),
+            //            HowHealthy: $("#HowHealthy").val(),
+            //        };
+
+            //        $.ajax({
+            //            url: "/Member/SaveActivityData/" + $("#hdnDashboardURL").val(),
+            //            data: PlayerDailyActivityExt,
+            //            dataType: "json",
+            //            type: "POST",
+            //            //beforeSend: function () {
+            //            //    $(".divButtons").slideUp();
+            //            //    $(".divProcessing").slideDown();
+            //            //},
+            //            error: function (e) {
+            //                debugger;
+            //            },
+            //            success: function (data) {
+
+            //                $("#hdn" + id).val(New_val);
+
+            //            }
+            //        });
+            //    }
+            //}
+            GetWeights(1);
+        });
+
+        function GetWeights(e)
+        {
+            debugger;
+            var dt= $("#dt_measurement").val();
+        
+            $("#wtheader").text('YOUR MEASUREMENTS' + ' - ' + dt);
+            GetYourWeightData();
+        }
+    </script>
+    <style>
+        span[role=button].k-select {
+            left: 0;
+            border-left: 0;
+            border-right: 1px solid rgb(231, 231, 231);
+            border-radius: 0;
+        }
+
+        .k-picker-wrap {
+            padding-left: 26px;
+            padding-right: 0;
+        }
+    </style>
+</head>
+<body class="test-rows">
+    @*<input type="hidden" id="hdnSelectedDate" value="24/01/2018" />*@
+    <input type="hidden" id="hdnDashboardURL" value="lucky123" />
+    <input type="hidden" value="@Model.PlayerID" id="hdnPlayerID" />
+    <!-- Header section  start-->
+    <header>
+        <div class="row setting-row">
+            <!-- head Top -->
+            <div class="top-head">
+                <div class="links_bg padon clearfix">
+                    <div class="container">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 logo pd-l-27 ">
+                            <img src="~/Content/ProgressDashbaord/images/logo.jpg" class="img-responsive center-block">
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 pd-r-27 nav-content-bx">
+                            <nav class="navbar left navbar-default navonmob">
+                                <div class="container-fluid nomrgpad p-0">
+                                    <div class="navbar-header nomrgpad">
+                                        <button type="button " class="menubtn navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar5">
+                                            <span class="sr-only">Toggle navigation</span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                    </div>
+                                    <div id="navbar5" class="navbar-collapse collapse nomrgpad p-0">
+                                        <ul class="nav navbar-nav mt-1">
+                                            <li><a href="#">dashboard</a></li>
+                                            <li><a href="#">leaderboard</a></li>
+                                            <li><a href="#">settings</a></li>
+                                            <li><a href="#">log out</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <div class="clsHeaderStats">
+
+
+                    <div class="container">
+                        <!-- profile-content -->
+                        <div class="profile-box-content clearfix">
+                            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 py-2 profile-info">
+                                <div class="profile_txt">
+                                    <div class="col-xs-24  col-sm-12 col-md-11">
+                                        <img src="~/Content/ProgressDashbaord/images/profile-img.jpg" class="profile-img">
+                                        <span>
+                                            <strong>Hello Andy, </strong>
+                                            <a href="#" id="modelLink">
+                                                <span> Happy St Patrick's Day!</span>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12 py-2 mt-2 arangetop_txt">
+                                <div class="pull-right align_center pr-4">
+                                    <div class="badge-bx"><span class="circle"></span>100</div>
+                                    <div class="black">18.45</div>
+                                    <div class="grey">WED 21 MAR</div>
+                                    <div class="green">500 POINTS <span>30 THIS WEEK </span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container -->
+            <div class="header-carousel">
+                <div class="container">
+                    <div class="row">
+                        <div class="slider_bg slider_bg_Head">
+                            <div class="crose_btn">
+                                <a href="#"><i class="fas fa-times pull-right"></i></a>
+                            </div>
+                            <div class="slide_banner">
+                                <div class="col-lg-12">
+                                    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                                        <!-- Indicators -->
+                                        <ol class="carousel-indicators">
+                                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+@for (int count = 1; count < notifications.Count; count++)
+{
+    <li data-target="#myCarousel" data-slide-to="@count"></li>}
+
+                                            <li data-target="#myCarousel" data-slide-to="1"></li>
+                                        </ol>
+                                        <!-- Wrapper for slides -->
+                                        <div class="carousel-inner text-center">
+                                            <div class="item active text-center">
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <img src="~/Content/ProgressDashbaord/images/banner_icon.png" class="banner_iconsize center-block img-responsive">
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <h6>New Achievement</h6>
+                                                    <p>                                                    
+
+                                                        @notifications.FirstOrDefault().Title </p>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="text-center">
+                                                        <a href="#" class="btn-default ">SHARE</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @foreach (var achievement in notifications.Skip(0))
+                                            {
+                                                <div class="item text-center">
+                                                    <div class="col-lg-3 col-md-3 col-sm-12">
+                                                        <img src="~/Content/ProgressDashbaord/images/banner_icon.png" class="banner_iconsize center-block img-responsive">
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                                        <h5>New Achievement</h5>
+                                                        <p>@achievement.Title</p>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-12">
+                                                        <div class="text-center">
+                                                            <a href="#" class="btn-default ">SHARE</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            @*<div class="item text-center">
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <img src="~/Content/ProgressDashbaord/images/comment_banner.png" class="banner_iconsize center-block img-responsive">
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <h6>New from community</h6>
+                                                    <p>healthy swaps</p>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="text-center">
+                                                        <a href="#" class="btn-default ">discuss</a>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                        </div>
+                                        <!-- Left and right controls -->
+                                        <a class="carousel-control-prev bnr_prev" href="#myCarousel" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon fas fa-chevron-right" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next bnr_next" href="#myCarousel" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon fas fa-chevron-left" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </header>
+    <!-- Header section  End-->
+
+    <div class="gap20"></div>
+    <div class=" content">
+        <div class="container">
+            <div class="row">
+
+                <!-- ================= Row I ===================-->
+                <div class="first-row clearfix items-height">
+                    <div class="height itemMasonry col-lg-6 col-md-6 col-sm-12">
+                        <div class="food_sec">
+                           <!-- <div class="food_hdr">
+                                <h3>FOOD AND DRINK</h3>
+                                <div class="arrow-links">
+                                    <i class="fas fa-angle-up pull-right" data-toggle="collapse" href="#collp1" aria-expanded="false" aria-controls="collapseExample"></i>
+                                </div>
+
+                                <a href="#">
+                                    <i class="fas fa-question-circle fa-question-circle2 pull-right" id="hide" data-toggle="collapse" data-target="#collp11"></i>
+                                </a>
+                            </div> -->
+
+                            <!-- food_sec_in -->
+                            @*<div class="food_sec_in collapse_in1 collapse in" id="collp1">
+                                <div class="food-content">*@
+                                    <!-- food_sec_in2 -->
+                                    @*<div class="food_sec_in2 collapse_in11 collapse" id="collp11">
+                                        <div class="fram-box clearfix">
+                                            <div class="frame-head clearfix">
+                                                <h2>HOW TO TRACK YOUR DAILY <br>FOOD AND DRINK INTAKE</h2>
+                                                <a href="#">
+                                                    <i class="fas fa-times fa-times2 pull-right" data-toggle="collapse" data-target="#collp11"></i>
+                                                </a>
+                                            </div>
+                                            <div class="fram-content" id="scroll-1">
+                                                <div class="col-lg-12 clearfix">
+                                                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/Rsi0Uqla5cE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="gap10"></div>
+                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+                                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley. </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                    <!-- ./food_sec_in2 -->
+                                    <!-- food_sec_in2 -->
+                                    @*<div class="share_food food_sec_in2 collapse_in11 collapse" id="collpShare">
+                                        <div class="fram-box clearfix">
+                                            <div class="share-head frame-head clearfix">
+                                                <h2>HOW do you want to share?</h2>
+                                                <a href="#">
+                                                    <i class="fas fa-times fa-times2 pull-right" data-toggle="collapse" data-target="#collpShare"></i>
+                                                </a>
+                                            </div>
+                                            <div class="fram-content" id="scroll-1">
+                                                <div class="col-lg-12 clearfix">
+                                                    <div class="clearfix">
+                                                        <select><option>today</option></select>
+                                                    </div>
+                                                    <h4>who do you want to share it with?</h4>
+                                                    <p class="boxed-text">team</p>
+                                                    <div class="form">
+                                                        <input type="text" name="email" placeholder="enter email address" />
+                                                    </div>
+                                                    <p class="text-ex">
+                                                        Use a comma, to seperate multiple emails eg.<br>
+                                                        bob@manvfat.com,dave@manvfat.com
+                                                    </p>
+                                                    <br>
+                                                    <h4>include apersonal message?</h4>
+                                                    <textarea placeholder="check out my healthy eating, no more pizza!"></textarea>
+                                                    <button class="send-button">send <i class="fas fa-arrow-circle-right"></i> </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                    <!-- ./food_sec_in2 -->
+                                    <!-- ./food_sec_in1 -->
+
+                                 
+                                    @*<div class="box">
+                                        <i class="fas fa-angle-left"></i>
+                                        <h3>TODAY</h3>
+                                        <i class="fas fa-angle-right "></i>
+                                        <i class="fas fa-share-alt pull-right" data-toggle="collapse" data-target="#collpShare"></i>
+                                        <div id="datetimepicker2" class="input-append pull-right calandar-put">
+                                            <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"></input>
+                                            <span class="add-on">
+                                                <i data-time-icon="far fa-clock" data-date-icon="far fa-calendar-alt" class="fas fa-calendar-alt pull-right">
+                                                </i>
+                                            </span>
+                                        </div>
+                                        <div class="col-lg-12 nomrgpad">
+                                            <div class="food_list">
+                                                <ul>
+                                                    <li>
+                                                        <h4>BREAKFAST</h4>
+                                                        <input type="text" placeholder="Poached egg on toast" class="inp-change-background form-control">
+                                                    </li>
+                                                    <li>
+                                                        <h4>LUNCH</h4>
+                                                        <input type="text" placeholder="Eating from a plate helps you feel full, FACT!" class="inp-change-background form-control">
+                                                    </li>
+                                                    <li>
+                                                        <h4>DINNER</h4>
+                                                        <input type="text" placeholder="What's cooking good looking ?" class="inp-change-background form-control">
+                                                    </li>
+                                                    <li>
+                                                        <h4>SNACKS</h4>
+                                                        <input type="text" placeholder="Keep it healthy between meals" class="inp-change-background form-control">
+                                                    </li>
+                                                    <li>
+                                                        <h4>DRINKS</h4>
+                                                        <input type="text" placeholder="You need 7 glasses of water a day" class="inp-change-background form-control">
+                                                    </li>
+                                                    <li>
+                                                        <h4>HOW DO YOU FEEL ABOUT YOUR FOOD AND DRINK CHOICES ?</h4>
+                                                        <div class="gap5"></div>
+                                                        <ul class="emotions">
+                                                            <li><a href="#"><img src="~/Content/ProgressDashbaord/images/002-so-sad.png"><img src="~/Content/ProgressDashbaord/images/002-so-sad-green.png" id="first"></a></li>
+                                                            <li><a href="#"><img src="~/Content/ProgressDashbaord/images/002-sad-1.png"><img src="~/Content/ProgressDashbaord/images/001-sad.png" id="second"></a></li>
+                                                            <li><a href="#"><img src="~/Content/ProgressDashbaord/images/003-confusedsdaf.png"><img src="~/Content/ProgressDashbaord/images/001-confused-1fdsa.png" id="third"></a></li>
+                                                            <li><a href="#"><img src="~/Content/ProgressDashbaord/images/001-smiling.png"><img src="~/Content/ProgressDashbaord/images/Untitled-1.png" id="fourth"></a></li>
+                                                            <li><a href="#"><img src="~/Content/ProgressDashbaord/images/001-happy-1.png"><img src="~/Content/ProgressDashbaord/images/002-happyfsadf.png" id="fifth"></a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                @*</div>
+
+                            </div>*@
+                            <!-- food_sec_in -->
+                            @{ Html.RenderPartial("DailyActivities", Model); }
+                        </div>
+                    </div>
+                    <div class="height itemMasonry col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="food_sec">
+                            @{ Html.RenderPartial("WeeklyActivities", Model); }
+                              </div>
+                    </div>
+                    <div class="gap10"></div>
+                </div>
+                <!-- ================= ./END Row I ===================-->
+                <!-- ================= Row II ===================-->
+                <div class="second-row items-height">
+                    <!-- progress photo -->
+                    <div class="height col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="prog_sec">
+                            <div class="food_hdr">
+                                <h3>PROGRESS PHOTOS</h3>
+                                <div class="arrow-links">
+                                    <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp3"></i>
+                                </div>
+                                <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+                            </div>
+                            <div class="wt_sec_in collapse_in3 collapse in nomrgpad" id="collp3">
+                                <div class="col-lg-12 nomrgpad">
+                                    <ul class="nav nav-pills">
+                                        <li class="active nav-pills-act2"><a href="#1a" data-toggle="tab">UPLOAD</a></li>
+                                        <li><a href="#2a" data-toggle="tab">PHOTOS</a></li>
+                                        <li><a href="#3a" data-toggle="tab">GIFS</a></li>
+                                        <li><a href="#4a" class="remove_margin" data-toggle="tab">BEFORE + AFTER</a></li>
+                                    </ul>
+                                    <div class="tab-content px-0 clearfix">
+                                        <div class="tab-pane active" id="1a">
+                                            <form enctype="multipart/form-data" action="form.php" method="post" role="form" class="client-profile">
+                                                <div class="form-group upload-img">
+                                                    <div class="dropzone" data-width="450" data-height="250" data-resize="false" data-ajax="false" data-originalsave="true">
+                                                        <input type="file" name="thumb" required="required" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="tab-pane" id="2a">
+                                            <div class="libry-photo clearfix">
+                                                <h3 class="photo_libraryHeading">YOUR PHOTO LIBRARY</h3>
+                                                <div class="gap60"></div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                    <div class="modal-toggle">
+                                                        <img src="~/Content/ProgressDashbaord/images/galleryimg1.jpg" class="img-responsive" alt="img">
+                                                    </div>
+                                                    <!-- Modal -->
+                                                    <div class="modal-bf-aft">
+                                                        <div class="modal-content">
+                                                            <button type="button" class="close modale-close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-9">
+                                                                    <div id="carousel-example-generic1" class="carousel slide" data-ride="carousel" data-interval="false">
+                                                                        <!-- Wrapper for slides -->
+                                                                        <div class="carousel-inner" role="listbox">
+                                                                            <div class="item active">
+                                                                                <img src="http://farm8.staticflickr.com/7404/12868632153_b0a5718c22_b.jpg" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                            <div class="item">
+                                                                                <img src="http://farm8.staticflickr.com/7404/12868632153_b0a5718c22_b.jpg" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- Controls -->
+                                                                        <a class="left carousel-control carousel-popup-control" href="#carousel-example-generic1" role="button" data-slide="prev">
+                                                                            <span class="fas fa-chevron-left" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Previous</span>
+                                                                        </a>
+                                                                        <a class="right carousel-control carousel-popup-control" href="#carousel-example-generic1" role="button" data-slide="next">
+                                                                            <span class="fas fa-chevron-right" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Next</span>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-2 modal-caption">
+                                                                    <div class="clearfix">
+                                                                        <!-- text -->
+                                                                        <div class="text-caption-side text-left">
+                                                                            <h4>Monday 12 feb 2018</h4>
+                                                                            <p>Add caption.</p>
+                                                                            <i class="fas fa-share-alt icon-round-green"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                    <div class="modal-toggle">
+                                                        <img src="~/Content/ProgressDashbaord/images/galleryimg2.jpg" class="img-responsive" alt="img">
+                                                    </div>
+                                                    <!-- Modal -->
+                                                    <div class="modal-bf-aft">
+                                                        <div class="modal-content">
+                                                            <button type="button" class="close modale-close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-9">
+                                                                    <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel" data-interval="false">
+                                                                        <!-- Wrapper for slides -->
+                                                                        <div class="carousel-inner" role="listbox">
+                                                                            <div class="item active">
+                                                                                <img src="http://farm8.staticflickr.com/7404/12868632153_b0a5718c22_b.jpg" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                            <div class="item">
+                                                                                <img src="http://farm8.staticflickr.com/7404/12868632153_b0a5718c22_b.jpg" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- Controls -->
+                                                                        <a class="left carousel-control carousel-popup-control" href="#carousel-example-generic2" role="button" data-slide="prev">
+                                                                            <span class="fas fa-chevron-left" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Previous</span>
+                                                                        </a>
+                                                                        <a class="right carousel-control carousel-popup-control" href="#carousel-example-generic2" role="button" data-slide="next">
+                                                                            <span class="fas fa-chevron-right" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Next</span>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-2 modal-caption">
+                                                                    <div class="clearfix">
+                                                                        <!-- text -->
+                                                                        <div class="text-caption-side text-left">
+                                                                            <h4>Monday 12 feb 2018</h4>
+                                                                            <p>Add caption.</p>
+                                                                            <i class="fas fa-share-alt icon-round-green"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                    <div class="modal-toggle">
+                                                        <img src="~/Content/ProgressDashbaord/images/galleryimg3.jpg" class="img-responsive" alt="img">
+                                                    </div>
+                                                    <!-- Modal -->
+                                                    <div class="modal-bf-aft">
+                                                        <div class="modal-content">
+                                                            <button type="button" class="close modale-close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-9">
+                                                                    <div id="carousel-example-generic3" class="carousel slide" data-ride="carousel" data-interval="false">
+                                                                        <!-- Wrapper for slides -->
+                                                                        <div class="carousel-inner" role="listbox">
+                                                                            <div class="item active">
+                                                                                <img src="http://farm8.staticflickr.com/7404/12868632153_b0a5718c22_b.jpg" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                            <div class="item">
+                                                                                <img src="http://farm8.staticflickr.com/7404/12868632153_b0a5718c22_b.jpg" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- Controls -->
+                                                                        <a class="left carousel-control carousel-popup-control" href="#carousel-example-generic3" role="button" data-slide="prev">
+                                                                            <span class="fas fa-chevron-left" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Previous</span>
+                                                                        </a>
+                                                                        <a class="right carousel-control carousel-popup-control" href="#carousel-example-generic3" role="button" data-slide="next">
+                                                                            <span class="fas fa-chevron-right" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Next</span>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-2 modal-caption">
+                                                                    <div class="clearfix">
+                                                                        <!-- text -->
+                                                                        <div class="text-caption-side text-left">
+                                                                            <h4>Monday 12 feb 2018</h4>
+                                                                            <p>Add caption.</p>
+                                                                            <i class="fas fa-share-alt icon-round-green"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                    <div class="modal-toggle">
+                                                        <img src="~/Content/ProgressDashbaord/images/galleryimg4.jpg" class="img-responsive" alt="img">
+                                                    </div>
+                                                    <!-- Modal -->
+                                                    <div class="modal-bf-aft">
+                                                        <div class="modal-content">
+                                                            <button type="button" class="close modale-close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-9">
+                                                                    <div id="carousel-example-generic4" class="carousel slide" data-ride="carousel" data-interval="false">
+                                                                        <!-- Wrapper for slides -->
+                                                                        <div class="carousel-inner" role="listbox">
+                                                                            <div class="item active">
+                                                                                <img src="http://farm8.staticflickr.com/7404/12868632153_b0a5718c22_b.jpg" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                            <div class="item">
+                                                                                <img src="http://farm8.staticflickr.com/7404/12868632153_b0a5718c22_b.jpg" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- Controls -->
+                                                                        <a class="left carousel-control carousel-popup-control" href="#carousel-example-generic4" role="button" data-slide="prev">
+                                                                            <span class="fas fa-chevron-left" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Previous</span>
+                                                                        </a>
+                                                                        <a class="right carousel-control carousel-popup-control" href="#carousel-example-generic4" role="button" data-slide="next">
+                                                                            <span class="fas fa-chevron-right" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Next</span>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-2 modal-caption">
+                                                                    <div class="clearfix">
+                                                                        <!-- text -->
+                                                                        <div class="text-caption-side text-left">
+                                                                            <h4>Monday 12 feb 2018</h4>
+                                                                            <p>Add caption.</p>
+                                                                            <i class="fas fa-share-alt icon-round-green"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="3a">
+                                            <div class="all-step">
+                                                <!-- First Step -->
+                                                <div class="gif-step-nx step-one">
+                                                    <h3 class="photo_libraryHeading">your gifs</h3>
+                                                    <p class="btn-add pull-right">
+                                                        <i class="add-gifs fas fa-plus-circle circle-green"></i>
+                                                    </p>
+                                                    <div class="gap10"></div>
+                                                    <div class="box">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                            <div class="gifs-box">
+                                                                <img src="~/Content/ProgressDashbaord/images/galleryimg1.jpg" class="img-responsive" alt="img">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                            <div class="gifs-box">
+                                                                <img src="~/Content/ProgressDashbaord/images/galleryimg2.jpg" class="img-responsive" alt="img">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                            <div class="gifs-box">
+                                                                <img src="~/Content/ProgressDashbaord/images/galleryimg3.jpg" class="img-responsive" alt="img">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                            <div class="gifs-box">
+                                                                <img src="~/Content/ProgressDashbaord/images/galleryimg4.jpg" class="img-responsive" alt="img">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- second Step -->
+                                                <div class="gif-step-nx step-two">
+                                                    <h3 class="photo_libraryHeading">Create a gif</h3>
+                                                    <p class="btn-add pull-right"><i class="add-gifs fas fa-plus-circle circle-green"></i></p>
+                                                    <div class="gap10"></div>
+                                                    <div class="dropzone-check-img">
+                                                        <div class="dropzone-check">
+                                                            <h4>you have no gifs yet</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- third Steps -->
+                                                <div class="gif-step-nx step-three select-image-gif clearfix">
+                                                    <h3 class="photo_libraryHeading">select your images for gif</h3>
+                                                    <p class="btn-add pull-right"><i class="add-gifs fas fa-arrow-alt-circle-right circle-green"></i></p>
+                                                    <div class="gap10"></div>
+                                                    <div class="box">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                            <div class="gifs-box">
+                                                                <img src="~/Content/ProgressDashbaord/images/galleryimg1.jpg" class="img-responsive" alt="img">
+                                                                <i class="fas fa-times btn-remove-gif"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                            <div class="gifs-box">
+                                                                <img src="~/Content/ProgressDashbaord/images/galleryimg2.jpg" class="img-responsive" alt="img">
+                                                                <i class="fas fa-times btn-remove-gif"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                            <div class="gifs-box">
+                                                                <img src="~/Content/ProgressDashbaord/images/galleryimg3.jpg" class="img-responsive" alt="img">
+                                                                <i class="fas fa-times btn-remove-gif"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                                                            <div class="gifs-box">
+                                                                <img src="~/Content/ProgressDashbaord/images/galleryimg4.jpg" class="img-responsive" alt="img">
+                                                                <i class="fas fa-times btn-remove-gif"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Fourth Step -->
+                                                <div class="gif-step-nx step-four">
+                                                    <div class="creating-gif">
+                                                        <div class="valign">
+                                                            <div class="valign-middle">
+                                                                <div class="create-gif-box">
+                                                                    <div class="gap15"></div>
+                                                                    <div id="divProgress"></div>
+                                                                    <div class="gap5"></div>
+                                                                    <h4>creating your gif</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="4a">
+                                            <!-- Modal -->
+                                            <div class="before-after">
+                                                <h3 class="photo_libraryHeading">your before + after</h3>
+                                                <p class="btn-add pull-right"><i class="add-gifs fas fa-plus-circle circle-green"></i></p>
+                                                <div class="gap50"></div>
+                                                <div class="box clearfix">
+                                                    <div class="col-md-6 col-xs-10 photo_aft-bef clearfix">
+                                                        <div class="aft-bef-box modal-toggle">
+                                                            <div class="box-img">
+                                                                <img src="~/Content/ProgressDashbaord/images/before-1.png" class="img-responsive" alt="img">
+                                                                <img src="~/Content/ProgressDashbaord/images/after-1.png" class="img-responsive" alt="img">
+                                                            </div>
+                                                            <div class="logo-aft-bef">
+                                                                <img src="~/Content/ProgressDashbaord/images/logo.jpg" class="img-responsive manvfat logo" alt="img">
+                                                            </div>
+                                                        </div>
+                                                        <!-- modal-->
+                                                        <div class="modal-bf-aft">
+                                                            <div class="modal-content">
+                                                                <button type="button" class="close modale-close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                                <div class="row">
+                                                                    <div class="col-xs-12 col-sm-9">
+                                                                        <div class="aft-bef-box">
+                                                                            <div class="box-img">
+                                                                                <img src="~/Content/ProgressDashbaord/images/before-1.png" class="img-responsive" alt="img">
+                                                                                <img src="~/Content/ProgressDashbaord/images/after-1.png" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                            <div class="logo-aft-bef">
+                                                                                <img src="~/Content/ProgressDashbaord/images/logo.jpg" class="img-responsive manvfat logo" alt="img">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-2 modal-caption">
+                                                                        <div class="clearfix">
+                                                                            <!-- text -->
+                                                                            <div class="text-caption-side text-left">
+                                                                                <h4>Monday 12 feb 2018</h4>
+                                                                                <p>Add caption.</p>
+                                                                                <i class="fas fa-share-alt icon-round-green"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-xs-10 photo_aft-bef clearfix">
+                                                        <div class="aft-bef-box modal-toggle">
+                                                            <div class="box-img">
+                                                                <img src="~/Content/ProgressDashbaord/images/before-2.png" class="img-responsive" alt="img">
+                                                                <img src="~/Content/ProgressDashbaord/images/after-2.png" class="img-responsive" alt="img">
+                                                            </div>
+                                                            <div class="logo-aft-bef">
+                                                                <img src="~/Content/ProgressDashbaord/images/logo.jpg" class="img-responsive manvfat logo" alt="img">
+                                                            </div>
+                                                        </div>
+                                                        <!-- modal-->
+                                                        <div class="modal-bf-aft">
+                                                            <div class="modal-content">
+                                                                <button type="button" class="close modale-close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                                <div class="row">
+                                                                    <div class="col-xs-12 col-sm-9">
+                                                                        <div class="aft-bef-box">
+                                                                            <div class="box-img">
+                                                                                <img src="~/Content/ProgressDashbaord/images/before-2.png" class="img-responsive" alt="img">
+                                                                                <img src="~/Content/ProgressDashbaord/images/after-2.png" class="img-responsive" alt="img">
+                                                                            </div>
+                                                                            <div class="logo-aft-bef">
+                                                                                <img src="~/Content/ProgressDashbaord/images/logo.jpg" class="img-responsive manvfat logo" alt="img">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-2 modal-caption">
+                                                                        <div class="clearfix">
+                                                                            <!-- text -->
+                                                                            <div class="text-caption-side text-left">
+                                                                                <h4>Monday 12 feb 2018</h4>
+                                                                                <p>Add caption.</p>
+                                                                                <i class="fas fa-share-alt icon-round-green"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WEIGHT AND MEASUREMENTS -->
+                    <div class="height col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="wt_sec">
+                            <div class="food_hdr">
+                                <h3>WEIGHT AND MEASUREMENTS</h3>
+                                <div class="arrow-links">
+                                    <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp4"></i>
+                                </div>
+                                <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+                            </div>
+                            <div class="wt_sec_in collapse_in4 collapse in" id="collp4">
+                                <div class="col-lg-12 nomrgpad">
+                                    <ul class="nav nav-pills nav-pills4 nav-pills-act3">
+                                        <li class="active nav-pills-act2">
+                                            <a href="#Wa1" data-toggle="tab">YOUR WEIGHT</a>
+                                        </li>
+                                        <li>
+                                            <a href="#Wa2" data-toggle="tab">YOUR MEASUREMENTS</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content px-0 clearfix">
+
+                                     <div class="tab-pane active" id="Wa1">
+                                            <div class="gap15"></div>
+                                            <div class="box">
+                                                <div class="gap10"></div>
+                                                <h3>TODAYS WEIGHT</h3>
+                                                <i class="fas fa-share-alt pull-right"></i>
+
+                                                <div id="datetimepicker3" class="input-append pull-right calandar-put">
+                                                    <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
+                                                    <span class="add-on">
+                                                        <i data-time-icon="far fa-clock" data-date-icon="far fa-calendar-alt" class="fas fa-calendar-alt pull-right far">
+                                                        </i>
+                                                    </span>
+                                                </div>
+
+                                                <div class="gap10"></div>
+                                            </div>
+
+                                            <!-- Weight Calculate -->
+                                            <div class="weight-calc flex items-center ph2 mw5-5 center">
+                                                <div class="flex-auto bg-white br2 pa3 pt4 ba b--black-20 flex flex-column items-center items-stretch shadow-4">
+
+                                                    <h3 class="f4 dark-gray tc mb0 mt4">How much do you weigh?</h3>
+                                                    <p class="tc f5 moon-gray lh-copy mb4">This is used to set up and calculate your recommended daily consumption.<p>
+
+                                                        <div class="tc mb2 value-lbs">
+                                                            <span id="lbs-value" class="value">125</span>
+                                                            <span class="unite">lbs</span>
+                                                        </div>
+
+                                                    <p class="ma0 tc mb4 moon-gray f6 value-kg">
+                                                        <span id="kg-value" class="value">56.7</span> kg
+                                                    </p>
+
+                                                    <div class="dial mb4"></div>
+
+                                                    <div class="gap20"></div>
+
+                                                    <div class="tc">
+                                                        <a href="#0"
+                                                           class="f6 db link dim br2 pa3 white bg-blue ttu tracked border-box btn-primary">
+                                                            Submit
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Weight Calculate -->
+                                        </div>
+                                        <div class="tab-pane" id="Wa2">
+                                           @{ Html.RenderPartial("YourWeight", Model); }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ================= ./END Row II ===================-->
+                <!-- ================= Row III ===================-->
+                <!-- Gap -->
+                <div class="gap10"></div>
+                <div class="third-row items-height">
+                    <div class="height col-lg-12">
+                        <div class="data_sec">
+                            <div class="data_hdr">
+                                <h3>DATA </h3>
+                                <div class="arrow-links">
+                                    <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp10"></i>
+                                </div>
+                                <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+                            </div>
+                            <div class="wt_sec_in collapse_in9 collapse in nomrgpad" id="collp10">
+                                <div class="col-lg-12 nomrgpad">
+                                    <ul class="nav nav-pills nav-pills33 ">
+                                        <li class="active nav-pills-act"><a href="#1bbb" id="overview" data-toggle="tab" class="total-inches">OVERVIEW</a></li>
+                                        <li><a href="#2bbb" id="weight2" data-toggle="tab">WEIGHT</a></li>
+                                        <li><a href="#3bbb" id="totla" data-toggle="tab">TOTAl INCHES</a></li>
+                                        <li><a href="#4bbb" id="weeklyact" data-toggle="tab">WEEKLY ACTIVITY</a></li>
+                                    </ul>
+                                    <div class="tab-content clearfix">
+                                        <div class="tab-pane active" id="1bbb">
+                                            <div class="gap15"></div>
+                                            <div class="ahieve_list">
+                                                <h4 class="overview_heading"> <a href="javascript:;"><i class="fas fa-share-alt"></i></a> STATS AT A GLANCE</h4>
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            <img src="~/Content/ProgressDashbaord/images/data-img1.jpg" class="img-responsive center-block">
+                                                            <div class="gap10"></div>
+                                                            <div class="achieve_txt">
+                                                                <h4>37%</h4>
+                                                                <h5>Target weight</h5>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <img src="~/Content/ProgressDashbaord/images/data-img2.jpg" class="img-responsive center-block">
+                                                            <div class="gap10"></div>
+                                                            <div class="achieve_txt">
+                                                                <h4>40</h4>
+                                                                <h5>Target BMI</h5>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <img src="~/Content/ProgressDashbaord/images/data-img3.jpg" class="img-responsive center-block">
+                                                            <div class="gap10"></div>
+                                                            <div class="achieve_txt">
+                                                                <h4>10</h4>
+                                                                <h5>Total inches lost</h5>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <img src="~/Content/ProgressDashbaord/images/data-img4.jpg" class="img-responsive center-block">
+                                                            <div class="gap10"></div>
+                                                            <div class="achieve_txt">
+                                                                <h4>50%</h4>
+                                                                <h5>Weekly activites minutes</h5>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <img src="~/Content/ProgressDashbaord/images/data-img5.jpg" class="img-responsive center-block">
+                                                            <div class="gap10"></div>
+                                                            <div class="achieve_txt">
+                                                                <h4>50%</h4>
+                                                                <h5>Goals</h5>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="2bbb">
+                                            <div id="carousel-example-generic-weight1" class="carousel-auto-false carousel slide mb-3" data-ride="carousel" data-interval="false">
+                                                <!-- Indicators -->
+                                                <ol class="carousel-indicators carousel-indicators-dark">
+                                                    <li data-target="#carousel-example-generic-weight1" data-slide-to="0" class="active"></li>
+                                                    <li data-target="#carousel-example-generic-weight1" data-slide-to="1"></li>
+                                                </ol>
+                                                <!-- Wrapper for slides -->
+                                                <div class="carousel-inner" role="listbox">
+
+                                                    <!-- First Slide -->
+                                                    <div class="item">
+                                                        <div class="gap15"></div>
+                                                        <div class="row">
+                                                            <div class="col-xs-12 col-sm-6 col-md-8">
+                                                                <div class="ahieve_list">
+                                                                    <h4 class="overview_heading"> <a href="javascript:;"><i class="fas fa-share-alt"></i></a> weight (in lbs)</h4>
+                                                                </div>
+                                                                <!-- list -->
+                                                                <ul class="list-inline list-option pl-22">
+                                                                    <li>
+                                                                        <i class="fas fa-circle color-red"></i>
+                                                                        <strong>Actual weight</strong>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i class="fas fa-circle color-green"></i>
+                                                                        <strong>Target Weight</strong>
+                                                                    </li>
+                                                                    <li>
+                                                                        <i class="fas fa-circle color-blue"></i>
+                                                                        <strong>Projected weight</strong>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                                <div class="media media-boxes">
+                                                                    <div class="media-body">
+                                                                        <p class="text-uppercase">
+                                                                            <strong>current weight :</strong>
+                                                                            <b class="color-red ">238 Lbs</b>
+                                                                        </p>
+                                                                        <p class="text-uppercase">
+                                                                            <strong>target weight :</strong>
+                                                                            <b class="color-green">168 Lbs</b>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="media-left">
+                                                                        <img src="~/Content/ProgressDashbaord/images/ballance.png" alt="ballance img">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="pl-22 mt-5">
+                                                            <!-- Tabs -->
+                                                            <div>
+                                                                <!-- Nav tabs -->
+                                                                <div>
+                                                                    <!-- Nav tabs -->
+                                                                    <ul class="nav nav-tabs" role="tablist">
+                                                                        <li role="presentation" class="active"><a href="#home04" aria-controls="home04" role="tab" data-toggle="tab">All time</a></li>
+                                                                        <li role="presentation"><a href="#profile04" aria-controls="profile04" role="tab" data-toggle="tab">7 days</a></li>
+                                                                        <li role="presentation"><a href="#messages04" aria-controls="messages04" role="tab" data-toggle="tab">1 month</a></li>
+                                                                        <li role="presentation"><a href="#settings04" aria-controls="settings04" role="tab" data-toggle="tab">3 months</a></li>
+                                                                        <li role="presentation"><a href="#half04" aria-controls="half04" role="tab" data-toggle="tab">6 months</a></li>
+                                                                        <li role="presentation"><a href="#years04" aria-controls="years04" role="tab" data-toggle="tab">Years</a></li>
+                                                                    </ul>
+                                                                    <!-- Tab panes -->
+                                                                    <div class="tab-content">
+                                                                        <div role="tabpanel" class="tab-pane active" id="home04">
+                                                                            <img src="~/Content/ProgressDashbaord/images/chart-1.png" class="chart img" class="img-responsive">
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="profile04">
+                                                                            <img src="~/Content/ProgressDashbaord/images/chart-1.png" class="chart img" class="img-responsive">
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="messages04">
+                                                                            <img src="~/Content/ProgressDashbaord/images/chart-1.png" class="chart img" class="img-responsive">
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="settings04">
+                                                                            <img src="~/Content/ProgressDashbaord/images/chart-1.png" class="chart img" class="img-responsive">
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="half04">
+                                                                            <img src="~/Content/ProgressDashbaord/images/chart-1.png" class="chart img" class="img-responsive">
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="years04">
+                                                                            <img src="~/Content/ProgressDashbaord/images/chart-1.png" class="chart img" class="img-responsive">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- tabs -->
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- second Slide -->
+                                                    <div class="item active">
+                                                        <div class="content">
+                                                            <div class="gap15"></div>
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-6 col-md-8">
+                                                                    <div class="ahieve_list">
+                                                                        <h4 class="overview_heading"> <a href="javascript:;"><i class="fas fa-share-alt"></i></a> bmi </h4>
+                                                                    </div>
+                                                                    <!-- list -->
+                                                                    <ul class="list-inline list-option pl-22">
+                                                                        <li>
+                                                                            <i class="fas fa-circle color-red"></i>
+                                                                            <strong>Actual bmi</strong>
+                                                                        </li>
+                                                                        <li>
+                                                                            <i class="fas fa-circle color-blue"></i>
+                                                                            <strong>Projected bmi</strong>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-6 col-md-4">
+                                                                    <div class="media media-boxes">
+                                                                        <div class="media-body">
+                                                                            <p class="text-uppercase">
+                                                                                <strong>current bmi:</strong>
+                                                                                <b class="color-red "> 40.3 </b>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="media-left">
+                                                                            <img src="~/Content/ProgressDashbaord/images/bmi.png" alt="ballance img">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pl-22 mt-5 text-center">
+
+                                                                <!-- Nav tabs -->
+                                                                <div>
+                                                                    <ul class="nav nav-tabs" role="tablist">
+                                                                        <li role="presentation" class="active"><a href="#hom8" aria-controls="hom8" role="tab" data-toggle="tab">All time</a></li>
+                                                                        <li role="presentation"><a href="#profil8" aria-controls="profil8" role="tab" data-toggle="tab">7 days</a></li>
+                                                                        <li role="presentation"><a href="#message8" aria-controls="message8" role="tab" data-toggle="tab">1 month</a></li>
+                                                                        <li role="presentation"><a href="#setting8" aria-controls="setting8" role="tab" data-toggle="tab">3 months</a></li>
+                                                                        <li role="presentation"><a href="#hal8" aria-controls="hal8" role="tab" data-toggle="tab">6 months</a></li>
+                                                                        <li role="presentation"><a href="#year8" aria-controls="year8" role="tab" data-toggle="tab">Years</a></li>
+                                                                    </ul>
+                                                                    <!-- Tab panes -->
+                                                                    <div class="tab-content">
+                                                                        <div role="tabpanel" class="tab-pane active" id="hom8"><img src="~/Content/ProgressDashbaord/images/chart-2.png" class="chart img" class="img-responsive"></div>
+                                                                        <div role="tabpanel" class="tab-pane" id="profil8"><img src="~/Content/ProgressDashbaord/images/chart-2.png" class="chart img" class="img-responsive"></div>
+                                                                        <div role="tabpanel" class="tab-pane" id="message8"><img src="~/Content/ProgressDashbaord/images/chart-2.png" class="chart img" class="img-responsive"></div>
+                                                                        <div role="tabpanel" class="tab-pane" id="setting8"><img src="~/Content/ProgressDashbaord/images/chart-2.png" class="chart img" class="img-responsive"></div>
+                                                                        <div role="tabpanel" class="tab-pane" id="hal8"><img src="~/Content/ProgressDashbaord/images/chart-2.png" class="chart img" class="img-responsive"></div>
+                                                                        <div role="tabpanel" class="tab-pane" id="year8"><img src="~/Content/ProgressDashbaord/images/chart-2.png" class="chart img" class="img-responsive"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- tabs -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="3bbb">
+                                            <div class="gap15"></div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-8">
+                                                    <div class="ahieve_list">
+                                                        <h4 class="overview_heading"> <a href="javascript:;"><i class="fas fa-share-alt"></i></a> total inches </h4>
+                                                    </div>
+                                                    <!-- list -->
+                                                    <ul class="list-inline list-option pl-22">
+                                                        <li>
+                                                            <i class="fas fa-circle color-red"></i>
+                                                            <strong>current inches</strong>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fas fa-circle color-green"></i>
+                                                            <strong>inches lost</strong>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4">
+                                                    <div class="media media-boxes">
+                                                        <div class="pull-right pr-22">
+                                                            <img src="~/Content/ProgressDashbaord/images/total-inches.png" alt="ballance img">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pl-22 mt-5 text-center">
+                                                <div class="item active">
+                                                    <div class="content">
+                                                        <!-- Nav tabs -->
+                                                        <div>
+                                                            <!-- Nav tabs -->
+                                                            <ul class="nav nav-tabs" role="tablist">
+                                                                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">All time</a></li>
+                                                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">7 days</a></li>
+                                                                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">1 month</a></li>
+                                                                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">3 months</a></li>
+                                                                <li role="presentation"><a href="#half" aria-controls="settings" role="tab" data-toggle="tab">6 months</a></li>
+                                                                <li role="presentation"><a href="#years" aria-controls="settings" role="tab" data-toggle="tab">Years</a></li>
+                                                            </ul>
+                                                            <!-- Tab panes -->
+                                                            <div class="tab-content">
+                                                                <div role="tabpanel" class="tab-pane active" id="home"><canvas id="Hrzntchart"></canvas></div>
+                                                                <div role="tabpanel" class="tab-pane" id="profile"><canvas id="Hrzntchart2"></canvas></div>
+                                                                <div role="tabpanel" class="tab-pane" id="messages"><canvas id="Hrzntchart3"></canvas></div>
+                                                                <div role="tabpanel" class="tab-pane" id="settings"><canvas id="Hrzntchart4"></canvas></div>
+                                                                <div role="tabpanel" class="tab-pane" id="half"><canvas id="Hrzntchart5"></canvas></div>
+                                                                <div role="tabpanel" class="tab-pane" id="years"><canvas id="Hrzntchart6"></canvas></div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- tabs -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="4bbb">
+                                            <div id="carousel-example-generic-weight2" class="carousel-auto-false carousel slide mb-3" data-ride="carousel" data-interval="false">
+                                                <!-- Indicators -->
+                                                <ol class="carousel-indicators carousel-indicators-dark">
+                                                    <li data-target="#carousel-example-generic-weight2" data-slide-to="0" class="active"></li>
+                                                    <li data-target="#carousel-example-generic-weight2" data-slide-to="1"></li>
+                                                </ol>
+                                                <!-- Wrapper for slides -->
+                                                <div class="carousel-inner" role="listbox">
+                                                    <!-- first slide -->
+                                                    <div class="item active">
+                                                        <div class="content">
+                                                            <div class="gap15"></div>
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-6 col-md-8">
+                                                                    <div class="ahieve_list">
+                                                                        <h4 class="overview_heading"> <a href="javascript:;"><i class="fas fa-share-alt"></i></a> your weekly activity </h4>
+                                                                    </div>
+                                                                    <!-- list -->
+                                                                    <ul class="list-inline list-option pl-22">
+                                                                        <li>
+                                                                            <i class="fas fa-circle color-red"></i>
+                                                                            <strong>under</strong>
+                                                                        </li>
+                                                                        <li>
+                                                                            <i class="fas fa-circle color-green"></i>
+                                                                            <strong>over</strong>
+                                                                        </li>
+                                                                        <li>
+                                                                            <i class="fas fa-circle color-gray"></i>
+                                                                            <strong>target 150 mins</strong>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-6 col-md-4">
+                                                                    <div class="media media-boxes">
+                                                                        <div class="pull-right pr-22">
+                                                                            <img src="~/Content/ProgressDashbaord/images/runing.png" alt="runing img">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pl-22 mt-5 text-center">
+                                                                <!-- Nav tabs -->
+                                                                <div>
+                                                                    <!-- Nav tabs -->
+                                                                    <ul class="nav nav-tabs" role="tablist">
+                                                                        <li role="presentation" class="active"><a href="#perto1" aria-controls="perto1" role="tab" data-toggle="tab">All time</a></li>
+                                                                        <li role="presentation"><a href="#diamo" aria-controls="diamo" role="tab" data-toggle="tab">7 days</a></li>
+                                                                        <li role="presentation"><a href="#revol" aria-controls="revol" role="tab" data-toggle="tab">1 month</a></li>
+                                                                        <li role="presentation"><a href="#liberta" aria-controls="liberta" role="tab" data-toggle="tab">3 months</a></li>
+                                                                        <li role="presentation"><a href="#kalista" aria-controls="kalista" role="tab" data-toggle="tab">6 months</a></li>
+                                                                        <li role="presentation"><a href="#camill" aria-controls="camill" role="tab" data-toggle="tab">Years</a></li>
+                                                                    </ul>
+                                                                    <!-- Tab panes -->
+                                                                    <div class="tab-content">
+                                                                        <div role="tabpanel" class="tab-pane active" id="perto1">
+                                                                            <canvas id="barchart"></canvas>
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="diamo">
+                                                                            <canvas id="barchart2"></canvas>
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="revol">
+                                                                            <canvas id="barchart3"></canvas>
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="liberta">
+                                                                            <canvas id="barchart4"></canvas>
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="kalista">
+                                                                            <canvas id="barchart5"></canvas>
+                                                                        </div>
+                                                                        <div role="tabpanel" class="tab-pane" id="camill">
+                                                                            <canvas id="barchart6"></canvas>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- tabs -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- second slide -->
+                                                    <div class="item">
+                                                        <div class="gap15"></div>
+                                                        <div class="row">
+                                                            <div class="col-xs-12 col-sm-6 col-md-8">
+                                                                <div class="ahieve_list">
+                                                                    <h4 class="overview_heading"> <a href="javascript:;"><i class="fas fa-share-alt"></i></a> your weekly activity </h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                                <div class="media media-boxes">
+                                                                    <div class="pull-right pr-22">
+                                                                        <img src="~/Content/ProgressDashbaord/images/runing.png" alt="runing img">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="pl-22 mt-5 text-center mx-9">
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-6">
+                                                                    <div class="media media-activity">
+                                                                        <div class="media-left">
+                                                                            <a href="#">
+                                                                                <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-1.png" alt="img">
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="media-body text-left">
+                                                                            <h4 class="media-heading">3X</h4>
+                                                                            <p>you have met your weekly activity goal 3 weeks in a row.<br>Nice one!</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-6">
+                                                                    <div class="media media-activity">
+                                                                        <div class="media-left">
+                                                                            <a href="#">
+                                                                                <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-2.png" alt="img">
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="media-body text-left">
+                                                                            <h4 class="media-heading">50%</h4>
+                                                                            <p>your average success rate of meeting the weeky goal </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pl-22 mt-5 text-center">
+                                                            <div>
+                                                                <!-- Nav tabs -->
+                                                                <ul class="nav nav-tabs" role="tablist">
+                                                                    <li role="presentation" class="active"><a href="#petrm2" aria-controls="perto002" role="tab" data-toggle="tab">All time</a></li>
+                                                                    <li role="presentation"><a href="#diamo02" aria-controls="diamo" role="tab" data-toggle="tab">7 days</a></li>
+                                                                    <li role="presentation"><a href="#revol02" aria-controls="revol" role="tab" data-toggle="tab">1 month</a></li>
+                                                                    <li role="presentation"><a href="#liberta02" aria-controls="liberta" role="tab" data-toggle="tab">3 months</a></li>
+                                                                    <li role="presentation"><a href="#kalista02" aria-controls="kalista" role="tab" data-toggle="tab">6 months</a></li>
+                                                                    <li role="presentation"><a href="#camill02" aria-controls="camill" role="tab" data-toggle="tab">Years</a></li>
+                                                                </ul>
+                                                                <!-- Tab panes -->
+                                                                <div class="tab-content">
+                                                                    <div class="gap50"></div>
+                                                                    <div role="tabpanel" class="tab-pane active" id="petrm2">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-4.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <ul class="wikk-list">
+                                                                                            <li><p><strong>Walking</strong> <span>50 mins</span></p></li>
+                                                                                            <li><p><strong>Swimming</strong> <span>50 mins</span></p></li>
+                                                                                            <li><p><strong>Football</strong> <span>50 mins</span></p></li>
+                                                                                            <li><p><strong>Dancing</strong> <span>50 mins</span></p></li>
+                                                                                            <li><p><strong>Other</strong></p></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-3.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <h4 class="media-heading head2">30 Mins</h4>
+                                                                                        <p> Average session length</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div role="tabpanel" class="tab-pane" id="diamo02">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-4.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <ul class="wikk-list">
+                                                                                            <li><p><strong>Walking</strong> <span> 60 mins</span></p></li>
+                                                                                            <li><p><strong>Swimming</strong> <span> 60 mins</span></p></li>
+                                                                                            <li><p><strong>Football</strong> <span> 60 mins</span></p></li>
+                                                                                            <li><p><strong>Dancing</strong> <span> 60 mins</span></p></li>
+                                                                                            <li><p><strong>Other</strong></p></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-3.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <h4 class="media-heading head2"> 30 Mins</h4>
+                                                                                        <p> Average session length</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div role="tabpanel" class="tab-pane" id="revol02">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-4.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <ul class="wikk-list">
+                                                                                            <li><p><strong>Walking</strong> <span> 10 mins</span></p></li>
+                                                                                            <li><p><strong>Swimming</strong> <span> 10 mins</span></p></li>
+                                                                                            <li><p><strong>Football</strong> <span> 10 mins</span></p></li>
+                                                                                            <li><p><strong>Dancing</strong> <span> 10 mins</span></p></li>
+                                                                                            <li><p><strong>Other</strong></p></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-3.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <h4 class="media-heading head2"> 30 Mins</h4>
+                                                                                        <p> Average session length</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div role="tabpanel" class="tab-pane" id="liberta02">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-4.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <ul class="wikk-list">
+                                                                                            <li><p><strong>Walking</strong> <span> 20 mins</span></p></li>
+                                                                                            <li><p><strong>Swimming</strong> <span> 20 mins</span></p></li>
+                                                                                            <li><p><strong>Football</strong> <span> 20 mins</span></p></li>
+                                                                                            <li><p><strong>Dancing</strong> <span> 20 mins</span></p></li>
+                                                                                            <li><p><strong>Other</strong></p></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-3.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <h4 class="media-heading head2"> 30 Mins</h4>
+                                                                                        <p> Average session length</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div role="tabpanel" class="tab-pane" id="kalista02">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-4.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <ul class="wikk-list">
+                                                                                            <li><p><strong>Walking</strong> <span> 430 mins</span></p></li>
+                                                                                            <li><p><strong>Swimming</strong> <span> 430 mins</span></p></li>
+                                                                                            <li><p><strong>Football</strong> <span> 430 mins</span></p></li>
+                                                                                            <li><p><strong>Dancing</strong> <span> 30 mins</span></p></li>
+                                                                                            <li><p><strong>Other</strong></p></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-3.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <h4 class="media-heading head2"> 30 Mins</h4>
+                                                                                        <p> Average session length</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div role="tabpanel" class="tab-pane" id="camill02">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-4.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <ul class="wikk-list">
+                                                                                            <li><p><strong>Walking</strong> <span> 40 mins</span></p></li>
+                                                                                            <li><p><strong>Swimming</strong> <span> 40 mins</span></p></li>
+                                                                                            <li><p><strong>Football</strong> <span> 40 mins</span></p></li>
+                                                                                            <li><p><strong>Dancing</strong> <span> 40 mins</span></p></li>
+                                                                                            <li><p><strong>Other</strong></p></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xs-12 col-sm-6">
+                                                                                <div class="media media-activity">
+                                                                                    <div class="media-left">
+                                                                                        <a href="#">
+                                                                                            <img class="media-object" src="~/Content/ProgressDashbaord/images/wik-3.png" alt="img">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="media-body text-left">
+                                                                                        <h4 class="media-heading head2"> 30 Mins</h4>
+                                                                                        <p> Average session length</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- tabs -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ================= ./END Row III ===================-->
+                <!-- ================= Row IV ===================-->
+                <!-- Gap -->
+                <div class="gap10"></div>
+
+                <div class="fourth-row clearfix items-height">
+                    <!-- GOALS COLUMN -->
+                    <div class="height col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="food_sec">
+                            <div class="food_hdr">
+                                <h3>GOALS</h3>
+                                <div class="arrow-links"><i class="fas fa-angle-up pull-right collapsed" aria-expanded="false" aria-controls="collp5" data-toggle="collapse" data-target="#collp5"></i></div>
+                                <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+                            </div>
+                            <div class="food_sec_in collapse_in5 collapse in panel-collapse" id="collp5" data-parent="#accordion">
+                                <div class="gap10"></div>
+                                <h3>plan your goals and rewards</h3>
+                                <i class="fas fa-plus-circle pull-right "></i>
+                                <div class="gap10"></div>
+                                <div class="col-lg-12 nomrgpad">
+                                    <div class="food_list">
+                                        <div id="accordion">
+
+                                            <!-- Card -->
+                                            <div class="card">
+                                                <div class="card-header" id="heading8">
+                                                    <h5 class="mb-0">
+                                                        <button class="fas  btn btn-link" data-toggle="collapse" data-target="#collapse18" aria-expanded="true" aria-controls="collapse18">
+                                                            <h3>GOAL 1</h3> <i class="fas fa-angle-down"></i>
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapse18" class="panel-collapse collapse in" aria-labelledby="heading8" data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambledLorem.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- ./END Card -->
+                                            <!-- Card -->
+                                            <div class="card">
+                                                <div class="card-header" id="heading9">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse19" aria-expanded="false" aria-controls="collapse19">
+                                                            <h3>GOAL 2</h3> <i class="fas fa-angle-down"></i>
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapse19" class="collapse" aria-labelledby="heading9" data-parent="#accordion">
+                                                    <div class="card-body clearfix">
+                                                        <ul>
+                                                            <li>Weight - 110kg</li>
+                                                            <li>Cooking Lessons</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Card -->
+                                            <div class="card">
+                                                <div class="card-header" id="heading10">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse20" aria-expanded="false" aria-controls="collapse20">
+                                                            <h3>GOAL 3</h3> <i class="fas fa-angle-down"></i>
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapse20" class="collapse" aria-labelledby="heading10" data-parent="#accordion">
+                                                    <div class="card-body formbody">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card -->
+                                            <div class="card">
+                                                <div class="card-header" id="heading11">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse21" aria-expanded="false" aria-controls="collapse21">
+                                                            <h3>GOAL 4</h3> <i class="fas fa-angle-down"></i>
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapse21" class="collapse" aria-labelledby="heading12" data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Card -->
+                                            <div class="card">
+                                                <div class="card-header" id="heading12">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse22" aria-expanded="false" aria-controls="collapse22">
+                                                            <h3>GOAL 5</h3> <i class="fas fa-angle-down"></i>
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapse22" class="collapse" aria-labelledby="heading12" data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card -->
+                                            <div class="card">
+                                                <div class="card-header" id="heading13">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse23" aria-expanded="false" aria-controls="collapse23">
+                                                            <h3>GOAL 6</h3> <i class="fas fa-angle-down"></i>
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapse23" class="collapse" aria-labelledby="heading13" data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card -->
+                                            <div class="card">
+                                                <div class="card-header" id="heading14">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse24" aria-expanded="false" aria-controls="collapse24">
+                                                            <h3>GOAL 7</h3> <i class="fas fa-angle-down"></i>
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapse24" class="collapse" aria-labelledby="heading14" data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./END GOALS COLUMN -->
+                    <!-- COMMUNITY -->
+                    <div class="height col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="com_sec">
+                            <div class="food_hdr">
+                                <h3>COMMUNITY</h3>
+                                <div class="arrow-links"><i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp6"></i></div>
+                                <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+                            </div>
+                            <div class="wt_sec_in collapse_in6 collapse in nomrgpad" id="collp6">
+
+                                <div class="col-lg-12 nomrgpad">
+                                    <ul class="nav nav-pills nav-pills4 nav-pills-act3">
+                                        <li class="active"><a href="#1aa" id="forum" data-toggle="tab">FORUM</a></li>
+                                        <li><a href="#2aa" id="chat" data-toggle="tab">CHAT</a></li>
+                                    </ul>
+                                    <div class="tab-content clearfix">
+                                        <div class="tab-pane active" id="1aa">
+                                            <div class="gap15"></div>
+                                            <div class="chat_list">
+                                                <h3>JOIN THE CONVERSATION</h3>
+                                                <ul>
+                                                    <li>
+                                                        <img src="~/Content/ProgressDashbaord/images/img1.jpg" alt="img">
+                                                        <a href="#">
+                                                            <i class="fas fa-angle-right pull-right"></i>
+                                                            <div class="chat_txt">
+                                                                <h6>3HRS</h6>
+                                                                <h5>EMBARASSMENT</h5>
+                                                                <h4>Biffa94</h4>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <img src="~/Content/ProgressDashbaord/images/img2.jpg" alt="img">
+                                                        <a href="#">
+                                                            <i class="fas fa-angle-right pull-right"></i>
+                                                            <div class="chat_txt">
+                                                                <h6>14DAYS</h6>
+                                                                <h5>The Big Questions on BBC1 Sunday</h5>
+                                                                <h4>Smithr82</h4>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <img src="~/Content/ProgressDashbaord/images/img3.jpg" alt="img">
+                                                        <a href="#">
+                                                            <i class="fas fa-angle-right pull-right"></i>
+                                                            <div class="chat_txt">
+                                                                <h6>26 DAYS</h6>
+                                                                <h5>Healthy Swaps</h5>
+                                                                <h4>AndyJC</h4>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="2aa">
+                                            <div class="gap15"></div>
+                                            <h3>Lorem Ipsum Dolor Sit</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./END COMMUNITY -->
+                </div>
+                <!-- ================= ./END Row IV ===================-->
+                <!-- ================= Row V ===================-->
+                <div class="fifth-row items-height">
+
+                    <!-- TOOLS -->
+                    <div class="height col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                        <div class="tool_sec tools">
+                            <div class="tool_hdr">
+                                <h3>TOOLS</h3>
+                                <div class="arrow-links"><i class="fas fa-angle-up fa-angle-uphide pull-right" data-toggle="collapse" data-target="#collp7"></i></div>
+                                <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+                            </div>
+                            <div class="wt_sec_in collapse_in7 collapse in" id="collp7">
+                                <div class="news nomrgpad col-md-12">
+
+                                    <!-- Wrapper for slides -->
+                                    <!-- Carousel items -->
+                                    <div class="item tool_txt" id="FirstItem1">
+                                        <div class="box">
+                                            <img src="~/Content/ProgressDashbaord/images/tools-img.jpg" class="img-responsive">
+
+                                            <div class="slide-content">
+                                                <div class="valign">
+                                                    <div class="valign-middle">
+                                                        <div class="gap10"></div>
+                                                        <h2>AMAZING LOSERS</h2>
+                                                        <p>Meet hundreds of men who have reached their goals.Find out how they did it, chat to them and get inspired!</p>
+                                                        <div class="gap10"></div>
+                                                        <!-- Controls -->
+                                                        <a class="left control-inside scroll" href="#secondItem1" role="button" data-slide="next">
+                                                            <span class="fas fa-chevron-circle-right" aria-hidden="true"></span>
+                                                        </a>
+                                                        <div class="gap10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <img src="~/Content/ProgressDashbaord/images/tools-img-btm.jpg" class="img-responsive">
+                                        </div>
+                                    </div>
+                                    <!--/item-->
+                                    <div class="item tool_txt" id="secondItem1">
+                                        <div class="box">
+                                            <img src="~/Content/ProgressDashbaord/images/benefits-img.jpg" class="img-responsive">
+                                            <div class="slide-content">
+                                                <div class="valign">
+                                                    <div class="valign-middle">
+                                                        <div class="gap10"></div>
+                                                        <h2>AMAZING LOSERS</h2>
+                                                        <p>Meet hundreds of men who have reached their goals.Find out how they did it, chat to them and get inspired!</p>
+                                                        <div class="gap10"></div>
+                                                        <!-- Controls -->
+                                                        <a class="left carousel-control control-inside scroll" href="#thirdItem1" role="button" data-slide="next">
+                                                            <span class="fas fa-chevron-circle-right" aria-hidden="true"></span>
+                                                        </a>
+                                                        <div class="gap10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <img src="~/Content/ProgressDashbaord/images/benefits-img-btm.jpg" class="img-responsive">
+                                        </div>
+                                    </div>
+                                    <!--/item-->
+                                    <div class="item tool_txt" id="thirdItem1">
+                                        <div class="box">
+                                            <img src="~/Content/ProgressDashbaord/images/tools-img.jpg" class="img-responsive">
+                                            <div class="slide-content">
+                                                <div class="valign">
+                                                    <div class="valign-middle">
+                                                        <div class="gap10"></div>
+                                                        <h2>AMAZING LOSERS</h2>
+                                                        <p>Meet hundreds of men who have reached their goals.Find out how they did it, chat to them and get inspired!</p>
+                                                        <div class="gap10"></div>
+                                                        <!-- Controls -->
+                                                        <a class="left carousel-control control-inside scroll" href="#FirstItem1" role="button" data-slide="next">
+                                                            <span class="fas fa-chevron-circle-right" aria-hidden="true"></span>
+                                                        </a>
+                                                        <div class="gap10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <img src="~/Content/ProgressDashbaord/images/tools-img-btm.jpg" class="img-responsive">
+                                        </div>
+                                    </div>
+                                    <!--/item-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./END TOOLS -->
+                    <!-- BENEFITS -->
+                    <div class="height col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="tool_sec benif">
+                            <div class="tool_hdr">
+                                <h3>BENEFITS</h3>
+                                <div class="arrow-links"><i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp8"></i></div>
+                                <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+                            </div>
+                            <div class="wt_sec_in collapse_in8 collapse in" id="collp8">
+                                <div class="news nomrgpad col-md-12">
+
+                                    <div class="item active tool_txt">
+                                        <div class="box">
+                                            <img src="~/Content/ProgressDashbaord/images/benefits-img.jpg" class="img-responsive" alt="img">
+                                            <div class="slide-content">
+                                                <div class="valign">
+                                                    <div class="valign-middle">
+                                                        <div class="gap10"></div>
+                                                        <h2>2FREE GRAZE BOXES</h2>
+                                                        <p>Graze healthy boxes are te perfect snacks and you can get your first and fifth free as a member! Simply use the code CNXNRZ9 at</p>
+                                                        <a href="www.graze.com/uk/signup">www.graze.com/uk/signup</a>
+                                                        <div class="gap5"></div>
+                                                        <span class="exp">EXPIRES 29 APRIL 18</span>
+                                                        <div class="gap10"></div>
+                                                        <!-- Controls -->
+                                                        <a class="left carousel-control control-inside" href="#myCarousebtm2" role="button" data-slide="next">
+                                                            <span class="fas fa-chevron-circle-right" aria-hidden="true"></span>
+                                                        </a>
+                                                        <div class="gap10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <img src="~/Content/ProgressDashbaord/images/tools-img-btm.jpg" class="img-responsive" alt="img">
+                                        </div>
+                                    </div>
+                                    <!--/item -->
+                                    <div class="item tool_txt">
+                                        <div class="box">
+                                            <img src="~/Content/ProgressDashbaord/images/benefits-img.jpg" class="img-responsive" alt="img">
+                                            <div class="slide-content">
+                                                <div class="valign">
+                                                    <div class="valign-middle">
+                                                        <div class="gap10"></div>
+                                                        <h2>AMAZING LOSERS</h2>
+                                                        <p>Meet hundreds of men who have reached their goals.Find out how they did it, chat to them and get inspired!</p>
+                                                        <div class="gap10"></div>
+                                                        <!-- Controls -->
+                                                        <a class="left carousel-control control-inside" href="#myCarousebtm2" role="button" data-slide="next">
+                                                            <span class="fas fa-chevron-circle-right" aria-hidden="true"></span>
+                                                        </a>
+                                                        <div class="gap10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <img src="~/Content/ProgressDashbaord/images/benefits-img-btm.jpg" class="img-responsive">
+                                        </div>
+                                    </div>
+
+                                    <!--/item-->
+                                    <div class="item tool_txt">
+                                        <div class="box">
+                                            <img src="~/Content/ProgressDashbaord/images/benefits-img.jpg" class="img-responsive">
+                                            <div class="slide-content">
+                                                <div class="valign">
+                                                    <div class="valign-middle">
+                                                        <div class="gap10"></div>
+                                                        <h2>AMAZING LOSERS</h2>
+                                                        <p>Meet hundreds of men who have reached their goals.Find out how they did it, chat to them and get inspired!</p>
+                                                        <div class="gap10"></div>
+                                                        <!-- Controls -->
+                                                        <a class="left carousel-control control-inside" href="#myCarousebtm2" role="button" data-slide="next">
+                                                            <span class="fas fa-chevron-circle-right" aria-hidden="true"></span>
+                                                        </a>
+                                                        <div class="gap10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <img src="~/Content/ProgressDashbaord/images/benefits-img-btm.jpg" class="img-responsive">
+                                        </div>
+                                    </div>
+                                    <!--/item-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./END BENEFITS -->
+            </div>
+            <!-- ================= ./END Row V ===================-->
+            <!-- ================= Row VI ===================-->
+            <div class="gap10"></div>
+
+            <div class="sixth-row items-height">
+                <div class="height col-lg-12 clearfix">
+                    <div class="ach_sec">
+                        <div class="bnf_hdr">
+                            <h3>ACHIEVEMENTS</h3>
+                            <div class="arrow-links"><i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp9"></i></div>
+                            <a href="#"><i class="fas fa-question-circle pull-right"></i></a>
+                        </div>
+                        <div class="wt_sec_in collapse_in9 collapse in nomrgpad" id="collp9">
+                            <div class="col-lg-12 nomrgpad">
+                                <ul class="nav nav-pills nav-pills2 nav-pills-act4 ">
+                                    <li class="active nav-pills-act"><a href="#1aaa" id="recent" data-toggle="tab">RECENT</a></li>
+                                    <li><a href="#2aaa" id="tracking" data-toggle="tab">TRACKING</a></li>
+                                    <li><a href="#3aaa" id="weight" data-toggle="tab">WEIGHT</a></li>
+                                    <li><a href="#4aaa" id="activity" data-toggle="tab">ACTIVITY</a></li>
+                                    <li><a href="#5aaa" id="system" data-toggle="tab">SYSTEM</a></li>
+                                    <li><a href="#6aaa" id="football" data-toggle="tab">FOOTBALL</a></li>
+                                </ul>
+                                <div class="tab-content clearfix">
+                                    <div class="tab-pane active" id="1aaa">
+                                        <div class="gap15"></div>
+                                        <div class="ahieve_list">
+                                            <ul>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img1.jpg" class="img-responsive center-block">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4>GETTING GIFFY WITH IT</h4>
+                                                            <h5>You done made a GIF</h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img2.jpg" class="img-responsive center-block">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4>5% CLUB</h4>
+                                                            <h5>You have lost 5% of your body weight</h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img3.jpg" class="img-responsive center-block" alt="img">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4>CONSISTENCY KEY </h4>
+                                                            <h5>You have been active three days in a row. Nice!</h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img4.jpg" class="img-responsive center-block" alt="img">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4>OHH FRIEND! </h4>
+                                                            <h5>You got a friend linked on the system</h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img5.jpg" class="img-responsive center-block" alt="img">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4>KICK OFF </h4>
+                                                            <h5>You played your first game of MAN v FAT Football</h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="2aaa">
+
+                                    </div>
+                                    <div class="tab-pane" id="3aaa">
+                                        <div class="gap15"></div>
+                                        <div class="ahieve_list ahieve_list2">
+                                            <ul>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img3.jpg" class="img-responsive center-block">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4>consistency key</h4>
+                                                            <h5>You've been active three days in a row. Nice!</h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img3.jpg" class="img-responsive center-block">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4> first timer</h4>
+                                                            <h5>You logged your first activity </h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img3-gray.jpg" class="img-responsive center-block" alt="img">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4 class="color-gray"> gym class hero </h4>
+                                                            <h5>You completed 100% of your activity goals in 1 week!</h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <img src="~/Content/ProgressDashbaord/images/ahieve-img3-gray.jpg" class="img-responsive center-block" alt="img">
+                                                        <div class="gap10"></div>
+                                                        <div class="achieve_txt">
+                                                            <h4 class="color-gray"> active </h4>
+                                                            <h5>You have logged activity 7 days in a row</h5>
+                                                        </div>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="4aaa"><h3>Lorem Ipsum Dolor Sit 3</h3></div>
+                                    <div class="tab-pane" id="5aaa"><h3>Lorem Ipsum Dolor Sit 4</h3></div>
+                                    <div class="tab-pane" id="6aaa"><h3>Lorem Ipsum Dolor Sit 5</h3></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ================= ./END Row VI ===================-->
+        </div><!-- Row End-->
+    </div><!-- Container End-->
+   
+    <!-- ================= COntent  ===================-->
+    
+</body>
+</html>
+
+

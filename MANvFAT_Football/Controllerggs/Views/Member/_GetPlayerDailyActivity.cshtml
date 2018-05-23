@@ -1,0 +1,220 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDailyActivityExt
+@using MANvFAT_Football.Models.Enumerations
+<script>
+    $(document).ready(function () {
+
+        $("#Breakfast").kendoAutoComplete({
+            dataSource: {
+                type: "jsonp",
+                serverFiltering: false,
+                minLength: 1,
+                transport: {
+                    read: "/Member/GetDailyActivityAutoComplete/" + $("#hdnDashboardURL").val() + "?paramPlayerID=" + $("#hdnPlayerID").val() + "&activityType=" +'@enumDailyActivityTypes.Breakfast'
+                }
+            },
+            filter: "startswith",
+            placeholder: "",
+            separator: ", ",
+
+            filtering: function (e) {
+                // alert(e.filter.value);
+                if (e.filter.value == "") {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        $("#Lunch").kendoAutoComplete({
+            dataSource: {
+                type: "jsonp",
+                serverFiltering: false,
+                minLength: 1,
+                transport: {
+                    read: "/Member/GetDailyActivityAutoComplete/" + $("#hdnDashboardURL").val() + "?paramPlayerID=" + $("#hdnPlayerID").val() +"&activityType="+'@enumDailyActivityTypes.Lunch'
+                }
+            },
+            filter: "startswith",
+            placeholder: "",
+            separator: ", ",
+
+            filtering: function (e) {
+                // alert(e.filter.value);
+                if (e.filter.value == "") {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        $("#Dinner").kendoAutoComplete({
+            dataSource: {
+                type: "jsonp",
+                serverFiltering: false,
+                minLength: 1,
+                transport: {
+                    read: "/Member/GetDailyActivityAutoComplete/" + $("#hdnDashboardURL").val() + "?paramPlayerID=" + $("#hdnPlayerID").val() +"&activityType="+'@enumDailyActivityTypes.Dinner'
+                }
+            },
+            filter: "startswith",
+            placeholder: "",
+            separator: ", ",
+
+            filtering: function (e) {
+                // alert(e.filter.value);
+                if (e.filter.value == "") {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        $("#Snacks").kendoAutoComplete({
+            dataSource: {
+                type: "jsonp",
+                serverFiltering: false,
+                minLength: 1,
+                transport: {
+                    read: "/Member/GetDailyActivityAutoComplete/" + $("#hdnDashboardURL").val() + "?paramPlayerID=" + $("#hdnPlayerID").val() +"&activityType="+'@enumDailyActivityTypes.Snacks'
+                }
+            },
+            filter: "startswith",
+            placeholder: "",
+            separator: ", ",
+
+            filtering: function (e) {
+                // alert(e.filter.value);
+                if (e.filter.value == "") {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+</script>
+
+<input type="hidden" id="hdnPlayerDailyActivityID" value="@Model.PlayerDailyActivityID" />
+<input type="hidden" id="hdnPlayerID" value="@Model.PlayerID" />
+<input type="hidden" id="hdnActivityDate" value="@Model.ActivityDate.ToString("dd MMM yyyy")" />
+<input type="hidden" id="hdnBreakfast" value="@Model.Breakfast" />
+<input type="hidden" id="hdnLunch" value="@Model.Lunch" />
+<input type="hidden" id="hdnDinner" value="@Model.Dinner" />
+<input type="hidden" id="hdnSnacks" value="@Model.Snacks" />
+<input type="hidden" id="hdnDrink" value="@Model.Drink" />
+<input type="hidden" id="hdnHowHealthy" value="@Model.HowHealthy" />
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Breakfast)
+    <div>
+        @*@(Html.Kendo().AutoCompleteFor(m => m.Breakfast)
+          .Filter("startswith")
+          .HtmlAttributes(new { @style = "width:90%", @onblur = "SaveData('Breakfast');" })
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Action("GetDailyActivityAutoComplete", "Member", new { id = Model.da paramPlayerID = Model.PlayerID});
+              })
+              .ServerFiltering(false);
+          })
+        )*@
+        @Html.Kendo().TextBoxFor(m => m.Breakfast).HtmlAttributes(new { @style = "width:90%", @onblur = "SaveData('Breakfast');" })
+        <span id="saved_Breakfast" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+    </div>
+
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Lunch)
+    <div>
+        @Html.Kendo().TextBoxFor(m => m.Lunch).HtmlAttributes(new { @style = "width:90%", @onblur = "SaveData('Lunch');" })
+        <span id="saved_Lunch" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+    </div>
+
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Dinner)
+    <div>
+        @Html.Kendo().TextBoxFor(m => m.Dinner).HtmlAttributes(new { @style = "width:90%", @onblur = "SaveData('Dinner');" })
+        <span id="saved_Dinner" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+    </div>
+
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Snacks)
+    <div>
+        @Html.Kendo().TextBoxFor(m => m.Snacks).HtmlAttributes(new { @style = "width:90%", @onblur = "SaveData('Snacks');" })
+        <span id="saved_Snackst" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+    </div>
+
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Drink)
+    <div>
+        @Html.Kendo().TextBoxFor(m => m.Drink).HtmlAttributes(new { @style = "width:90%", @onblur = "SaveData('Drink');" })
+        <span id="saved_Drink" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+    </div>
+
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.HowHealthy)
+    <div>
+        @Html.HiddenFor(m => m.HowHealthy)
+        @*@Html.Kendo().TextBoxFor(m => m.HowHealthy).HtmlAttributes(new { @style = "width:90%", @onblur = "SaveData('HowHealthy');" })*@
+        <span id="saved_HowHealthy" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+    </div>
+
+    @{ var _HowHealthy = Model.HowHealthy.HasValue ? Model.HowHealthy.Value : 0; }
+   
+    <form id="smileys">
+        <label>
+            <input type="radio" name="smiley" value="1" class="rating-1" @if (_HowHealthy == 1) {<text> checked="checked" </text>} />
+            <img src="/Content/FrontEnd/img/Smilies/smiley-1.png" class="clssmiley_1 @if (_HowHealthy == 1) {<text> clsHowHealthySelected </text>}"  >
+        </label>
+
+        <label>
+            <input type="radio" name="smiley" value="2" class="rating-2" @if (_HowHealthy == 2) { <text> checked="checked" </text> } />
+            <img src="/Content/FrontEnd/img/Smilies/smiley-2.png" class="clssmiley_2 @if (_HowHealthy == 2) { <text> clsHowHealthySelected </text> }">
+        </label>
+
+        <label>
+            <input type="radio" name="smiley" value="3" class="rating-3" @if (_HowHealthy == 3) { <text> checked="checked" </text>  } />
+            <img src="/Content/FrontEnd/img/Smilies/smiley-3.png" class="clssmiley_3 @if (_HowHealthy == 3) { <text> clsHowHealthySelected </text>  }">
+        </label>
+
+        <label>
+            <input type="radio" name="smiley" value="4" class="rating-4" @if (_HowHealthy == 4) { <text> checked="checked" </text>  } />
+            <img src="/Content/FrontEnd/img/Smilies/smiley-4.png" class="clssmiley_4 @if (_HowHealthy == 4) { <text> clsHowHealthySelected </text>  }">
+        </label>
+
+        <label>
+            <input type="radio" name="smiley" value="5" class="rating-5" @if (_HowHealthy == 5) { <text> checked="checked" </text>  } />
+            <img src="/Content/FrontEnd/img/Smilies/smiley-5.png"class="clssmiley_5  @if (_HowHealthy == 5) { <text> clsHowHealthySelected </text>  }">
+        </label>
+
+        @if (_HowHealthy != 0)
+        {
+            <p id="HowHealthy_Selection">It looks like you've chosen a rating of @_HowHealthy.ToString() today.</p>
+        }
+        else
+        {
+            <p id="HowHealthy_Selection"></p>
+        }
+    </form>
+
+    <script>
+        // Simple jQuery for updating the text
+        // when a radio button is clicked
+        $('#smileys input').on('click', function () {
+
+            $('#HowHealthy_Selection').html("It looks like you've chosen a rating of "+ $(this).val()+" today.");
+            $("#HowHealthy").val($(this).val());
+
+            $(".clssmiley_1").removeClass("clsHowHealthySelected");
+            $(".clssmiley_2").removeClass("clsHowHealthySelected");
+            $(".clssmiley_3").removeClass("clsHowHealthySelected");
+            $(".clssmiley_4").removeClass("clsHowHealthySelected");
+            $(".clssmiley_5").removeClass("clsHowHealthySelected");
+
+            $(".clssmiley_" + $(this).val()).addClass("clsHowHealthySelected");
+
+            SaveData('HowHealthy');
+        });
+    </script>
+
+</div>

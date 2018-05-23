@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "TestEmail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Send Test Email</h2>
+@ViewData["Status"]
+
+@using (Html.BeginForm())
+{
+    <div>
+        <br />
+        To: <br />@Html.TextBox("txtTo","tech@manvfat.com")<br />
+        Subject: <br />@Html.TextBox("txtSubject", "testing Email")<br />
+        Body:<br />@Html.TextArea("txtEmailBody")<br />
+
+        <input type="submit" id="btntest" value="Send" />
+    </div>
+
+}
+

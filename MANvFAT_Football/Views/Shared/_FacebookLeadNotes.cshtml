@@ -1,0 +1,98 @@
+﻿
+    <div class="col-md-12">
+        <div class="modal fade model_FacebookLeadNotesDialogue" tabindex="-1" role="dialog" aria-labelledby="dlgHeading" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="margin-top:5% !important;">
+                    <div class="modal-header">
+                        <h2 class="text-primary" id="dlgHeading">Facebook Lead Player Notes</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.Hidden("hdnFacebookLeadID")
+
+                                @Html.TextArea("txtFacebookLeadNotes")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal" value="Close" />
+                        <input id="btnAction" type="button" class="btn btn-primary" value="Save" onclick="SaveFacebookLeadNotes();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+    function cmdFacebookLeadNotes(id) {
+
+        OpenFacebookLeadNotes(id);
+    }
+
+    function OpenFacebookLeadNotes(id) {
+
+        $.ajax({
+            url: "/FacebookLeads/GetFacebookLeadNotes",
+            data: { FacebookLeadID: id },
+            dataType: "json",
+            type: "POST",
+            beforeSend: function myfunction() {
+                if (id == undefined) {
+                    ProcessingWindow("Processing please wait...");
+                }
+            },
+            error: function (e) {
+                OpenErrorWindow("An unexpected error occurred.");// + e.responseText);
+            },
+
+            success: function (data) {
+
+                $('.model_FacebookLeadNotesDialogue').find('#txtFacebookLeadNotes').val(data);
+                $('.model_FacebookLeadNotesDialogue').find('#hdnFacebookLeadID').val(id);
+
+                $('.model_FacebookLeadNotesDialogue').modal('show');
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    function SaveFacebookLeadNotes() {
+
+        var _FacebookLeadID = $("#hdnFacebookLeadID").val();
+        var _Notes = $("#txtFacebookLeadNotes").val();
+        if (_Notes == "") {
+            OpenAlertModal("Error", "Please enter notes to save.", "btn-danger", BootstrapDialog.TYPE_DANGER)
+        }
+        else {
+            $.ajax({
+                url: "/FacebookLeads/SaveFacebookLeadNotes",
+                data: { FacebookLeadID: _FacebookLeadID, Notes: _Notes },
+                dataType: "json",
+                type: "POST",
+                beforeSend: function myfunction() {
+                    waitingDialog.show('Processing Please wait...', { dialogSize: 'sm', progressType: 'info' });
+                },
+                error: function (e) {
+                    OpenErrorWindow("An unexpected error occurred.");// + e.responseText);
+                },
+
+                success: function (data) {
+
+                    waitingDialog.hide();
+
+                    if (data.status == true) {
+                        // OpenAlertModal("Information", "Notes saves successfully", "btn-primary", BootstrapDialog.TYPE_PRIMARY);
+                        $('.model_FacebookLeadNotesDialogue').modal('hide');
+                        RefreshGrid_FacebookLeads_Grid();
+                    }
+                    else {
+                        OpenAlertModal("Error", data.Msg, "btn-danger", BootstrapDialog.TYPE_DANGER);
+                    }
+                }
+            });
+        }
+    }
+</script>

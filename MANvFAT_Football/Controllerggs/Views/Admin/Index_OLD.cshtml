@@ -1,0 +1,339 @@
+﻿
+@{
+    ViewBag.Title = "HOME";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+
+    function ToggleAllKendoGridDetailRows(direction) {
+        //Get a collection of all rows in the grid
+        var grid = $("#NAGLeagues_Grid").data("kendoGrid");
+        var dataView = grid.dataSource.view();
+
+        for (var i = 0; i < dataView.length; i++) {
+            for (var j = 0; j < dataView[i].items.length; j++) {
+                var uid = dataView[i].items[j].uid;
+                if (direction == 'collapse') {
+                    $(".toggleDetail").attr("onclick", "ToggleAllKendoGridDetailRows('expand')");
+                    $(".toggleDetail").text("Expand all rows");
+                    grid.collapseGroup($("#NAGLeagues_Grid").find("tr[data-uid=" + uid + "]").prev("tr.k-grouping-row"));
+                }
+                else if (direction == 'expand') {
+                    $(".toggleDetail").attr("onclick", "ToggleAllKendoGridDetailRows('collapse')");
+                    $(".toggleDetail").text("Collapse all rows");
+                    grid.expandGroup($("#NAGLeagues_Grid").find("tr[data-uid=" + uid + "]").prev("tr.k-grouping-row"));
+                }
+                //if (dataView[i].items[j].status == "Closed") {
+                //
+                //    grid.collapseGroup($("#grid").find("tr[data-uid=" + uid + "]").prev("tr.k-grouping-row"));
+                //}
+            }
+        }
+
+
+    }
+
+
+
+</script>
+<h2>Notification and Guidance</h2>
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">NAG for Leagues</div>
+            <div class="panel-body">
+                <div>
+                    @*<a href="#" class="toggleDetail" title="Expand all rows" onclick="ToggleAllKendoGridDetailRows('expand');">Collapse all rows</a>*@
+                </div>
+                @(Html.Kendo().Grid<MANvFAT_Football.Models.SelectNAG_Leagues_Result>()
+    .Name("NAGLeagues_Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(50)
+             .Group(grp =>
+             {
+                 grp.Add(g => g.LeagueName);
+                 grp.Add(g => g.Title);
+             })
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.NAGLeagueID))
+                .Read(read => read.Action("_ReadNAG_Leagues", "NAGs"))
+    .ServerOperation(true)
+    )
+    .NoRecords(m => m.Template("<div class='alert alert-success'>No NAGs for any League</div>"))
+    .Columns(columns =>
+    {
+        //columns.Bound(p => p.LeagueName).Width(150).ClientGroupHeaderTemplate("League Name: #=LeagueName#");
+        columns.Bound(p => p.SubTitle).ClientTemplate("<a target='_blank' href='/NAGs/Details/#=NAGID#'>#=SubTitle#</a>").Width(150);
+        columns.Bound(p => p.Completed).Title("Done").ClientTemplate("<div style='text-align:center; font-weight:bold;'> #if(Completed){#<div class='text-success'>Yes</div>#}else{#<div class='text-danger'>No</div>#}# </div>").Width(50);
+        // columns.Bound(p => p.CompletedDateTime).Title("Date/Time").Format("{0:dd/MM/yyyy HH:mm}").Width(100);
+
+        columns.Command(command =>
+        {
+            command.Custom("cmdNAGLeagueDone").Text("Done").Click("cmdNAGLeagueDone").HtmlAttributes(new { @class = "btn btn-success btn-MVF" });
+            command.Custom("cmdNAGLeagueUnDone").Text("Un-Done").Click("cmdNAGLeagueUnDone").HtmlAttributes(new { @class = "btn btn-warning btn-MVF" });
+        }).Width(100);
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 50, 100, 150, 200 }))
+    .Sortable(s => s.SortMode(GridSortMode.SingleColumn))
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+    .Selectable()
+    .Groupable()
+                // .Events(ev => ev.DataBound("NAGLeagues_Grid_DataBound"))
+                )
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">General NAGs</div>
+            <div class="panel-body">
+                @(Html.Kendo().Grid<MANvFAT_Football.Models.SelectNAG_General_Result>()
+    .Name("NAGUsers_Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(50)
+    .Events(ev => ev.Error("DisplayGridError"))
+     .Group(grp =>  grp.Add(g => g.Title) )
+    .Model(model => model.Id(p => p.NAGUserID))
+                .Read(read => read.Action("_ReadNAG_General", "NAGs"))
+    .ServerOperation(false)
+    )
+ .NoRecords(m => m.Template("<div class='alert alert-success'>No more General NAGs for Today</div>"))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.SubTitle).Width(150);
+        columns.Bound(p => p.Completed).Title("Done").ClientTemplate("<div style='text-align:center; font-weight:bold;'> #if(Completed){#<div class='text-success'>Yes</div>#}else{#<div class='text-danger'>No</div>#}# </div>").Width(50);
+        // columns.Bound(p => p.CompletedDateTime).Title("Date/Time").Format("{0:dd/MM/yyyy HH:mm}").Width(100);
+
+        columns.Command(command =>
+        {
+            command.Custom("cmdNAGUserDone").Text("Done").Click("cmdNAGUserDone").HtmlAttributes(new { @class = "btn btn-success btn-MVF" });
+            command.Custom("cmdNAGUserUnDone").Text("Un-Done").Click("cmdNAGUserUnDone").HtmlAttributes(new { @class = "btn btn-warning btn-MVF" });
+        }).Width(100);
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 50, 100, 150, 200 }))
+    .Sortable(s => s.SortMode(GridSortMode.SingleColumn))
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+    .Selectable()
+    .Groupable()
+
+                )
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">Overdue NAGs</div>
+            <div class="panel-body">
+                @(Html.Kendo().Grid<MANvFAT_Football.Models.SelectNAGsOverdue_Result>()
+    .Name("NAGOverdue_Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(50)
+            .Events(ev => ev.Error("DisplayGridError"))
+            .Group(grp => grp.Add(g => g.Title))
+    .Model(model => model.Id(p => p.NAGID))
+                .Read(read => read.Action("_ReadNAG_Overdue", "NAGs"))
+    .ServerOperation(false)
+    )
+ .NoRecords(m => m.Template("<div class='alert alert-success'>No more Overdue NAGs for Today</div>"))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.SubTitle).ClientTemplate("<a target='_blank' href='/NAGs/Details/#=NAGID#'>#=SubTitle#</a>").Width(150);
+        columns.Bound(p => p.LeagueName)
+        .ClientTemplate("<a target='_blank' href='/Leagues/Details/#=LeagueID#'>#=LeagueName#</a>").Width(150);
+        columns.Bound(p => p.OverdueDate).Title("Overdue Date/Time").Format("{0:dd/MM/yyyy}").Width(100);
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 50, 100, 150, 200 }))
+    .Sortable(s => s.SortMode(GridSortMode.SingleColumn))
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+    .Selectable()
+    .Groupable()
+
+                )
+
+            </div>
+        </div>
+    </div>
+</div>
+@*<div class="col-md-4">
+
+        <div class="jumbotron">
+            <div class="alert alert-success  text-center">
+                <div>
+                    <img src="~/Images/ManvFat-FC-Badge.png" />
+                </div>
+                <h1>MANvFAT Football</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="jumbotron">
+            <div class="alert alert-success  text-center">
+                <div>
+                    <img src="~/Images/ManvFat-FC-Badge.png" />
+                </div>
+                <h1>MANvFAT Football</h1>
+            </div>
+        </div>
+    </div>*@
+        </div>
+
+<script type="text/javascript">
+
+    function NAGLeagues_Grid_DataBound(e) {
+        var grid = $("#NAGLeagues_Grid").data("kendoGrid");
+        var gridData = grid.dataSource.view();
+        alert("gridData.length = " + gridData.length);
+        for (var i = 0; i < gridData.length; i++) {
+            var currentUid = gridData[i].uid;
+            alert(gridData[i].Completed);
+            if (gridData[i].Completed == true) {
+                var currentRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                var cmdNAGLeagueUnDone = $(currentRow).find(".k-grid-cmdNAGLeagueUnDone");
+                alert("cmdNAGLeagueUnDone = " + cmdNAGLeagueUnDone);
+                cmdNAGLeagueUnDone.css('display', 'none')
+
+                var cmdNAGLeagueDone = $(currentRow).find(".k-grid-cmdNAGLeagueDone");
+                cmdNAGLeagueDone.css('display', '')
+            }
+            else {
+                var cmdNAGLeagueUnDone = $(currentRow).find(".k-grid-cmdNAGLeagueUnDone");
+                alert("cmdNAGLeagueUnDone = " + cmdNAGLeagueUnDone);
+                cmdNAGLeagueUnDone.css('display', '')
+
+                var cmdNAGLeagueDone = $(currentRow).find(".k-grid-cmdNAGLeagueDone");
+                cmdNAGLeagueDone.css('display', 'none')
+            }
+
+        }
+
+
+        var g = $("#NAGLeagues_Grid").data("kendoGrid");
+        g.dataSource.group({ field: "LeagueName" });
+
+    }
+
+
+    function RefreshNAGLeagues_Grid() {
+        $("#NAGLeagues_Grid").data("kendoGrid").dataSource.read();
+    }
+
+    function RefreshNAGUsersGrid(e) {
+        $("#NAGUsers_Grid").data("kendoGrid").dataSource.read();
+    }
+
+    function cmdNAGLeagueDone(e) {
+
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var NAGLeagueID = dataItem.NAGLeagueID;
+
+        MarkNAGLeagueDone_UnDone(NAGLeagueID, true);
+        //OpenConfirmationModal("cmdNAGLeagueDone", "Mark Done", "Are you sure you want to Mark this NAG as DONE?",BootstrapDialog.TYPE_SUCCESS, NAGLeagueID);
+    }
+
+
+    function cmdNAGLeagueUnDone(e) {
+
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var NAGLeagueID = dataItem.NAGLeagueID;
+
+        MarkNAGLeagueDone_UnDone(NAGLeagueID, false);
+        // OpenConfirmationModal("cmdNAGLeagueUnDone", "Mark UnDone", "Are you sure you want to Mark this NAG as Un-DONE?",BootstrapDialog.TYPE_WARNING, NAGLeagueID);
+    }
+
+    function MarkNAGLeagueDone_UnDone(NAGLeagueID, IsDone) {
+
+        $.ajax({
+            type: "POST",
+            url: '/NAGLeagues/MarkNAGLeagueDone_UnDone',
+            data: { NAGLeagueID: NAGLeagueID, IsDone: IsDone },
+            dataType: "json",
+            error: function (e) {
+                return false;
+            },
+            success: function (data) {
+
+                if (data.status) {
+                    RefreshNAGLeagues_Grid();
+                }
+                else {
+                    OpenAlertModal("Error", data.Msg, "btn-danger", BootstrapDialog.TYPE_DANGER);
+                }
+            }
+        });
+    }
+
+
+
+    function cmdNAGUserDone(e) {
+
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var NAGUserID = dataItem.NAGUserID;
+
+        MarkNAGUserDone_UnDone(NAGUserID, true);
+        //OpenConfirmationModal("cmdNAGUserDone", "Mark Done", "Are you sure you want to Mark this NAG as DONE?",BootstrapDialog.TYPE_SUCCESS, NAGUserID);
+    }
+
+
+    function cmdNAGUserUnDone(e) {
+
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var NAGUserID = dataItem.NAGUserID;
+
+        MarkNAGUserDone_UnDone(NAGUserID, false);
+        //OpenConfirmationModal("cmdNAGUserUnDone", "Mark Done", "Are you sure you want to Mark this NAG as DONE?",BootstrapDialog.TYPE_WARNING, NAGUserID);
+    }
+
+    function MarkNAGUserDone_UnDone(NAGUserID, IsDone) {
+
+        $.ajax({
+            type: "POST",
+            url: '/NAGUsers/MarkDone_UnDone',
+            data: { NAGUserID: NAGUserID, IsDone: IsDone },
+            dataType: "json",
+            error: function (e) {
+                return false;
+            },
+            success: function (data) {
+
+                if (data.status) {
+                    RefreshNAGUsersGrid();
+                }
+                else {
+                    OpenAlertModal("Error", data.Msg, "btn-danger", BootstrapDialog.TYPE_DANGER);
+                }
+            }
+        });
+    }
+
+
+
+</script>

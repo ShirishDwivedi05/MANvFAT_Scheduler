@@ -1,0 +1,148 @@
+﻿@using MANvFAT_Football.Helpers
+
+@{
+    ViewBag.Title = "LogOn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#txtMobileCode").focus();
+        TestBrowserForCookies();
+    });
+
+
+
+        function cookiesAreEnabled() {
+        var cookieEnabled = (navigator.cookieEnabled) ? 1 : 0;
+
+        if (typeof navigator.cookieEnabled == "undefined" && cookieEnabled == 0) {
+            document.cookie = "testcookie";
+        cookieEnabled = (document.cookie.indexOf("test­cookie") != -1) ? 1 : 0;
+        }
+
+        return cookieEnabled == 1;
+    }
+
+    function TestBrowserForCookies() {
+        if (cookiesAreEnabled())
+        {
+            //alert("YES! Cookies are Enabled!");
+        }
+        else
+        {
+            //alert("NO! Cookies are NOT Enabled!");
+            $(".divLoginButton").slideUp();
+            $(".divCookiesMsg").slideDown();
+        }
+        }
+
+    function SubmitMobileCode() {
+        if ($("#txtMobileCode").val() == "") {
+            OpenAlertModal("Error", "Please enter Mobile verification code. If you didn't receive the code Please contact us at football@manvfat.com", "btn-danger", BootstrapDialog.TYPE_DANGER);
+        }
+        else {
+            $.ajax({
+                url: "/Account/VerifyMobileCode",
+                data: { UserEmailAddress: $("#hdnUserEmailAddress").val(), VerificationCode: $("#txtMobileCode").val(), RememberMe: $("#chkRememberMe").is(":checked") },
+                dataType: "json",
+                beforeSend: function () {
+                    waitingDialog.show('Processing please wait...', { dialogSize: 'md', progressType: 'info' });
+                },
+                type: "GET",
+                error: function (e) {
+                    alert("Error  = " + e.responseText);
+                    // $("#divLatestNewsList").html(e.responseText);
+                },
+                success: function (data) {
+                    waitingDialog.hide();
+                    if (data.status == true) {
+                        location.href = data.returnUrl;
+                    }
+                    else {
+                        OpenAlertModal("Error", data.ErrorMsg, "btn-danger", BootstrapDialog.TYPE_DANGER);
+                    }
+                }
+            });
+        }
+    }
+    
+</script>
+
+
+<div class="divMain">
+ 
+
+       
+        <section>
+            <div class="container">
+                <div class="row divCookiesMsg" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3 text-center alert alert-danger">
+                            <h2>Cookies are Not Enabled</h2>
+                            <h3>It seems like Cookies are not enabled on your browser, Please enable Browser Cookies and Refresh this Page to login.</h3>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Convert.ToBoolean(ViewBag.IsMobileNumExists) == false)
+    {
+            <div class="row divCookiesMsg">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3 text-center alert alert-danger">
+                        <h2>You are set up as a user on the system but it seems that you don't have your mobile number set up</h2>
+                        please either:
+                        <div class="text-left">
+                            <p style="color:white;">
+                                <br />
+                                - Email football@manvfat.com or
+                                <br />
+                                - Call Terry Dowding (07860750692), Craig Morris (07595467945) or Andrew Shanahan on (07792017766) and they will add your mobile number to the system.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+}
+else
+{
+
+            <div class="row">
+
+                <div class="col-md-6 col-md-offset-3 well">
+                    <input type="hidden" id="hdnUserEmailAddress" value="@ViewBag.UserEmailAddress" />
+                    <div class="box-static box-border-top margin-top-10 padding-30">
+                        <div class="box-title margin-bottom-30">
+                            <h3>2-Step Account Verification</h3>
+                            <p>
+                                A text message with your code has been sent to your mobile phone end with @ViewBag.UserMobilePhoneEndsWith
+                            </p>
+                        </div>
+                        <br />
+                        <form class="nomargin" method="post" action="#" autocomplete="off">
+                            <div class="clearfix">
+
+                                <div class="form-group">
+                                    @Html.Kendo().IntegerTextBox().Name("txtMobileCode").Decimals(0).Format("{0:##}").Spinners(false).Min(0).Placeholder("Enter Verification Code").HtmlAttributes(new { @style = "width:100%" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.Kendo().CheckBox().Name("chkRememberMe").Label("Remember this Device?")
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6 text-right divLoginButton">
+
+                                    <button type="button" class="btn btn-primary" onclick="return SubmitMobileCode();">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+}
+            </div>
+        </section>
+
+    
+</div>

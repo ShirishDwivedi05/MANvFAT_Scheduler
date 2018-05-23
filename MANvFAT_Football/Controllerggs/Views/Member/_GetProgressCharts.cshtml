@@ -1,0 +1,79 @@
+﻿@model MANvFAT_Football.Models.Repositories.ProgressChart
+@{
+  
+    string cls_CompletedWeightTarget = "p" + Model.Percent_CompletedWeightTarget.ToString();
+
+    string cls_PercentWeeklyCompletedActivities = "p" + Model.Percent_WeeklyCompletedActivities.ToString();
+
+}
+
+<div class="row">
+
+    <div class="col-xs-6">
+        <div class="tile data-circle">
+            <div class="c100 @cls_CompletedWeightTarget green">
+                <span>@Model.Percent_CompletedWeightTarget%</span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+            <h4>Weight Target</h4>
+            <p>
+                Your progress for your weight.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="col-xs-6">
+        <div class="tile data-circle">
+            <div class="c100 @cls_PercentWeeklyCompletedActivities green">
+                <span>@Model.Percent_WeeklyCompletedActivities%</span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+            <h4>Completed Weekly Activities</h4>
+            <p>
+                The progress on how many of your weekly activity sessions you've ticked off.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="col-md-12">
+
+        @(Html.Kendo().Chart<MANvFAT_Football.Models.Repositories.PlayerWeigtPerWeekChart>()
+                                .Name("chart")
+                                //.Title("Weight per Week")
+                                .Legend(legend => legend
+                                    .Position(ChartLegendPosition.Top).Visible(false)
+                                )
+                                .DataSource(ds => ds.Read(read => read.Action("_ReadChartData", "Member", new { id = Model.DashboardURL, paramPlayerID = Model.PlayerID })))
+                                .Series(series =>
+                                {
+                                    series.Area(model => model.Weight).Name("").CategoryField("WeekNum").Color("green");
+                                })
+                                .CategoryAxis(axis => axis
+                                    .Labels(labels => labels.Rotation(-90))
+                                    .Justify()
+                                    .Crosshair(c => c.Visible(true))
+                                )
+                                .ValueAxis(axis => axis.Numeric()
+                                    .Labels(labels => labels.Format("{0:N0}"))
+                                //                                    .MajorUnit(10000)
+                                )
+                                .Tooltip(tooltip => tooltip
+                                    .Visible(true)
+                                    .Shared(true)
+                                    .Format("{0:N2} kg")
+                                )
+        )
+
+
+    </div>
+
+
+</div>

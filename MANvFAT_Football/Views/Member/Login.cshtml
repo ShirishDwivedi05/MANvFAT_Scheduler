@@ -1,0 +1,58 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardLogin
+
+@{
+    ViewBag.Title = "Premium Dashboard";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<div class="gap20" style="margin-top:44px;"></div>
+<div class=" content">
+    <div class="container">
+        <div class="row">
+
+            <!-- ================= Row I ===================-->
+            @using (Html.BeginForm("Login", "Member", FormMethod.Post,new { @autocomplete = "off" }))
+            {
+
+        <div class="login_logo col-lg-12 col-md-6 col-sm-12">
+            <img src="/Content/ProgressDashbaord/images/m_logo.png"><br>
+            log in to progress<br>
+            <span>Let's do this</span>
+        </div>
+
+        <div class="gap10"></div>
+        @Html.HiddenFor(m => m.DashboardURLId)
+        <div class="text-danger col-sm-12" style="text-align:center;">
+            @Html.ValidationSummary(true, "Login was unsuccessful.")
+            @if (!string.IsNullOrEmpty(Model.Reason))
+            {
+                <div class="alert alert-danger" style="font-size:25px;">
+                    @Model.Reason
+                </div>
+            }
+        </div>
+        <div class="row divCookiesMsg" style="display:none;">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center alert alert-danger">
+                    <h2>Cookies are Not Enabled</h2>
+                    <h3>It seems like Cookies are not enabled on your browser, Please enable Browser Cookies and Refresh this Page to login.</h3>
+                </div>
+            </div>
+        </div>
+        <!-- ================= ./END Row I ===================-->
+        <div class="formlogin col-lg-4 col-md-6 col-sm-12">
+            <div class="password_input">
+                Password<br>
+                <input class="input_p" id="Password" name="Password" type="password" value="Enter your password" required  autocomplete="off">
+            </div>
+            <div class="loginbtn">
+                <button class="btn_green" id="btnLogin" type="submit">LOG ME IN</button><br>
+                <a href="/Member/ForgottenPassword/@Model.DashboardURLId">I've forgotten my password</a><br>
+                <img src="/Content/ProgressDashbaord/images/login_footer_logo.png">
+            </div>
+
+        </div>
+}
+        </div>
+
+    </div><!-- Row End-->
+</div><!-- Container End-->

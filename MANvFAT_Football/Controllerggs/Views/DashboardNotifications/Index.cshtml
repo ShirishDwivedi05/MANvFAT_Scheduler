@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .clsToolBenefitImage {
+        width: 100px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function RefreshGrid(e) {
+        $("#Grid").data("kendoGrid").dataSource.read();
+    }
+
+    function BeforeSave_Grid(e) {
+        var _IsRecurring = e.container.find("input[name=IsRecurring]").is(":checked");
+        var _RecurringFrequency = e.container.find("input[name=RecurringFrequency]").val();
+        var _DayOfWeek = e.container.find("input[name=DayOfWeek]").val();
+
+      //  alert("_IsRecurring = " + _IsRecurring + " _RecurringFrequency = " + _RecurringFrequency + " _DayOfWeek = " + _DayOfWeek);
+
+        if (_IsRecurring == true && _RecurringFrequency == "") {
+            OpenAlertModal("Error", "Please Select Recurring Frequency", "btn-danger", BootstrapDialog.TYPE_DANGER);
+            e.preventDefault();
+            return false;
+        }
+
+        if (_IsRecurring == true && _RecurringFrequency == 2 && _DayOfWeek =="") {
+            OpenAlertModal("Error", "Please Select Day Of Week", "btn-danger", BootstrapDialog.TYPE_DANGER);
+            e.preventDefault();
+            return false;
+        }
+    }
+
+    function OnInsertEdit(e) {
+        //if (e.model.isNew()) {
+        //    e.container.find("input[name=IsTool]").prop("checked", true).trigger('change');
+        //}
+    }
+</script>
+
+<h1>Dashboard Notifications</h1>
+<hr />
+
+
+@(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.DashboardNotificationExt>()
+    .Name("Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax().Events(ev => ev.Sync("RefreshGrid"))
+    .PageSize(25)
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model =>
+    {
+        model.Id(p => p.DashboardNotificationID);
+        model.Field(m => m.NotificationDateTime).Editable(false);
+    })
+                .Create(update => update.Action("_Create", "DashboardNotifications"))
+                .Read(read => read.Action("_Read", "DashboardNotifications"))
+                .Update(update => update.Action("_Update", "DashboardNotifications"))
+                .Destroy(update => update.Action("_Destroy", "DashboardNotifications"))
+    .ServerOperation(false)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.NotificationDateTime).Format("{0:dd/MM/yyyy HH:mm}").EditorTemplateName("Date").Title("Date/Time").Width(80);
+        columns.Bound(p => p.Title).Width(100);
+        columns.Bound(p => p.Summary).EditorTemplateName("TextArea").Width(110);
+        columns.Bound(p => p.Link).ClientTemplate("<a target='_blank' title='Click to open this Link (New Tab)' href='#=Link#'>#=Link#</a>").Width(80);
+        columns.Bound(p => p.LeagueName).EditorTemplateName("Leagues").Width(110);
+        columns.Bound(p => p.IsRecurring).ClientTemplate("#if(IsRecurring){#<span class='glyphicon glyphicon-ok'></span>#}#").HtmlAttributes(new { @class = "text-center" }).Width(50);
+        columns.Bound(p => p.RecurringFrequency).ClientTemplate("#=RecurringFrequency_Str#").EditorTemplateName("NotificationRecurringFrequency").Width(80);
+        columns.Bound(p => p.DayOfWeek).ClientTemplate("#=DayOfWeek_Str#").EditorTemplateName("DayOfWeek").Width(60);
+
+        columns.Bound(p => p.IsAchievementNotification).Hidden(true);
+
+        columns.Command(command =>
+        {
+            command.Edit().UpdateText("Insert/Update").HtmlAttributes(new { @class = "btn btn-primary" });
+            command.Destroy().HtmlAttributes(new { @class = "btn btn-danger" });
+
+        }).Width(150);
+    })
+    .ToolBar(tool =>
+    {
+        tool.Custom().Name("cmdAddNewRecord")
+        .Text("+ Add New Record")
+        .HtmlAttributes(new { @id = "cmdAddNewRecord", @class = "btn btn-primary" });
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Navigatable()
+     .Events(ev => ev.Save("BeforeSave_Grid").Edit("OnInsertEdit"))
+    .Scrollable(scr => scr.Height(500))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+
+)
+
+<script>
+    $("#cmdAddNewRecord").click(function (e) {
+
+        var table = $("#Grid").data("kendoGrid");
+            var sorting = table.dataSource.sort();
+
+            if (sorting) {
+                table.dataSource.sort(null);
+            }
+            table.addRow();
+            e.preventDefault();
+            //put custom logic here
+        });
+</script>
+
+@Scripts.Render("~/bundles/Grid_Resizer-js")

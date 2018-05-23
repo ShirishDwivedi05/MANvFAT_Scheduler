@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("MandateStatusID")
+              .HtmlAttributes(new { style = "width:100%" })
+               .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("MandateStatus")
+              .DataValueField("MandateStatusID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetMandateStatuses", "DropDownLists");
+                  });
+
+              })
+)

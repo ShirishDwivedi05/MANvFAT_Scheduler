@@ -1,0 +1,54 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+<style>
+    .nav > li
+    {
+        width:auto !important;
+    }
+    header {
+        padding-top: 70px;
+    } 
+    
+    .navbar-brand {
+        /*margin-top: 0 !important;*/
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    .navbar{
+        min-height:unset !important;
+    }
+    .navbar-header{
+        margin-bottom: 0 !important;
+    }
+</style>
+<!-- JO-NEW new header layout starts here -->
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/Home/Index" class="navbar-brand">
+                    <img width="265" height="40" src="/Content/FrontEnd/img/ManvFat-Progress-logo.png" alt="Logo: MAN v FAT Progress"/>
+
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="/Member/@Model.DashboardURL">Home</a> </li>
+                    <li><a href="/Member/Settings/@Model.DashboardURL">Dashboard Settings</a></li>
+                    <li><a href="/Member/LogOff/@Model.DashboardURL">Log Out</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container -->
+    </nav>
+
+</header>
+<!-- JO-NEW new header layout ends here -->

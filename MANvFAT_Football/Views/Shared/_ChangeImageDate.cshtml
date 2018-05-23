@@ -1,0 +1,58 @@
+﻿
+<style type="text/css">
+    .PaddingLeft {
+        padding-left: 30px !important;
+    }
+
+    .spanHeader {
+        font-weight: bold;
+        padding-left: 10px;
+        margin-right: 10px;
+    }
+
+    .Process td {
+        padding-bottom: 5px !important;
+    }
+</style>
+
+
+@(Html.Kendo().Window()
+    .Name("ImageDateWindow")
+    .Title("Update Image Date")
+    .Content(@<text>
+
+        <p>Please Select the Date/Time for selected Image</p>
+
+        <table class="NoBorderTables Process" style="width:325px;">
+            <tr>
+                <th>Image Date/Time</th>
+                <td>
+                    @(Html.Kendo().DateTimePicker()
+                        .Name("ImageDate")
+                        .HtmlAttributes(new { @Style = "width:200px; height:25px;", @tabindex = "1" })
+                    )
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div id="lblImageDate"></div>
+                </td>
+            </tr>
+
+        </table>
+        <div style="text-align:center">
+            <button type="button" class="btn btn-primary" onclick="return UpdateImageDate();"><span class="glyphicon glyphicon-saved"></span>Update</button> &nbsp; <button type="button" class="btn btn-danger" onclick="return CloseImageDateWindow();"><span class="glyphicon glyphicon-remove"></span>Close</button>
+        </div>
+
+    </text>)
+     .Visible(false)
+    .Draggable(true)
+    .Scrollable(false)
+    .Modal(true)
+    .Width(350)
+    .Actions(actions => actions.Close())
+)
+
+
+

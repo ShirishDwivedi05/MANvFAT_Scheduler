@@ -1,0 +1,72 @@
+﻿@model string
+<script src="/Scripts/views_js/Dashboard/ShareActivityData.js"></script>
+<style>
+    .divDateRangeSelection_@Model, .clsShareActivityMsg_@Model {
+        display: none;
+    }
+</style>
+
+<div class="clsShareData_@Model text-center">
+        <div class="form-group">
+            <label for="ShareFrequencyID">What do you want to share?</label>
+            <div>
+                @(Html.Kendo().DropDownList()
+                .Name("ShareFrequencyID_"+Model)
+                .HtmlAttributes(new { data_value_primitive = "true" })
+                .DataValueField("Value")
+                .DataTextField("Text")
+                .Events(ev => ev.Close("ShareFrequency_OnChange_"+Model))
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetActivityShareFrequency", "DropDownLists").Data("additionalData('"+Model+"')");
+                    });
+                })
+                )
+            </div>
+
+        </div>
+        <div class="form-group divDateRangeSelection_@Model">
+            <label for="Activity_ShareDateFrom">Select Date Range</label>
+            <div>
+                @Html.Kendo().DatePicker().Name("Activity_ShareDateFrom_"+Model).Events(ev => ev.Change("Activity_ShareDateFrom_OnChange_"+Model)).Format("dd MMM yyyy")
+                @Html.Kendo().DatePicker().Name("Activity_ShareDateTo_" + Model).Format("dd MMM yyyy")
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label for="txtEmail_@Model">Who do you want to share it with?</label>
+            <div>
+
+                Share with my Coach?  @Html.Kendo().RadioButton().Name("chkSendToCoach_"+Model).HtmlAttributes(new { @name="chkShareTo", @onChange = "chkSendToCoach_OnSelect('"+Model+"');" })
+                <br />
+                Share with my Team?  @Html.Kendo().RadioButton().Name("chkSendToTeam_"+Model).HtmlAttributes(new { @name = "chkShareTo", @onChange = "chkSendToTeam_OnSelect('" + Model + "');" })
+                <br />
+                Both?  @Html.Kendo().RadioButton().Name("chkSendToTeam_Coach_"+Model).HtmlAttributes(new { @name = "chkShareTo", @onChange = "chkSendToTeam_Coach_OnSelect('" + Model + "');" })
+                <br />
+               
+            </div>
+            <div>
+                @Html.Kendo().TextBox().Name("txtEmail_"+Model).HtmlAttributes(new { @style = "width:90%" })
+                <p>use semicolon (;) to separate multiple emails e.g. emailA@domain.com;emailB@domain.com</p>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="txtMsgBody_@Model">Add an optional Message?</label>
+            <div>
+                @Html.TextArea("txtMsgBody_"+Model, "", 5, 8, new { @style = "width:90%" })
+            </div>
+
+        </div>
+        <div class="clsShareActivityMsg_@Model">
+
+        </div>
+        <div>
+            <button type="button" class="btn btn-sm btn-group-justified btn-primary" onclick="ShareActivityData('@Model');"><span class="fa fa-share-alt"></span> Share</button>
+        </div>
+ 
+</div>
+

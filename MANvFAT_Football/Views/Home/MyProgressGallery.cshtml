@@ -1,0 +1,195 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerProgressGallery
+@{
+    ViewBag.Title = "MyProgressGallery";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+<h2 class="text-center text-success">YOUR MAN v FAT FOOTBALL PROGRESS PICS GALLERY</h2>
+
+
+@{ Html.RenderPartial("_FancyBox"); }
+
+<script>
+    $(document).ready(function () {
+
+        CreatePlayerImagesList('@Model.PlayerID');
+        CreatePlayerImagesGIFList('@Model.PlayerID');
+
+    });
+</script>
+
+<style>
+    div.k-dropzone {
+        border: 1px solid #c5c5c5; /* For Default; Different for each theme */
+    }
+
+        div.k-dropzone em {
+            visibility: visible;
+        }
+</style>
+
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5925d051bc33759c"></script> 
+
+<div style="overflow:hidden">
+    <div id="divListOfFundBGImages">
+
+        <div class="k-content wide">
+            <div id="lstPlayerImages"></div>
+            <div id="pager_PlayerImages" class="k-pager-wrap"> </div>
+        </div>
+
+        <script type="text/x-kendo-tmpl" id="template_PlayerImages">
+            <div class="divPlayerImages img-thumbnail" id="#:PlayerImageID#">
+              
+                <div>
+                    <a class="fancybox-thumbs" data-fancybox-group="thumb" href="#:ImageLink#">
+                        <img class="imgPlayer" src="#:ImageLink#" id="#:FileName#" alt="#:FileName# image" />
+                    </a>
+                </div>
+
+                <div style="position:absolute;">
+                    <img src="/Images/btnDelete.png" alt="Delete Image" title="Click here to Delete this Image" onclick="OpenConfirmationModal('MarkImageDelete','Delete Image','Do you want to delete this image from your gallery permanently?','#:PlayerImageID#');" />
+                </div>
+                <div class="text-center marbot10">
+
+                    #if(IsFront){#
+                    <strong>Front</strong>
+                    #} else {#
+                    <strong>Side</strong>
+                    #}#
+                    <br />
+                    <strong class="clsUploadDate"> #:UploadDate_Str#</strong>
+                </div>
+            </div>
+        </script>
+
+     
+
+        <style>
+            .clsUploadDate{
+                color:#f00;
+            }
+            .divPlayerImages {
+                float: left;
+                /*width: 220px;*/
+                /*height: 240px;*/
+                margin-left: 20px;
+                margin-top: 20px;
+                padding: 8px;
+                cursor: pointer;
+            }
+
+                .divPlayerImages .imgPlayer {
+                    float: left;
+                    width: 200px;
+                    /*height: 150px;*/
+                /*border-radius: 50px;*/
+            }
+        </style>
+    </div>
+</div>
+
+<div style="overflow:hidden">
+    <h2 class="text-left text-info">GIF Images</h2>
+    <div id="divPlayerGIFImages">
+
+        <div class="k-content wide">
+            <div id="lstPlayerGIFImages"></div>
+            <div id="pager_PlayerGIFImages" class="k-pager-wrap"> </div>
+        </div>
+
+        <script type="text/x-kendo-tmpl" id="template_PlayerGIFImages">
+            <div class="divPlayerGIFImages img-thumbnail" id="#:PlayerImageID#">
+                <div class="text-center marbot10">
+                    <button type="button" class="btn btn-sm btn-primary" title="Click here to to download this Image" onclick="return DownloadImage('#:PlayerImageID#');"><span class="glyphicon glyphicon-download-alt"></span> Download</button>
+                </div>
+                <div>
+                    <a class="fancybox-thumbs" data-fancybox-group="thumb" href="#:ImageLink#">
+                        <img class="imgPlayer" src="#:ImageLink#" id="#:FileName#" alt="#:FileName# image" />
+                    </a>
+                </div>
+
+                <div style="position:absolute;">
+                    <img src="/Images/btnDelete.png" alt="Delete Image" title="Click here to Delete this Image" onclick="OpenConfirmationModal('MarkImageDelete','Delete Image','Do you want to delete this image from your gallery permanently?','#:PlayerImageID#');" />
+                </div>
+                <div class="text-center" style="margin-top:60%;">
+                    <meta property="og:title" content="My Progress at MANvFAT Football" />
+                    <meta property="og:type" content="image" />
+                    <meta property="og:url" content="#:AbsoluteImageLink#" />
+                    <meta property="og:image" content="#:AbsoluteImageLink#" />
+                    <div style="display:inline;" data-url="#:AbsoluteImageLink#" data-title="My Progress at MANvFAT Football" class="addthis_inline_share_toolbox"></div>
+                </div>
+               
+            </div>
+        </script>
+
+
+
+        <style>
+            .divPlayerGIFImages {
+                float: left;
+                /*width: 220px;*/
+                height: 240px;
+                margin-left: 20px;
+                margin-top: 20px;
+                padding: 8px;
+                cursor: pointer;
+            }
+
+                .divPlayerGIFImages .imgPlayer {
+                    float: left;
+                    width: 275px;
+                    height: 150px;
+                    border-radius: 50px;
+                }
+        </style>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <h2 class="text-center text-success">Create Animated GIF Image</h2>
+        <div style="overflow:hidden">
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12 marbot20 martop10">
+                            <h3 class="text-center text-primary">Select images you want to include in animated GIF Image</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div style="width:100%">
+                                <div class="demo-section">
+                                    @(Html.Kendo().MultiSelect().Name("PlayerAnimImgs")
+                                .BindTo(Model.playerImages)
+                                .DataTextField("FileName")
+                                .DataValueField("PlayerImageID")
+                                .ItemTemplate("<img src='#:data.ImageLink#' style='width:100px; height:100px;'>")
+                                 .TagTemplate("<img src='#:data.ImageLink#' style='width:100px; height:100px;'>")
+                                .DataSource(m=>m.ServerFiltering(true))
+                                .AutoClose(false)
+                                .Placeholder("-- Click here to select Images for creating Animated Gif Image --")
+                                .Events(ev => ev.Select("PlayerAnimImgs_OnSelect").Deselect("PlayerAnimImgs_OnDeSelect"))
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row martop20">
+                <div class="col-md-12">
+                    @*<input type="button" value="Create GIF" onclick="CreateAnimatedImg();" class="btn btn-group-justified clsBtnPlayerProgress" />*@
+                    <button id="btnCreateGif" onclick="return CreateAnimatedImg();" class="btn btn-group-justified clsBtnPlayerProgress"><span class="glyphicon glyphicon-film"></span> Create GIF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundles/tab-PlayerImages-FrontEnd-js")
+

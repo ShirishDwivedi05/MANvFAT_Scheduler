@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - MANvFAT Football</title>
+    @Scripts.Render("~/bundles/jquery-backend")
+
+    @Styles.Render("~/Content/css-kendo-backend")
+    @Scripts.Render("~/bundles/js-kendo-backend")
+    @Scripts.Render("~/bundles/js-custom-backend")
+    @Styles.Render("~/Content/css-bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/css-custom-backend")
+    @*@Scripts.Render("~/bundles/DownForMaintenance-js")*@
+
+    <script>
+        kendo.culture("en-GB"); // Default culture
+
+        //function resizeKendoControls() {
+        //    kendo.resize(".k-chart");
+        //}
+
+        //$(window).resize(resizeKendoControls);
+    </script>
+	<script src="@Url.Content("~/Scripts/kendo/2017.2.621/jszip.min.js")"></script>
+</head>
+<body>
+    @{ Html.RenderPartial("ErrorWindowControl"); }
+    @{ Html.RenderPartial("ConfirmationDialog"); }
+
+
+    @{ Html.RenderPartial("Header"); }
+
+    <div class="container-fluid body-content">
+        @RenderBody()
+    </div>
+
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <hr style="width:80% !important;" />
+                <p style="text-align:center;">&copy; @DateTime.Now.Year - MANvFAT Football</p>
+            </div>
+        </div>
+    </footer>
+
+   
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

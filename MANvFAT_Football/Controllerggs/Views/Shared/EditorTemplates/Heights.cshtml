@@ -1,0 +1,18 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("HeightID")
+              .HtmlAttributes(new { style = "width:100%" })
+               .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("Height_Display")
+              .DataValueField("HeightID")
+              .Events(ev=>ev.Open("adjustDropDownWidth"))
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetHeights", "DropDownLists");
+                  });
+
+              })
+)

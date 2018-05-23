@@ -1,0 +1,78 @@
+﻿@model MANvFAT_Football.Models.Repositories.SystemSettingsExt
+@{
+    ViewBag.Title = "System Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool IsTechUser = (bool)ViewBag.IsTechUser;
+}
+
+@*<script>
+    function SystemSettings_tabstrip_OnSelect(e) {
+        //Update localStorage variable when tab is selected
+        $("#SelectedSysSettings_TabIndex").val($(e.item).index());
+        localStorage.setItem('SelectedSysSettings_TabIndex', $(e.item).index());
+    }
+</script>*@
+<h2>System Settings</h2>
+
+<div class="@ViewBag.MsgCss">
+    @ViewBag.Msg
+</div>
+
+@using (Html.BeginForm())
+{
+  
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-12">
+            @Html.HiddenFor(m => m.SystemSettingID)
+            @Html.HiddenFor(m => m.ResetLeagueWeightLoss)
+            @Html.HiddenFor(m => m.Enable_MobileVerification)
+            @if (IsTechUser)
+    {
+        <div class="row" style="margin-bottom:5px; margin-left:5px;">
+            <input type="submit" value="Save System Settings" class="btn btn-primary" />
+        </div>
+}
+else
+{
+        <div class="alert alert-warning">
+            <h2>
+                Only Techninal Administrators can update System settings. For more information please contact us at <a href="football@manvfat.com">football@manvfat.com</a>
+            </h2>
+        </div>
+}
+
+            @(Html.Kendo().TabStrip()
+    .Name("SystemSettings_tabstrip")
+            .Items(tabstrip =>
+            {
+                tabstrip.Add().Selected(true).Text("Defaults").Content(@Html.Partial("tab_Defaults").ToHtmlString());
+                tabstrip.Add().Text("GoCardless").Content(@Html.Partial("tab_GoCardless").ToHtmlString());
+                tabstrip.Add().Text("PayPal").Content(@Html.Partial("tab_PayPal").ToHtmlString());
+                tabstrip.Add().Text("Import Leagues Data").Content(@Html.Partial("tab_ImportLeagues").ToHtmlString());
+                tabstrip.Add().Text("Down For Maintenance").Content(@Html.Partial("tab_DownForMaintenance").ToHtmlString());
+                tabstrip.Add().Text("Referral Candy").Content(@Html.Partial("tab_ReferralCandy").ToHtmlString());
+            })
+            // .Events(ev => ev.Select("SystemSettings_tabstrip_OnSelect"))
+            )
+
+        </div>
+    </div>
+}
+
+
+<script type="text/javascript">
+
+    //When Page Completely Loaded then reselect the Last Selected tab if Apply Button used to save changes
+    $(window).bind("load", function() {
+
+        var tabStrip = $("#SystemSettings_tabstrip").data("kendoTabStrip");
+        var _SelectedTabIndex = localStorage.getItem('SelectedSysSettings_TabIndex');
+       //alert(_SelectedTabIndex);
+        if(_SelectedTabIndex==null)
+            _SelectedTabIndex=0;
+
+        tabStrip.select(_SelectedTabIndex);
+        localStorage.removeItem('SelectedSysSettings_TabIndex');
+    });
+</script>

@@ -1,0 +1,42 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.PlayerImagesExt>
+@{
+    ViewBag.Title = "MyProgressGallery";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+<h2 style="text-align:center;">Your Progress Gallery</h2>
+
+<section>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="card gallery">
+                @*<div class="section-title">
+                        <h3>Progress Photos</h3>
+                    </div>*@
+                @if (Model.Count == 0)
+                {
+                    <div style="display:none;" id="LeagueGallery_0" class="html5gallery" data-autoslide="true" data-padding="6" data-skin="gallery" data-width="480" data-height="272" data-responsive="true">
+                        <a href="~/Images/noimage.png"><img src="~/Images/noimage.png" alt=""></a>
+                    </div>
+                }
+
+                <div style="display:none;" id="ProgressGallery" class="html5gallery" data-autoslide="true" data-padding="6" data-skin="gallery" data-width="480" data-height="272" data-responsive="true">
+                    @foreach (var gallery in Model)
+                    {
+                        <a href="@gallery.ImageLink"><img src="@gallery.ImageLink" alt=""></a>
+                    }
+                </div>
+
+                <!--/html5gallery -->
+            </div><!-- /card-gallery -->
+        </div><!-- /col-md-12 -->
+    </div><!-- /row -->
+</section>
+
+<script>
+    function MarkAsDeletion() {
+        alert("MARK AS DELETEION");
+    }
+</script>
+
+@Scripts.Render("~/bundles/Html5Gallery-js")

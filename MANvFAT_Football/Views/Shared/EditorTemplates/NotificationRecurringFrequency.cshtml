@@ -1,0 +1,10 @@
+﻿@(Html.Kendo().DropDownList()
+                                            .Name("RecurringFrequency")
+                                            .ValuePrimitive(true)
+                                            .Items(item =>
+                                            {
+                                                item.Add().Text("Daily").Value("1");
+                                                item.Add().Text("Weekly").Value("2");
+                                                item.Add().Text("Monthly").Value("3");
+                                            })
+)

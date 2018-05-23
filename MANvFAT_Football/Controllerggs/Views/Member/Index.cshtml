@@ -1,0 +1,207 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+
+@{
+    ViewBag.Title = "Premium Dashboard";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+@Styles.Render("~/Content/ProgressDashboard-css")
+
+@Scripts.Render("~/bundles/ProgressDashboard-js")
+
+<script>
+
+    // Check screensize - if small size collapse accordion panels.
+    $(document).ready(function () {
+        if ($(document).width() < 768) {
+            $('.panel-collapse').removeClass('in');
+            $('.panel-title a').addClass('collapsed');
+        }
+    });
+</script>
+
+<input type="hidden" id="hdnPlayerID" value="@Model.PlayerID" />
+<input type="hidden" id="hdnDashboardURL" value="@Model.DashboardURL" />
+
+<div id="dashboard">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="" style="margin-bottom: 20px;">
+                        @{ Html.RenderPartial("Notifications"); }
+                    </div>
+
+                </div><!--/col-md-12 -->
+            </div><!--/row-->
+
+            <div class="row">
+                <!--Daily Activity-->
+                <div class="col-md-8">
+                    <!-- Row 1 column 1 -->
+                    <div class="row">
+                        <!--Start Daily Activity-->
+                        <div class="col-md-6">
+                            <!-- Row 1 column 1 sub-column 1 -->
+                            @{ Html.RenderPartial("DailyActivities", Model); }
+                        </div><!--/col-md-6 -->
+                        <!--End Daily Activity-->
+                        <!--Start Weekly Activity-->
+
+                        <div class="col-md-6">
+                            <!-- Row 1 column 1 sub-column 1 -->
+                            @{ Html.RenderPartial("WeeklyActivities", Model); }
+                        </div><!--/col-md-6 -->
+                        <!--End Weekly Activity-->
+                        <!--Start Image Gallery-->
+
+                        <div class="col-md-12">
+                            <!-- Row 1 column 1 sub-column 3 -->
+
+                            <div class="panel panel-default">
+
+                                <div class="panel-heading" role="tab" id="headingThree">
+                                    <h4 class="panel-title">
+                                        <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                            Progress Photos
+                                        </a>
+                                    </h4>
+                                </div><!--/panel-heading -->
+
+                                <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="panel-body clsPanelImageGallery">
+
+                                        @{ Html.RenderPartial("ImageGallery", Model); }
+                                    </div>
+                                </div><!--/panel-collapse -->
+                            </div><!--/panel -->
+                        </div><!-- /col-md-12 -->
+                        <!--Start Image Gallery-->
+                    </div><!--/row -->
+                </div><!--/col-md-8 -->
+                <div class="col-md-4">
+                    <!-- Row 1 column 2 -->
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <!-- Row 1 subcolumn -->
+
+                            <div class="panel panel-default">
+
+                                <div class="panel-heading" role="tab" id="headingFour">
+                                    <h4 class="panel-title">
+                                        <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                            Data
+                                        </a>
+                                    </h4>
+                                </div><!--/panel-heading -->
+
+                                <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+                                    <div class="panel-body">
+
+                                        @{ Html.RenderPartial("ProgressCharts", Model); }
+                                    </div><!-- /panel-body -->
+                                </div><!--/panel-collapse -->
+                            </div><!--/panel -->
+                        </div><!-- /col-md-12 -->
+
+                        <div class="col-md-12">
+                            <!-- Row 1 subcolumn -->
+
+                            <div class="panel panel-default">
+
+                                <div class="panel-heading" role="tab" id="headingFive">
+                                    <h4 class="panel-title">
+                                        <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                                            Community
+                                        </a>
+                                    </h4>
+                                </div><!--/panel-heading -->
+
+                                <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">
+                                    <div class="panel-body">
+
+                                        @{ Html.RenderPartial("Community"); }
+                                    </div>
+                                </div><!--/panel-collapse -->
+                            </div><!--/panel -->
+                        </div><!-- /col-md-12 -->
+                    </div><!-- /row-->
+                </div>
+            </div>
+            <!--/col-md-4 --><!--/row -->
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <!-- Row 2 col-1 -->
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" role="tab" id="headingSix">
+                            <h4 class="panel-title">
+                                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+                                    Tools
+                                </a>
+                            </h4>
+                        </div><!--/panel-heading -->
+
+                        <div id="collapseSix" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSix">
+                            <div class="panel-body">
+
+                                @{ Html.RenderPartial("Tools"); }
+                            </div>
+                        </div><!--/panel-collapse -->
+                    </div><!--/panel -->
+                </div>
+
+                <div class="col-md-4">
+                    <!-- Row 2 col-2 -->
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" role="tab" id="headingSeven">
+                            <h4 class="panel-title">
+                                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                                    Member Benefits
+                                </a>
+                            </h4>
+                        </div><!--/panel-heading -->
+
+                        <div id="collapseSeven" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSeven">
+                            <div class="panel-body">
+
+                                @{ Html.RenderPartial("Benefits"); }
+                            </div>
+                        </div><!--/panel-collapse -->
+                    </div><!--/panel -->
+                </div>
+
+                <div class="col-md-4">
+                    <!-- Row 2 col-3 -->
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" role="tab" id="headingEight">
+                            <h4 class="panel-title">
+                                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                                    Achievements
+                                </a>
+                            </h4>
+                        </div><!--/panel-heading -->
+
+                        <div id="collapseEight" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingEight">
+                            <div class="panel-body clsPanelAchievement">
+                                @{ Html.RenderPartial("Achievements"); }
+                            </div>
+                        </div><!--/panel-collapse -->
+                    </div><!--/panel -->
+                </div>
+            </div><!--/row -->
+
+        </div>
+    </div><!--/panel-group -->
+</div><!--/dashboard -->
+@*@{ Html.RenderPartial("_Notifications"); }*@

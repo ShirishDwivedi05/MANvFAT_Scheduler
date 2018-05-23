@@ -1,0 +1,59 @@
+﻿@{
+    MANvFAT_Football.Models.Repositories.PlayerDashboardExt playerDashboard = new MANvFAT_Football.Models.Repositories.PlayerDashboardExt();
+    MANvFAT_Football.Models.Repositories.HeaderTextsRepository headerTexts = new MANvFAT_Football.Models.Repositories.HeaderTextsRepository();
+    var headerTextList = headerTexts.ReadAll();
+
+    //Select if date specific header exists
+    if (headerTextList.Exists(x => x.DisplayDate.HasValue && x.DisplayDate.Value.Date.ToString("dd/MM/YYYY") == DateTime.Now.Date.ToString("dd/MM/yyyy")))
+    {
+        playerDashboard.HeaderTexts = new MANvFAT_Football.Models.Repositories.HeaderTextsExt();
+        playerDashboard.HeaderTexts = headerTextList.Where(x => x.DisplayDate.HasValue && x.DisplayDate.Value.Date.ToString("dd/MM/YYYY") == DateTime.Now.Date.ToString("dd/MM/yyyy")).SingleOrDefault();
+    }
+    else
+    {
+        var headerListWithoutDateHeaders = headerTextList.Where(x => x.DisplayDate == null).ToList();
+        if (headerListWithoutDateHeaders != null && headerListWithoutDateHeaders.Count > 0)
+        {
+            playerDashboard.HeaderTexts = new MANvFAT_Football.Models.Repositories.HeaderTextsExt();
+            //Select general header
+            int randomNumber = MANvFAT_Football.Helpers.ExtensionMethods.GeneralHelper.GetRandomNumber(1, headerListWithoutDateHeaders.Count);
+            var listArray = headerListWithoutDateHeaders.ToArray();
+            playerDashboard.HeaderTexts = listArray[randomNumber - 1];
+        }
+
+    }
+}
+<div class="clsHeaderStats">
+
+
+    <div class="container">
+        <!-- profile-content -->
+        <div class="profile-box-content clearfix">
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 py-2 profile-info">
+                <div class="profile_txt">
+                    <div class="col-xs-24  col-sm-12 col-md-11">
+                        <img src="~/Content/ProgressDashbaord/images/profile-img.jpg" class="profile-img">
+                        <span>
+                            <strong>Hello Andy, </strong>
+                            @if (playerDashboard.HeaderTexts != null)
+                            {
+                                string link = !string.IsNullOrEmpty(playerDashboard.HeaderTexts.Link) ? playerDashboard.HeaderTexts.Link : "#";
+                                <a href="@link" id="modelLink">
+                                    <span>@playerDashboard.HeaderTexts.HeaderText</span>
+                                </a>
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12 py-2 mt-2 arangetop_txt">
+                <div class="pull-right align_center pr-4">
+                    <div class="badge-bx"><span class="circle"></span>100</div>
+                    <div class="black">18.45</div>
+                    <div class="grey">WED 21 MAR</div>
+                    <div class="green">500 POINTS <span>30 THIS WEEK </span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

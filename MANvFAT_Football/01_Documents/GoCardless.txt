@@ -1,0 +1,17 @@
+﻿TEST Account
+Account number: 55779911
+Sort code: 20-00-00
+
+ following are the statuses GoCardless can hold for a Payment
+
+
+    *pending_customer_approval: we're waiting for the customer to approve this payment
+    *pending_submission: the payment has been created, but not yet submitted to the banks
+    *submitted: the payment has been submitted to the banks
+    *confirmed:  the payment has been confirmed as collected
+    *paid_out: the payment has been included in a payout
+    *cancelled: the payment has been cancelled
+    *customer_approval_denied: the customer has denied approval for the payment. You should contact the customer directly
+
+*failed:  the payment failed to be processed. Note that payments can fail after being confirmed if the failure message is sent late by the banks.
+*charged_back: the payment has been charged back

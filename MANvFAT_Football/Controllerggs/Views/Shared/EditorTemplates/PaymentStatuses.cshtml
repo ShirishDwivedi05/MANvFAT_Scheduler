@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("PaymentStatusID")
+              .HtmlAttributes(new { style = "width:100%" })
+               .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("PaymentStatus")
+              .DataValueField("PaymentStatusID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetPaymentStatuses", "DropDownLists");
+                  });
+
+              })
+)

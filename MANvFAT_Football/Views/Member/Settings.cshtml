@@ -1,0 +1,1118 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+
+    var rdFrequency = Model.ShareDataFrequency.HasValue ? Model.ShareDataFrequency.Value : 0;
+    var rdShareTo = Model.ShareDataWith.HasValue ? Model.ShareDataWith.Value : 0;
+
+}
+
+<script src="svg4everybody.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
+
+@Scripts.Render("~/bundles/ProgressDashboard-Settings-js")
+@Styles.Render("~/Content/ProgressDashboard-Settings-css")
+
+<link href="~/Content/MaterialTimePicker/mdtimepicker.css" rel="stylesheet" />
+<script src="~/Content/MaterialTimePicker/mdtimepicker.js"></script>
+
+<input type="hidden" id="hdnPlayerID" value="@Model.PlayerID" />
+<input type="hidden" id="hdnDashboardURL" value="@Model.DashboardURL" />
+<input type="hidden" id="hdnPlayerDashboardID" value="@Model.PlayerDashboardID" />
+<input type="hidden" id="hdnPlayerHeight_cm" value="@Model.PlayerHeight_cm" />
+<input type="hidden" id="hdnIsFirstLogin" value="@Model.IsFirstLogin.ToString()" />
+
+
+<style>
+    .clsPasswordHints li {
+        list-style-type: circle;
+    }
+
+    .clsErrorMsg, .clsDashboardValidation, .clsUpdateSettings, .div_ReminderTime {
+        display: none;
+    }
+
+    .div_ReminderTime {
+        margin-top: 15px;
+    }
+
+    #ReminderTime {
+        width: 120px;
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+        height: 50px;
+        cursor: pointer;
+    }
+    .clsFirstName_txt, .clsLastName_txt{
+        width:45% !important;
+    }
+</style>
+
+<script>
+    function Edit(id) {
+        $("." + id + "_lbl").addClass("hidden");
+
+        if (id == "clsName") {
+            $(".clsFirstName_txt").removeClass("hidden");
+            $(".clsLastName_txt").removeClass("hidden");
+            $(".clsFirstName_txt").select().focus();
+            $("." + id + "_btnEdit").addClass("hidden");
+            $("." + id + "_btnSave").removeClass("hidden");
+        }
+        
+        else {
+            $("." + id + "_lbl").addClass("hidden");
+            $("." + id + "_txt").removeClass("hidden");
+            $("." + id + "_txt").select().focus();
+            $("." + id + "_btnEdit").addClass("hidden");
+            $("." + id + "_btnSave").removeClass("hidden");
+        }
+    }
+
+    function Save(id) {
+        var NewValue = "";
+        if (id == "clsName") {
+            NewValue = $(".clsFirstName_txt").val() + " " + $(".clsLastName_txt").val();
+            $("." + id + "_lbl").text(NewValue);
+            $(".clsFirstName_txt").addClass("hidden");
+            $(".clsLastName_txt").addClass("hidden");
+
+            HideShow_Controls(id);
+        }
+        else if (id == "clsHeight")
+        {
+          //  alert("height = " + $("." + id + "_txt").children('option:selected').data("height"));
+            NewValue = $("." + id + "_txt").children('option:selected').data("ft");
+            $("." + id + "_lbl").text(NewValue+"\"");
+
+            HideShow_Controls(id);
+        }
+        else if (id == "clsStartingWeight") {
+            //  alert("height = " + $("." + id + "_txt").children('option:selected').data("height"));
+            NewValue = $("." + id + "_txt").children('option:selected').data("lbs");
+            $("." + id + "_lbl").text(NewValue);
+
+            HideShow_Controls(id);
+        }
+        else {
+            NewValue = $("." + id + "_txt").val();
+            $("." + id + "_lbl").text(NewValue);
+
+            HideShow_Controls(id);
+        }
+
+        //TODO: Now Create Full Object with Values
+
+
+    }
+
+    function HideShow_Controls(id) {
+        $("." + id + "_lbl").removeClass("hidden");
+        $("." + id + "_txt").addClass("hidden");
+        $("." + id + "_btnEdit").removeClass("hidden");
+        $("." + id + "_btnSave").addClass("hidden");
+    }
+
+</script>
+
+<div class="gap20"></div>
+
+<div class=" content">
+    <div class="container">
+        <div class="row">
+
+            <!-- ================= Row I ===================-->
+            <div class="first-row clearfix items-height">
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 your_account">
+                    <div class="account_container">
+                        <div class="account_hdr">
+                            <h3>Your Account</h3>
+                            <div class="arrow-links">
+                                <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp2"></i>
+                            </div>
+                        </div>
+                        <div class="collapse in" id="collp2">
+                            <div class="coll-2-content">
+                                <div class="user_image"><img src="/Content/Data/PlayerProfileImages/75315.png"></div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label class="clsName_lbl clsLabel">@Model.PlayerFullName</label>
+                                        <input type="text" value="@Model.PlayerFullName" id="txtFirstName" placeholder="Enter your First name" class="clsFirstName_txt hidden clsTextBox">
+                                        <input type="text" value="@Model.PlayerFullName" id="txtLastName" placeholder="Enter your Last name" class="clsLastName_txt hidden clsTextBox">
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a style="cursor:pointer;" class="clsName_btnEdit" onclick="return Edit('clsName');">Edit</a>
+                                        <a style="cursor:pointer;" class="clsName_btnSave hidden" onclick="return Save('clsName');">Save</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label class="clsUsername_lbl clsLabel">Andy</label>
+                                        <input type="text" value="Andy" id="txtUsername" placeholder="Enter your Username" class="clsUsername_txt hidden clsTextBox">
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a style="cursor:pointer;" class="clsUsername_btnEdit" onclick="return Edit('clsUsername');">Edit</a>
+                                        <a style="cursor:pointer;" class="clsUsername_btnSave hidden" onclick="return Save('clsUsername');">Save</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Your story</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label class="clsYourStory_lbl clsLabel">Spicy jalapeno bacon ipsum dolor amet bresaola fatback chuck prosciutto short loin sausage. Cow ham pork chop turducken. Prosciutto frankfurter pork loin jerky salami alcatra kielbasa capicola andouille.</label>
+                                        <textarea id="txtYourStory" placeholder="Enter your Story" class="clsYourStory_txt hidden clsTextBox">Spicy jalapeno bacon ipsum dolor amet bresaola fatback chuck prosciutto short loin sausage. Cow ham pork chop turducken. Prosciutto frankfurter pork loin jerky salami alcatra kielbasa capicola andouille.</textarea>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a style="cursor:pointer;" class="clsYourStory_btnEdit" onclick="return Edit('clsYourStory');">Edit</a>
+                                        <a style="cursor:pointer;" class="clsYourStory_btnSave hidden" onclick="return Save('clsYourStory');">Save</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Starting weight</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label class="clsStartingWeight_lbl clsLabel">200 lbs</label>
+                                        <select class="form-control clsStartingWeight_txt hidden clsTextBox" data-val="true" data-val-number="The field Weight (KG) must be a number." data-val-required="Please enter Weight" id="Weight" name="Weight">
+                                            <option value="">-- Select your weight --</option>
+                                            <option data-lbs="150 lbs" data-stone="10 stone 10 lbs" data-kg="68.00 kg">68.00 kg / 150 lbs / 10 stone 10 lbs</option>
+                                            <option data-lbs="151 lbs" data-stone="10 stone 11 lbs" data-kg="68.50 kg">68.50 kg / 151 lbs / 10 stone 11 lbs</option>
+                                            <option data-lbs="152 lbs" data-stone="10 stone 12 lbs" data-kg="68.90 kg">68.90 kg / 152 lbs / 10 stone 12 lbs</option>
+                                            <option data-lbs="153 lbs" data-stone="10 stone 13 lbs" data-kg="69.40 kg">69.40 kg / 153 lbs / 10 stone 13 lbs</option>
+                                            <option data-lbs="154 lbs" data-stone="11 stone 0 lbs" data-kg="69.90 kg">69.90 kg / 154 lbs / 11 stone 0 lbs</option>
+                                            <option data-lbs="155 lbs" data-stone="11 stone 1 lbs" data-kg="70.30 kg">70.30 kg / 155 lbs / 11 stone 1 lbs</option>                                            
+                                            <option data-lbs="156 lbs" data-stone="11 stone 2 lbs" data-kg="70.80 kg">70.80 kg / 156 lbs / 11 stone 2 lbs</option>
+                                            <option data-lbs="157 lbs" data-stone="11 stone 3 lbs" data-kg="71.20 kg">71.20 kg / 157 lbs / 11 stone 3 lbs</option>
+                                            <option data-lbs="158 lbs" data-stone="11 stone 4 lbs" data-kg="71.70 kg">71.70 kg / 158 lbs / 11 stone 4 lbs</option>
+                                            <option data-lbs="159 lbs" data-stone="11 stone 5 lbs" data-kg="72.10 kg">72.10 kg / 159 lbs / 11 stone 5 lbs</option>
+                                            <option data-lbs="160 lbs" data-stone="11 stone 6 lbs" data-kg="72.60 kg">72.60 kg / 160 lbs / 11 stone 6 lbs</option>
+                                            <option data-lbs="161 lbs" data-stone="11 stone 7 lbs" data-kg="73.00 kg">73.00 kg / 161 lbs / 11 stone 7 lbs</option>
+                                            <option data-lbs="162 lbs" data-stone="11 stone 8 lbs" data-kg="73.50 kg">73.50 kg / 162 lbs / 11 stone 8 lbs</option>
+                                            <option data-lbs="163 lbs" data-stone="11 stone 9 lbs" data-kg="73.90 kg">73.90 kg / 163 lbs / 11 stone 9 lbs</option>
+                                            <option data-lbs="164 lbs" data-stone="11 stone 10 lbs" data-kg="74.40 kg">74.40 kg / 164 lbs / 11 stone 10 lbs</option>
+                                            <option data-lbs="165 lbs" data-stone="11 stone 11 lbs" data-kg="74.80 kg">74.80 kg / 165 lbs / 11 stone 11 lbs</option>
+                                            <option data-lbs="166 lbs" data-stone="11 stone 12 lbs" data-kg="75.30 kg">75.30 kg / 166 lbs / 11 stone 12 lbs</option>
+                                            <option data-lbs="167 lbs" data-stone="11 stone 13 lbs" data-kg="75.70 kg">75.70 kg / 167 lbs / 11 stone 13 lbs</option>
+                                            <option data-lbs="168 lbs" data-stone="12 stone 0 lbs" data-kg="76.20 kg">76.20 kg / 168 lbs / 12 stone 0 lbs</option>
+                                            <option data-lbs="169 lbs" data-stone="12 stone 1 lbs" data-kg="76.60 kg">76.60 kg / 169 lbs / 12 stone 1 lbs</option>
+                                            <option data-lbs="170 lbs" data-stone="12 stone 2 lbs" data-kg="77.10 kg">77.10 kg / 170 lbs / 12 stone 2 lbs</option>
+                                            <option data-lbs="171 lbs" data-stone="12 stone 3 lbs" data-kg="77.50 kg">77.50 kg / 171 lbs / 12 stone 3 lbs</option>
+                                            <option data-lbs="172 lbs" data-stone="12 stone 4 lbs" data-kg="78.00 kg">78.00 kg / 172 lbs / 12 stone 4 lbs</option>
+                                            <option data-lbs="173 lbs" data-stone="12 stone 5 lbs" data-kg="78.40 kg">78.40 kg / 173 lbs / 12 stone 5 lbs</option>
+                                            <option data-lbs="174 lbs" data-stone="12 stone 6 lbs" data-kg="78.90 kg">78.90 kg / 174 lbs / 12 stone 6 lbs</option>
+                                            <option data-lbs="175 lbs" data-stone="12 stone 7 lbs" data-kg="79.30 kg">79.30 kg / 175 lbs / 12 stone 7 lbs</option>
+                                            <option data-lbs="176 lbs" data-stone="12 stone 8 lbs" data-kg="79.80 kg">79.80 kg / 176 lbs / 12 stone 8 lbs</option>
+                                            <option data-lbs="177 lbs" data-stone="12 stone 9 lbs" data-kg="80.20 kg">80.20 kg / 177 lbs / 12 stone 9 lbs</option>
+                                            <option data-lbs="178 lbs" data-stone="12 stone 10 lbs" data-kg="80.70 kg">80.70 kg / 178 lbs / 12 stone 10 lbs</option>
+                                            <option data-lbs="179 lbs" data-stone="12 stone 11 lbs" data-kg="81.10 kg">81.10 kg / 179 lbs / 12 stone 11 lbs</option>
+                                            <option data-lbs="180 lbs" data-stone="12 stone 12 lbs" data-kg="81.60 kg">81.60 kg / 180 lbs / 12 stone 12 lbs</option>
+                                            <option data-lbs="181 lbs" data-stone="12 stone 13 lbs" data-kg="82.00 kg">82.00 kg / 181 lbs / 12 stone 13 lbs</option>
+                                            <option data-lbs="182 lbs" data-stone="13 stone 0 lbs" data-kg="82.50 kg">82.50 kg / 182 lbs / 13 stone 0 lbs</option>
+                                            <option data-lbs="183 lbs" data-stone="13 stone 1 lbs" data-kg="82.90 kg">82.90 kg / 183 lbs / 13 stone 1 lbs</option>
+                                            <option data-lbs="184 lbs" data-stone="13 stone 2 lbs" data-kg="83.40 kg">83.40 kg / 184 lbs / 13 stone 2 lbs</option>
+                                            <option data-lbs="185 lbs" data-stone="13 stone 3 lbs" data-kg="83.80 kg">83.80 kg / 185 lbs / 13 stone 3 lbs</option>
+                                            <option data-lbs="186 lbs" data-stone="13 stone 4 lbs" data-kg="84.30 kg">84.30 kg / 186 lbs / 13 stone 4 lbs</option>
+                                            <option data-lbs="187 lbs" data-stone="13 stone 5 lbs" data-kg="84.70 kg">84.70 kg / 187 lbs / 13 stone 5 lbs</option>
+                                            <option data-lbs="188 lbs" data-stone="13 stone 6 lbs" data-kg="85.20 kg">85.20 kg / 188 lbs / 13 stone 6 lbs</option>
+                                            <option data-lbs="189 lbs" data-stone="13 stone 7 lbs" data-kg="85.60 kg">85.60 kg / 189 lbs / 13 stone 7 lbs</option>
+                                            <option data-lbs="190 lbs" data-stone="13 stone 8 lbs" data-kg="86.10 kg">86.10 kg / 190 lbs / 13 stone 8 lbs</option>
+                                            <option data-lbs="191 lbs" data-stone="13 stone 9 lbs" data-kg="86.50 kg">86.50 kg / 191 lbs / 13 stone 9 lbs</option>
+                                            <option data-lbs="192 lbs" data-stone="13 stone 10 lbs" data-kg="87.00 kg">87.00 kg / 192 lbs / 13 stone 10 lbs</option>
+                                            <option data-lbs="193 lbs" data-stone="13 stone 11 lbs" data-kg="87.40 kg">87.40 kg / 193 lbs / 13 stone 11 lbs</option>
+                                            <option data-lbs="194 lbs" data-stone="13 stone 12 lbs" data-kg="87.90 kg">87.90 kg / 194 lbs / 13 stone 12 lbs</option>
+                                            <option data-lbs="195 lbs" data-stone="13 stone 13 lbs" data-kg="88.30 kg">88.30 kg / 195 lbs / 13 stone 13 lbs</option>
+                                            <option data-lbs="196 lbs" data-stone="14 stone 0 lbs" data-kg="88.80 kg">88.80 kg / 196 lbs / 14 stone 0 lbs</option>
+                                            <option data-lbs="197 lbs" data-stone="14 stone 1 lbs" data-kg="89.20 kg">89.20 kg / 197 lbs / 14 stone 1 lbs</option>
+                                            <option data-lbs="198 lbs" data-stone="14 stone 2 lbs" data-kg="89.70 kg">89.70 kg / 198 lbs / 14 stone 2 lbs</option>
+                                            <option data-lbs="199 lbs" data-stone="14 stone 3 lbs" data-kg="90.10 kg">90.10 kg / 199 lbs / 14 stone 3 lbs</option>
+                                            <option data-lbs="200 lbs" data-stone="14 stone 4 lbs" data-kg="90.60 kg">90.60 kg / 200 lbs / 14 stone 4 lbs</option>
+                                            <option data-lbs="201 lbs" data-stone="14 stone 5 lbs" data-kg="91.00 kg">91.00 kg / 201 lbs / 14 stone 5 lbs</option>
+                                            <option data-lbs="202 lbs" data-stone="14 stone 6 lbs" data-kg="91.50 kg">91.50 kg / 202 lbs / 14 stone 6 lbs</option>
+                                            <option data-lbs="203 lbs" data-stone="14 stone 7 lbs" data-kg="91.90 kg">91.90 kg / 203 lbs / 14 stone 7 lbs</option>
+                                            <option data-lbs="204 lbs" data-stone="14 stone 8 lbs" data-kg="92.40 kg">92.40 kg / 204 lbs / 14 stone 8 lbs</option>
+                                            <option data-lbs="205 lbs" data-stone="14 stone 9 lbs" data-kg="92.80 kg">92.80 kg / 205 lbs / 14 stone 9 lbs</option>
+                                            <option data-lbs="206 lbs" data-stone="14 stone 10 lbs" data-kg="93.30 kg">93.30 kg / 206 lbs / 14 stone 10 lbs</option>
+                                            <option data-lbs="207 lbs" data-stone="14 stone 11 lbs" data-kg="93.70 kg">93.70 kg / 207 lbs / 14 stone 11 lbs</option>
+                                            <option data-lbs="208 lbs" data-stone="14 stone 12 lbs" data-kg="94.20 kg">94.20 kg / 208 lbs / 14 stone 12 lbs</option>
+                                            <option data-lbs="209 lbs" data-stone="14 stone 13 lbs" data-kg="94.60 kg">94.60 kg / 209 lbs / 14 stone 13 lbs</option>
+                                            <option data-lbs="210 lbs" data-stone="15 stone 0 lbs" data-kg="95.10 kg">95.10 kg / 210 lbs / 15 stone 0 lbs</option>
+                                            <option data-lbs="211 lbs" data-stone="15 stone 1 lbs" data-kg="95.50 kg">95.50 kg / 211 lbs / 15 stone 1 lbs</option>
+                                            <option data-lbs="212 lbs" data-stone="15 stone 2 lbs" data-kg="96.00 kg">96.00 kg / 212 lbs / 15 stone 2 lbs</option>
+                                            <option data-lbs="213 lbs" data-stone="15 stone 3 lbs" data-kg="96.40 kg">96.40 kg / 213 lbs / 15 stone 3 lbs</option>
+                                            <option data-lbs="214 lbs" data-stone="15 stone 4 lbs" data-kg="96.90 kg">96.90 kg / 214 lbs / 15 stone 4 lbs</option>
+                                            <option data-lbs="215 lbs" data-stone="15 stone 5 lbs" data-kg="97.30 kg">97.30 kg / 215 lbs / 15 stone 5 lbs</option>
+                                            <option data-lbs="216 lbs" data-stone="15 stone 6 lbs" data-kg="97.80 kg">97.80 kg / 216 lbs / 15 stone 6 lbs</option>
+                                            <option data-lbs="217 lbs" data-stone="15 stone 7 lbs" data-kg="98.20 kg">98.20 kg / 217 lbs / 15 stone 7 lbs</option>
+                                            <option data-lbs="218 lbs" data-stone="15 stone 8 lbs" data-kg="98.70 kg">98.70 kg / 218 lbs / 15 stone 8 lbs</option>
+                                            <option data-lbs="219 lbs" data-stone="15 stone 9 lbs" data-kg="99.10 kg">99.10 kg / 219 lbs / 15 stone 9 lbs</option>
+                                            <option data-lbs="220 lbs" data-stone="15 stone 10 lbs" data-kg="99.60 kg">99.60 kg / 220 lbs / 15 stone 10 lbs</option>
+                                            <option data-lbs="221 lbs" data-stone="15 stone 11 lbs" data-kg="100.00 kg">100.00 kg / 221 lbs / 15 stone 11 lbs</option>
+                                            <option data-lbs="222 lbs" data-stone="15 stone 12 lbs" data-kg="100.50 kg">100.50 kg / 222 lbs / 15 stone 12 lbs</option>
+                                            <option data-lbs="223 lbs" data-stone="15 stone 13 lbs" data-kg="100.90 kg">100.90 kg / 223 lbs / 15 stone 13 lbs</option>
+                                            <option data-lbs="224 lbs" data-stone="16 stone 0 lbs" data-kg="101.40 kg">101.40 kg / 224 lbs / 16 stone 0 lbs</option>
+                                            <option data-lbs="225 lbs" data-stone="16 stone 1 lbs" data-kg="101.80 kg">101.80 kg / 225 lbs / 16 stone 1 lbs</option>
+                                            <option data-lbs="226 lbs" data-stone="16 stone 2 lbs" data-kg="102.30 kg">102.30 kg / 226 lbs / 16 stone 2 lbs</option>
+                                            <option data-lbs="227 lbs" data-stone="16 stone 3 lbs" data-kg="102.70 kg">102.70 kg / 227 lbs / 16 stone 3 lbs</option>
+                                            <option data-lbs="228 lbs" data-stone="16 stone 4 lbs" data-kg="103.20 kg">103.20 kg / 228 lbs / 16 stone 4 lbs</option>
+                                            <option data-lbs="229 lbs" data-stone="16 stone 5 lbs" data-kg="103.60 kg">103.60 kg / 229 lbs / 16 stone 5 lbs</option>
+                                            <option data-lbs="230 lbs" data-stone="16 stone 6 lbs" data-kg="104.10 kg">104.10 kg / 230 lbs / 16 stone 6 lbs</option>
+                                            <option data-lbs="231 lbs" data-stone="16 stone 7 lbs" data-kg="104.50 kg">104.50 kg / 231 lbs / 16 stone 7 lbs</option>
+                                            <option data-lbs="232 lbs" data-stone="16 stone 8 lbs" data-kg="105.00 kg">105.00 kg / 232 lbs / 16 stone 8 lbs</option>
+                                            <option data-lbs="233 lbs" data-stone="16 stone 9 lbs" data-kg="105.40 kg">105.40 kg / 233 lbs / 16 stone 9 lbs</option>
+                                            <option data-lbs="234 lbs" data-stone="16 stone 10 lbs" data-kg="105.90 kg">105.90 kg / 234 lbs / 16 stone 10 lbs</option>
+                                            <option data-lbs="235 lbs" data-stone="16 stone 11 lbs" data-kg="106.30 kg">106.30 kg / 235 lbs / 16 stone 11 lbs</option>
+                                            <option data-lbs="236 lbs" data-stone="16 stone 12 lbs" data-kg="106.80 kg">106.80 kg / 236 lbs / 16 stone 12 lbs</option>
+                                            <option data-lbs="237 lbs" data-stone="16 stone 13 lbs" data-kg="107.20 kg">107.20 kg / 237 lbs / 16 stone 13 lbs</option>
+                                            <option data-lbs="238 lbs" data-stone="17 stone 0 lbs" data-kg="107.70 kg">107.70 kg / 238 lbs / 17 stone 0 lbs</option>
+                                            <option data-lbs="239 lbs" data-stone="17 stone 1 lbs" data-kg="108.10 kg">108.10 kg / 239 lbs / 17 stone 1 lbs</option>
+                                            <option data-lbs="240 lbs" data-stone="17 stone 2 lbs" data-kg="108.60 kg">108.60 kg / 240 lbs / 17 stone 2 lbs</option>
+                                            <option data-lbs="241 lbs" data-stone="17 stone 3 lbs" data-kg="109.00 kg">109.00 kg / 241 lbs / 17 stone 3 lbs</option>
+                                            <option data-lbs="242 lbs" data-stone="17 stone 4 lbs" data-kg="109.50 kg">109.50 kg / 242 lbs / 17 stone 4 lbs</option>
+                                            <option data-lbs="243 lbs" data-stone="17 stone 5 lbs" data-kg="109.90 kg">109.90 kg / 243 lbs / 17 stone 5 lbs</option>
+                                            <option data-lbs="244 lbs" data-stone="17 stone 6 lbs" data-kg="110.40 kg">110.40 kg / 244 lbs / 17 stone 6 lbs</option>
+                                            <option data-lbs="245 lbs" data-stone="17 stone 7 lbs" data-kg="110.80 kg">110.80 kg / 245 lbs / 17 stone 7 lbs</option>
+                                            <option data-lbs="246 lbs" data-stone="17 stone 8 lbs" data-kg="111.30 kg">111.30 kg / 246 lbs / 17 stone 8 lbs</option>
+                                            <option data-lbs="247 lbs" data-stone="17 stone 9 lbs" data-kg="111.70 kg">111.70 kg / 247 lbs / 17 stone 9 lbs</option>
+                                            <option data-lbs="248 lbs" data-stone="17 stone 10 lbs" data-kg="112.20 kg">112.20 kg / 248 lbs / 17 stone 10 lbs</option>
+                                            <option data-lbs="249 lbs" data-stone="17 stone 11 lbs" data-kg="112.60 kg">112.60 kg / 249 lbs / 17 stone 11 lbs</option>
+                                            <option data-lbs="250 lbs" data-stone="17 stone 12 lbs" data-kg="113.10 kg">113.10 kg / 250 lbs / 17 stone 12 lbs</option>
+                                            <option data-lbs="251 lbs" data-stone="17 stone 13 lbs" data-kg="113.50 kg">113.50 kg / 251 lbs / 17 stone 13 lbs</option>
+                                            <option data-lbs="252 lbs" data-stone="18 stone 0 lbs" data-kg="114.00 kg">114.00 kg / 252 lbs / 18 stone 0 lbs</option>
+                                            <option data-lbs="253 lbs" data-stone="18 stone 1 lbs" data-kg="114.40 kg">114.40 kg / 253 lbs / 18 stone 1 lbs</option>
+                                            <option data-lbs="254 lbs" data-stone="18 stone 2 lbs" data-kg="114.90 kg">114.90 kg / 254 lbs / 18 stone 2 lbs</option>
+                                            <option data-lbs="255 lbs" data-stone="18 stone 3 lbs" data-kg="115.30 kg">115.30 kg / 255 lbs / 18 stone 3 lbs</option>
+                                            <option data-lbs="256 lbs" data-stone="18 stone 4 lbs" data-kg="115.80 kg">115.80 kg / 256 lbs / 18 stone 4 lbs</option>
+                                            <option data-lbs="257 lbs" data-stone="18 stone 5 lbs" data-kg="116.20 kg">116.20 kg / 257 lbs / 18 stone 5 lbs</option>
+                                            <option data-lbs="258 lbs" data-stone="18 stone 6 lbs" data-kg="116.70 kg">116.70 kg / 258 lbs / 18 stone 6 lbs</option>
+                                            <option data-lbs="259 lbs" data-stone="18 stone 7 lbs" data-kg="117.10 kg">117.10 kg / 259 lbs / 18 stone 7 lbs</option>
+                                            <option data-lbs="260 lbs" data-stone="18 stone 8 lbs" data-kg="117.60 kg">117.60 kg / 260 lbs / 18 stone 8 lbs</option>
+                                            <option data-lbs="261 lbs" data-stone="18 stone 9 lbs" data-kg="118.00 kg">118.00 kg / 261 lbs / 18 stone 9 lbs</option>
+                                            <option data-lbs="262 lbs" data-stone="18 stone 10 lbs" data-kg="118.50 kg">118.50 kg / 262 lbs / 18 stone 10 lbs</option>
+                                            <option data-lbs="263 lbs" data-stone="18 stone 11 lbs" data-kg="118.90 kg">118.90 kg / 263 lbs / 18 stone 11 lbs</option>
+                                            <option data-lbs="264 lbs" data-stone="18 stone 12 lbs" data-kg="119.40 kg">119.40 kg / 264 lbs / 18 stone 12 lbs</option>
+                                            <option data-lbs="265 lbs" data-stone="18 stone 13 lbs" data-kg="119.80 kg">119.80 kg / 265 lbs / 18 stone 13 lbs</option>
+                                            <option data-lbs="266 lbs" data-stone="19 stone 0 lbs" data-kg="120.30 kg">120.30 kg / 266 lbs / 19 stone 0 lbs</option>
+                                            <option data-lbs="267 lbs" data-stone="19 stone 1 lbs" data-kg="120.70 kg">120.70 kg / 267 lbs / 19 stone 1 lbs</option>
+                                            <option data-lbs="268 lbs" data-stone="19 stone 2 lbs" data-kg="121.20 kg">121.20 kg / 268 lbs / 19 stone 2 lbs</option>
+                                            <option data-lbs="269 lbs" data-stone="19 stone 3 lbs" data-kg="121.60 kg">121.60 kg / 269 lbs / 19 stone 3 lbs</option>
+                                            <option data-lbs="270 lbs" data-stone="19 stone 4 lbs" data-kg="122.10 kg">122.10 kg / 270 lbs / 19 stone 4 lbs</option>
+                                            <option data-lbs="271 lbs" data-stone="19 stone 5 lbs" data-kg="122.50 kg">122.50 kg / 271 lbs / 19 stone 5 lbs</option>
+                                            <option data-lbs="272 lbs" data-stone="19 stone 6 lbs" data-kg="123.00 kg">123.00 kg / 272 lbs / 19 stone 6 lbs</option>
+                                            <option data-lbs="273 lbs" data-stone="19 stone 7 lbs" data-kg="123.40 kg">123.40 kg / 273 lbs / 19 stone 7 lbs</option>
+                                            <option data-lbs="274 lbs" data-stone="19 stone 8 lbs" data-kg="123.90 kg">123.90 kg / 274 lbs / 19 stone 8 lbs</option>
+                                            <option data-lbs="275 lbs" data-stone="19 stone 9 lbs" data-kg="124.30 kg">124.30 kg / 275 lbs / 19 stone 9 lbs</option>
+                                            <option data-lbs="276 lbs" data-stone="19 stone 10 lbs" data-kg="124.80 kg">124.80 kg / 276 lbs / 19 stone 10 lbs</option>
+                                            <option data-lbs="277 lbs" data-stone="19 stone 11 lbs" data-kg="125.20 kg">125.20 kg / 277 lbs / 19 stone 11 lbs</option>
+                                            <option data-lbs="278 lbs" data-stone="19 stone 12 lbs" data-kg="125.70 kg">125.70 kg / 278 lbs / 19 stone 12 lbs</option>
+                                            <option data-lbs="279 lbs" data-stone="19 stone 13 lbs" data-kg="126.10 kg">126.10 kg / 279 lbs / 19 stone 13 lbs</option>
+                                            <option data-lbs="280 lbs" data-stone="20 stone 0 lbs" data-kg="126.60 kg">126.60 kg / 280 lbs / 20 stone 0 lbs</option>
+                                            <option data-lbs="281 lbs" data-stone="20 stone 1 lbs" data-kg="127.00 kg">127.00 kg / 281 lbs / 20 stone 1 lbs</option>
+                                            <option data-lbs="282 lbs" data-stone="20 stone 2 lbs" data-kg="127.50 kg">127.50 kg / 282 lbs / 20 stone 2 lbs</option>
+                                            <option data-lbs="283 lbs" data-stone="20 stone 3 lbs" data-kg="127.90 kg">127.90 kg / 283 lbs / 20 stone 3 lbs</option>
+                                            <option data-lbs="284 lbs" data-stone="20 stone 4 lbs" data-kg="128.40 kg">128.40 kg / 284 lbs / 20 stone 4 lbs</option>
+                                            <option data-lbs="285 lbs" data-stone="20 stone 5 lbs" data-kg="128.80 kg">128.80 kg / 285 lbs / 20 stone 5 lbs</option>
+                                            <option data-lbs="286 lbs" data-stone="20 stone 6 lbs" data-kg="129.30 kg">129.30 kg / 286 lbs / 20 stone 6 lbs</option>
+                                            <option data-lbs="287 lbs" data-stone="20 stone 7 lbs" data-kg="129.70 kg">129.70 kg / 287 lbs / 20 stone 7 lbs</option>
+                                            <option data-lbs="288 lbs" data-stone="20 stone 8 lbs" data-kg="130.20 kg">130.20 kg / 288 lbs / 20 stone 8 lbs</option>
+                                            <option data-lbs="289 lbs" data-stone="20 stone 9 lbs" data-kg="130.60 kg">130.60 kg / 289 lbs / 20 stone 9 lbs</option>
+                                            <option data-lbs="290 lbs" data-stone="20 stone 10 lbs" data-kg="131.10 kg">131.10 kg / 290 lbs / 20 stone 10 lbs</option>
+                                            <option data-lbs="291 lbs" data-stone="20 stone 11 lbs" data-kg="131.50 kg">131.50 kg / 291 lbs / 20 stone 11 lbs</option>
+                                            <option data-lbs="292 lbs" data-stone="20 stone 12 lbs" data-kg="132.00 kg">132.00 kg / 292 lbs / 20 stone 12 lbs</option>
+                                            <option data-lbs="293 lbs" data-stone="20 stone 13 lbs" data-kg="132.40 kg">132.40 kg / 293 lbs / 20 stone 13 lbs</option>
+                                            <option data-lbs="294 lbs" data-stone="21 stone 0 lbs" data-kg="132.90 kg">132.90 kg / 294 lbs / 21 stone 0 lbs</option>
+                                            <option data-lbs="295 lbs" data-stone="21 stone 1 lbs" data-kg="133.30 kg">133.30 kg / 295 lbs / 21 stone 1 lbs</option>
+                                            <option data-lbs="296 lbs" data-stone="21 stone 2 lbs" data-kg="133.80 kg">133.80 kg / 296 lbs / 21 stone 2 lbs</option>
+                                            <option data-lbs="297 lbs" data-stone="21 stone 3 lbs" data-kg="134.20 kg">134.20 kg / 297 lbs / 21 stone 3 lbs</option>
+                                            <option data-lbs="298 lbs" data-stone="21 stone 4 lbs" data-kg="134.70 kg">134.70 kg / 298 lbs / 21 stone 4 lbs</option>
+                                            <option data-lbs="299 lbs" data-stone="21 stone 5 lbs" data-kg="135.10 kg">135.10 kg / 299 lbs / 21 stone 5 lbs</option>
+                                            <option data-lbs="300 lbs" data-stone="21 stone 6 lbs" data-kg="135.60 kg">135.60 kg / 300 lbs / 21 stone 6 lbs</option>
+                                            <option data-lbs="301 lbs" data-stone="21 stone 7 lbs" data-kg="136.00 kg">136.00 kg / 301 lbs / 21 stone 7 lbs</option>
+                                            <option data-lbs="302 lbs" data-stone="21 stone 8 lbs" data-kg="136.50 kg">136.50 kg / 302 lbs / 21 stone 8 lbs</option>
+                                            <option data-lbs="303 lbs" data-stone="21 stone 9 lbs" data-kg="136.90 kg">136.90 kg / 303 lbs / 21 stone 9 lbs</option>
+                                            <option data-lbs="304 lbs" data-stone="21 stone 10 lbs" data-kg="137.40 kg">137.40 kg / 304 lbs / 21 stone 10 lbs</option>
+                                            <option data-lbs="305 lbs" data-stone="21 stone 11 lbs" data-kg="137.80 kg">137.80 kg / 305 lbs / 21 stone 11 lbs</option>
+                                            <option data-lbs="306 lbs" data-stone="21 stone 12 lbs" data-kg="138.30 kg">138.30 kg / 306 lbs / 21 stone 12 lbs</option>
+                                            <option data-lbs="307 lbs" data-stone="21 stone 13 lbs" data-kg="138.70 kg">138.70 kg / 307 lbs / 21 stone 13 lbs</option>
+                                            <option data-lbs="308 lbs" data-stone="22 stone 0 lbs" data-kg="139.20 kg">139.20 kg / 308 lbs / 22 stone 0 lbs</option>
+                                            <option data-lbs="309 lbs" data-stone="22 stone 1 lbs" data-kg="139.60 kg">139.60 kg / 309 lbs / 22 stone 1 lbs</option>
+                                            <option data-lbs="310 lbs" data-stone="22 stone 2 lbs" data-kg="140.10 kg">140.10 kg / 310 lbs / 22 stone 2 lbs</option>
+                                            <option data-lbs="311 lbs" data-stone="22 stone 3 lbs" data-kg="140.50 kg">140.50 kg / 311 lbs / 22 stone 3 lbs</option>
+                                            <option data-lbs="312 lbs" data-stone="22 stone 4 lbs" data-kg="141.00 kg">141.00 kg / 312 lbs / 22 stone 4 lbs</option>
+                                            <option data-lbs="313 lbs" data-stone="22 stone 5 lbs" data-kg="141.40 kg">141.40 kg / 313 lbs / 22 stone 5 lbs</option>
+                                            <option data-lbs="314 lbs" data-stone="22 stone 6 lbs" data-kg="141.90 kg">141.90 kg / 314 lbs / 22 stone 6 lbs</option>
+                                            <option data-lbs="315 lbs" data-stone="22 stone 7 lbs" data-kg="142.30 kg">142.30 kg / 315 lbs / 22 stone 7 lbs</option>
+                                            <option data-lbs="316 lbs" data-stone="22 stone 8 lbs" data-kg="142.80 kg">142.80 kg / 316 lbs / 22 stone 8 lbs</option>
+                                            <option data-lbs="317 lbs" data-stone="22 stone 9 lbs" data-kg="143.20 kg">143.20 kg / 317 lbs / 22 stone 9 lbs</option>
+                                            <option data-lbs="318 lbs" data-stone="22 stone 10 lbs" data-kg="143.70 kg">143.70 kg / 318 lbs / 22 stone 10 lbs</option>
+                                            <option data-lbs="319 lbs" data-stone="22 stone 11 lbs" data-kg="144.10 kg">144.10 kg / 319 lbs / 22 stone 11 lbs</option>
+                                            <option data-lbs="320 lbs" data-stone="22 stone 12 lbs" data-kg="144.60 kg">144.60 kg / 320 lbs / 22 stone 12 lbs</option>
+                                            <option data-lbs="321 lbs" data-stone="22 stone 13 lbs" data-kg="145.00 kg">145.00 kg / 321 lbs / 22 stone 13 lbs</option>
+                                            <option data-lbs="322 lbs" data-stone="23 stone 0 lbs" data-kg="145.50 kg">145.50 kg / 322 lbs / 23 stone 0 lbs</option>
+                                            <option data-lbs="323 lbs" data-stone="23 stone 1 lbs" data-kg="145.90 kg">145.90 kg / 323 lbs / 23 stone 1 lbs</option>
+                                            <option data-lbs="324 lbs" data-stone="23 stone 2 lbs" data-kg="146.40 kg">146.40 kg / 324 lbs / 23 stone 2 lbs</option>
+                                            <option data-lbs="325 lbs" data-stone="23 stone 3 lbs" data-kg="146.80 kg">146.80 kg / 325 lbs / 23 stone 3 lbs</option>
+                                            <option data-lbs="326 lbs" data-stone="23 stone 4 lbs" data-kg="147.30 kg">147.30 kg / 326 lbs / 23 stone 4 lbs</option>
+                                            <option data-lbs="327 lbs" data-stone="23 stone 5 lbs" data-kg="147.70 kg">147.70 kg / 327 lbs / 23 stone 5 lbs</option>
+                                            <option data-lbs="328 lbs" data-stone="23 stone 6 lbs" data-kg="148.20 kg">148.20 kg / 328 lbs / 23 stone 6 lbs</option>
+                                            <option data-lbs="329 lbs" data-stone="23 stone 7 lbs" data-kg="148.60 kg">148.60 kg / 329 lbs / 23 stone 7 lbs</option>
+                                            <option data-lbs="330 lbs" data-stone="23 stone 8 lbs" data-kg="149.10 kg">149.10 kg / 330 lbs / 23 stone 8 lbs</option>
+                                            <option data-lbs="331 lbs" data-stone="23 stone 9 lbs" data-kg="149.50 kg">149.50 kg / 331 lbs / 23 stone 9 lbs</option>
+                                            <option data-lbs="332 lbs" data-stone="23 stone 10 lbs" data-kg="150.00 kg">150.00 kg / 332 lbs / 23 stone 10 lbs</option>
+                                            <option data-lbs="333 lbs" data-stone="23 stone 11 lbs" data-kg="150.40 kg">150.40 kg / 333 lbs / 23 stone 11 lbs</option>
+                                            <option data-lbs="334 lbs" data-stone="23 stone 12 lbs" data-kg="150.90 kg">150.90 kg / 334 lbs / 23 stone 12 lbs</option>
+                                            <option data-lbs="335 lbs" data-stone="23 stone 13 lbs" data-kg="151.30 kg">151.30 kg / 335 lbs / 23 stone 13 lbs</option>
+                                            <option data-lbs="336 lbs" data-stone="24 stone 0 lbs" data-kg="151.80 kg">151.80 kg / 336 lbs / 24 stone 0 lbs</option>
+                                            <option data-lbs="337 lbs" data-stone="24 stone 1 lbs" data-kg="152.20 kg">152.20 kg / 337 lbs / 24 stone 1 lbs</option>
+                                            <option data-lbs="338 lbs" data-stone="24 stone 2 lbs" data-kg="152.70 kg">152.70 kg / 338 lbs / 24 stone 2 lbs</option>
+                                            <option data-lbs="339 lbs" data-stone="24 stone 3 lbs" data-kg="153.10 kg">153.10 kg / 339 lbs / 24 stone 3 lbs</option>
+                                            <option data-lbs="340 lbs" data-stone="24 stone 4 lbs" data-kg="153.60 kg">153.60 kg / 340 lbs / 24 stone 4 lbs</option>
+                                            <option data-lbs="341 lbs" data-stone="24 stone 5 lbs" data-kg="154.00 kg">154.00 kg / 341 lbs / 24 stone 5 lbs</option>
+                                            <option data-lbs="342 lbs" data-stone="24 stone 6 lbs" data-kg="154.50 kg">154.50 kg / 342 lbs / 24 stone 6 lbs</option>
+                                            <option data-lbs="343 lbs" data-stone="24 stone 7 lbs" data-kg="154.90 kg">154.90 kg / 343 lbs / 24 stone 7 lbs</option>
+                                            <option data-lbs="344 lbs" data-stone="24 stone 8 lbs" data-kg="155.40 kg">155.40 kg / 344 lbs / 24 stone 8 lbs</option>
+                                            <option data-lbs="345 lbs" data-stone="24 stone 9 lbs" data-kg="155.80 kg">155.80 kg / 345 lbs / 24 stone 9 lbs</option>
+                                            <option data-lbs="346 lbs" data-stone="24 stone 10 lbs" data-kg="156.30 kg">156.30 kg / 346 lbs / 24 stone 10 lbs</option>
+                                            <option data-lbs="347 lbs" data-stone="24 stone 11 lbs" data-kg="156.70 kg">156.70 kg / 347 lbs / 24 stone 11 lbs</option>
+                                            <option data-lbs="348 lbs" data-stone="24 stone 12 lbs" data-kg="157.20 kg">157.20 kg / 348 lbs / 24 stone 12 lbs</option>
+                                            <option data-lbs="349 lbs" data-stone="24 stone 13 lbs" data-kg="157.60 kg">157.60 kg / 349 lbs / 24 stone 13 lbs</option>
+                                            <option data-lbs="350 lbs" data-stone="25 stone 0 lbs" data-kg="158.10 kg">158.10 kg / 350 lbs / 25 stone 0 lbs</option>
+                                            <option data-lbs="351 lbs" data-stone="25 stone 1 lbs" data-kg="158.50 kg">158.50 kg / 351 lbs / 25 stone 1 lbs</option>
+                                            <option data-lbs="352 lbs" data-stone="25 stone 2 lbs" data-kg="159.00 kg">159.00 kg / 352 lbs / 25 stone 2 lbs</option>
+                                            <option data-lbs="353 lbs" data-stone="25 stone 3 lbs" data-kg="159.40 kg">159.40 kg / 353 lbs / 25 stone 3 lbs</option>
+                                            <option data-lbs="354 lbs" data-stone="25 stone 4 lbs" data-kg="159.90 kg">159.90 kg / 354 lbs / 25 stone 4 lbs</option>
+                                            <option data-lbs="355 lbs" data-stone="25 stone 5 lbs" data-kg="160.30 kg">160.30 kg / 355 lbs / 25 stone 5 lbs</option>
+                                            <option data-lbs="356 lbs" data-stone="25 stone 6 lbs" data-kg="160.80 kg">160.80 kg / 356 lbs / 25 stone 6 lbs</option>
+                                            <option data-lbs="357 lbs" data-stone="25 stone 7 lbs" data-kg="161.20 kg">161.20 kg / 357 lbs / 25 stone 7 lbs</option>
+                                            <option data-lbs="358 lbs" data-stone="25 stone 8 lbs" data-kg="161.70 kg">161.70 kg / 358 lbs / 25 stone 8 lbs</option>
+                                            <option data-lbs="359 lbs" data-stone="25 stone 9 lbs" data-kg="162.10 kg">162.10 kg / 359 lbs / 25 stone 9 lbs</option>
+                                            <option data-lbs="360 lbs" data-stone="25 stone 10 lbs" data-kg="162.60 kg">162.60 kg / 360 lbs / 25 stone 10 lbs</option>
+                                            <option data-lbs="361 lbs" data-stone="25 stone 11 lbs" data-kg="163.00 kg">163.00 kg / 361 lbs / 25 stone 11 lbs</option>
+                                            <option data-lbs="362 lbs" data-stone="25 stone 12 lbs" data-kg="163.50 kg">163.50 kg / 362 lbs / 25 stone 12 lbs</option>
+                                            <option data-lbs="363 lbs" data-stone="25 stone 13 lbs" data-kg="163.90 kg">163.90 kg / 363 lbs / 25 stone 13 lbs</option>
+                                            <option data-lbs="364 lbs" data-stone="26 stone 0 lbs" data-kg="164.40 kg">164.40 kg / 364 lbs / 26 stone 0 lbs</option>
+                                            <option data-lbs="365 lbs" data-stone="26 stone 1 lbs" data-kg="164.80 kg">164.80 kg / 365 lbs / 26 stone 1 lbs</option>
+                                            <option data-lbs="366 lbs" data-stone="26 stone 2 lbs" data-kg="165.30 kg">165.30 kg / 366 lbs / 26 stone 2 lbs</option>
+                                            <option data-lbs="367 lbs" data-stone="26 stone 3 lbs" data-kg="165.70 kg">165.70 kg / 367 lbs / 26 stone 3 lbs</option>
+                                            <option data-lbs="368 lbs" data-stone="26 stone 4 lbs" data-kg="166.20 kg">166.20 kg / 368 lbs / 26 stone 4 lbs</option>
+                                            <option data-lbs="369 lbs" data-stone="26 stone 5 lbs" data-kg="166.60 kg">166.60 kg / 369 lbs / 26 stone 5 lbs</option>
+                                            <option data-lbs="370 lbs" data-stone="26 stone 6 lbs" data-kg="167.10 kg">167.10 kg / 370 lbs / 26 stone 6 lbs</option>
+                                            <option data-lbs="371 lbs" data-stone="26 stone 7 lbs" data-kg="167.50 kg">167.50 kg / 371 lbs / 26 stone 7 lbs</option>
+                                            <option data-lbs="372 lbs" data-stone="26 stone 8 lbs" data-kg="168.00 kg">168.00 kg / 372 lbs / 26 stone 8 lbs</option>
+                                            <option data-lbs="373 lbs" data-stone="26 stone 9 lbs" data-kg="168.40 kg">168.40 kg / 373 lbs / 26 stone 9 lbs</option>
+                                            <option data-lbs="374 lbs" data-stone="26 stone 10 lbs" data-kg="168.90 kg">168.90 kg / 374 lbs / 26 stone 10 lbs</option>
+                                            <option data-lbs="375 lbs" data-stone="26 stone 11 lbs" data-kg="169.30 kg">169.30 kg / 375 lbs / 26 stone 11 lbs</option>
+                                            <option data-lbs="376 lbs" data-stone="26 stone 12 lbs" data-kg="169.80 kg">169.80 kg / 376 lbs / 26 stone 12 lbs</option>
+                                            <option data-lbs="377 lbs" data-stone="26 stone 13 lbs" data-kg="170.20 kg">170.20 kg / 377 lbs / 26 stone 13 lbs</option>
+                                            <option data-lbs="378 lbs" data-stone="27 stone 0 lbs" data-kg="170.70 kg">170.70 kg / 378 lbs / 27 stone 0 lbs</option>
+                                            <option data-lbs="379 lbs" data-stone="27 stone 1 lbs" data-kg="171.10 kg">171.10 kg / 379 lbs / 27 stone 1 lbs</option>
+                                            <option data-lbs="380 lbs" data-stone="27 stone 2 lbs" data-kg="171.60 kg">171.60 kg / 380 lbs / 27 stone 2 lbs</option>
+                                            <option data-lbs="381 lbs" data-stone="27 stone 3 lbs" data-kg="172.00 kg">172.00 kg / 381 lbs / 27 stone 3 lbs</option>
+                                            <option data-lbs="382 lbs" data-stone="27 stone 4 lbs" data-kg="172.50 kg">172.50 kg / 382 lbs / 27 stone 4 lbs</option>
+                                            <option data-lbs="383 lbs" data-stone="27 stone 5 lbs" data-kg="172.90 kg">172.90 kg / 383 lbs / 27 stone 5 lbs</option>
+                                            <option data-lbs="384 lbs" data-stone="27 stone 6 lbs" data-kg="173.40 kg">173.40 kg / 384 lbs / 27 stone 6 lbs</option>
+                                            <option data-lbs="385 lbs" data-stone="27 stone 7 lbs" data-kg="173.80 kg">173.80 kg / 385 lbs / 27 stone 7 lbs</option>
+                                            <option data-lbs="386 lbs" data-stone="27 stone 8 lbs" data-kg="174.30 kg">174.30 kg / 386 lbs / 27 stone 8 lbs</option>
+                                            <option data-lbs="387 lbs" data-stone="27 stone 9 lbs" data-kg="174.70 kg">174.70 kg / 387 lbs / 27 stone 9 lbs</option>
+                                            <option data-lbs="388 lbs" data-stone="27 stone 10 lbs" data-kg="175.20 kg">175.20 kg / 388 lbs / 27 stone 10 lbs</option>
+                                            <option data-lbs="389 lbs" data-stone="27 stone 11 lbs" data-kg="175.60 kg">175.60 kg / 389 lbs / 27 stone 11 lbs</option>
+                                            <option data-lbs="390 lbs" data-stone="27 stone 12 lbs" data-kg="176.10 kg">176.10 kg / 390 lbs / 27 stone 12 lbs</option>
+                                            <option data-lbs="391 lbs" data-stone="27 stone 13 lbs" data-kg="176.50 kg">176.50 kg / 391 lbs / 27 stone 13 lbs</option>
+                                            <option data-lbs="392 lbs" data-stone="28 stone 0 lbs" data-kg="177.00 kg">177.00 kg / 392 lbs / 28 stone 0 lbs</option>
+                                            <option data-lbs="393 lbs" data-stone="28 stone 1 lbs" data-kg="177.40 kg">177.40 kg / 393 lbs / 28 stone 1 lbs</option>
+                                            <option data-lbs="394 lbs" data-stone="28 stone 2 lbs" data-kg="177.90 kg">177.90 kg / 394 lbs / 28 stone 2 lbs</option>
+                                            <option data-lbs="395 lbs" data-stone="28 stone 3 lbs" data-kg="178.30 kg">178.30 kg / 395 lbs / 28 stone 3 lbs</option>
+                                            <option data-lbs="396 lbs" data-stone="28 stone 4 lbs" data-kg="178.80 kg">178.80 kg / 396 lbs / 28 stone 4 lbs</option>
+                                            <option data-lbs="397 lbs" data-stone="28 stone 5 lbs" data-kg="179.20 kg">179.20 kg / 397 lbs / 28 stone 5 lbs</option>
+                                            <option data-lbs="398 lbs" data-stone="28 stone 6 lbs" data-kg="179.70 kg">179.70 kg / 398 lbs / 28 stone 6 lbs</option>
+                                            <option data-lbs="399 lbs" data-stone="28 stone 7 lbs" data-kg="180.10 kg">180.10 kg / 399 lbs / 28 stone 7 lbs</option>
+                                            <option data-lbs="400 lbs" data-stone="28 stone 8 lbs" data-kg="180.60 kg">180.60 kg / 400 lbs / 28 stone 8 lbs</option>
+                                            <option data-lbs="401 lbs" data-stone="28 stone 9 lbs" data-kg="181.00 kg">181.00 kg / 401 lbs / 28 stone 9 lbs</option>
+                                            <option data-lbs="402 lbs" data-stone="28 stone 10 lbs" data-kg="181.50 kg">181.50 kg / 402 lbs / 28 stone 10 lbs</option>
+                                            <option data-lbs="403 lbs" data-stone="28 stone 11 lbs" data-kg="181.90 kg">181.90 kg / 403 lbs / 28 stone 11 lbs</option>
+                                            <option data-lbs="404 lbs" data-stone="28 stone 12 lbs" data-kg="182.40 kg">182.40 kg / 404 lbs / 28 stone 12 lbs</option>
+                                            <option data-lbs="405 lbs" data-stone="28 stone 13 lbs" data-kg="182.80 kg">182.80 kg / 405 lbs / 28 stone 13 lbs</option>
+                                            <option data-lbs="406 lbs" data-stone="29 stone 0 lbs" data-kg="183.30 kg">183.30 kg / 406 lbs / 29 stone 0 lbs</option>
+                                            <option data-lbs="407 lbs" data-stone="29 stone 1 lbs" data-kg="183.70 kg">183.70 kg / 407 lbs / 29 stone 1 lbs</option>
+                                            <option data-lbs="408 lbs" data-stone="29 stone 2 lbs" data-kg="184.20 kg">184.20 kg / 408 lbs / 29 stone 2 lbs</option>
+                                            <option data-lbs="409 lbs" data-stone="29 stone 3 lbs" data-kg="184.60 kg">184.60 kg / 409 lbs / 29 stone 3 lbs</option>
+                                            <option data-lbs="410 lbs" data-stone="29 stone 4 lbs" data-kg="185.10 kg">185.10 kg / 410 lbs / 29 stone 4 lbs</option>
+                                            <option data-lbs="411 lbs" data-stone="29 stone 5 lbs" data-kg="185.50 kg">185.50 kg / 411 lbs / 29 stone 5 lbs</option>
+                                            <option data-lbs="412 lbs" data-stone="29 stone 6 lbs" data-kg="186.00 kg">186.00 kg / 412 lbs / 29 stone 6 lbs</option>
+                                            <option data-lbs="413 lbs" data-stone="29 stone 7 lbs" data-kg="186.40 kg">186.40 kg / 413 lbs / 29 stone 7 lbs</option>
+                                            <option data-lbs="414 lbs" data-stone="29 stone 8 lbs" data-kg="186.90 kg">186.90 kg / 414 lbs / 29 stone 8 lbs</option>
+                                            <option data-lbs="415 lbs" data-stone="29 stone 9 lbs" data-kg="187.30 kg">187.30 kg / 415 lbs / 29 stone 9 lbs</option>
+                                            <option data-lbs="416 lbs" data-stone="29 stone 10 lbs" data-kg="187.80 kg">187.80 kg / 416 lbs / 29 stone 10 lbs</option>
+                                            <option data-lbs="417 lbs" data-stone="29 stone 11 lbs" data-kg="188.20 kg">188.20 kg / 417 lbs / 29 stone 11 lbs</option>
+                                            <option data-lbs="418 lbs" data-stone="29 stone 12 lbs" data-kg="188.70 kg">188.70 kg / 418 lbs / 29 stone 12 lbs</option>
+                                            <option data-lbs="419 lbs" data-stone="29 stone 13 lbs" data-kg="189.10 kg">189.10 kg / 419 lbs / 29 stone 13 lbs</option>
+                                            <option data-lbs="420 lbs" data-stone="30 stone 0 lbs" data-kg="189.60 kg">189.60 kg / 420 lbs / 30 stone 0 lbs</option>
+                                            <option data-lbs="421 lbs" data-stone="30 stone 1 lbs" data-kg="190.00 kg">190.00 kg / 421 lbs / 30 stone 1 lbs</option>
+                                            <option data-lbs="422 lbs" data-stone="30 stone 2 lbs" data-kg="190.50 kg">190.50 kg / 422 lbs / 30 stone 2 lbs</option>
+                                            <option data-lbs="423 lbs" data-stone="30 stone 3 lbs" data-kg="190.90 kg">190.90 kg / 423 lbs / 30 stone 3 lbs</option>
+                                            <option data-lbs="424 lbs" data-stone="30 stone 4 lbs" data-kg="191.40 kg">191.40 kg / 424 lbs / 30 stone 4 lbs</option>
+                                            <option data-lbs="425 lbs" data-stone="30 stone 5 lbs" data-kg="191.80 kg">191.80 kg / 425 lbs / 30 stone 5 lbs</option>
+                                            <option data-lbs="426 lbs" data-stone="30 stone 6 lbs" data-kg="192.30 kg">192.30 kg / 426 lbs / 30 stone 6 lbs</option>
+                                            <option data-lbs="427 lbs" data-stone="30 stone 7 lbs" data-kg="192.70 kg">192.70 kg / 427 lbs / 30 stone 7 lbs</option>
+                                            <option data-lbs="428 lbs" data-stone="30 stone 8 lbs" data-kg="193.20 kg">193.20 kg / 428 lbs / 30 stone 8 lbs</option>
+                                            <option data-lbs="429 lbs" data-stone="30 stone 9 lbs" data-kg="193.60 kg">193.60 kg / 429 lbs / 30 stone 9 lbs</option>
+                                            <option data-lbs="430 lbs" data-stone="30 stone 10 lbs" data-kg="194.10 kg">194.10 kg / 430 lbs / 30 stone 10 lbs</option>
+                                            <option data-lbs="431 lbs" data-stone="30 stone 11 lbs" data-kg="194.50 kg">194.50 kg / 431 lbs / 30 stone 11 lbs</option>
+                                            <option data-lbs="432 lbs" data-stone="30 stone 12 lbs" data-kg="195.00 kg">195.00 kg / 432 lbs / 30 stone 12 lbs</option>
+                                            <option data-lbs="433 lbs" data-stone="30 stone 13 lbs" data-kg="195.40 kg">195.40 kg / 433 lbs / 30 stone 13 lbs</option>
+                                            <option data-lbs="434 lbs" data-stone="31 stone 0 lbs" data-kg="195.90 kg">195.90 kg / 434 lbs / 31 stone 0 lbs</option>
+                                            <option data-lbs="435 lbs" data-stone="31 stone 1 lbs" data-kg="196.30 kg">196.30 kg / 435 lbs / 31 stone 1 lbs</option>
+                                            <option data-lbs="436 lbs" data-stone="31 stone 2 lbs" data-kg="196.80 kg">196.80 kg / 436 lbs / 31 stone 2 lbs</option>
+                                            <option data-lbs="437 lbs" data-stone="31 stone 3 lbs" data-kg="197.20 kg">197.20 kg / 437 lbs / 31 stone 3 lbs</option>
+                                            <option data-lbs="438 lbs" data-stone="31 stone 4 lbs" data-kg="197.70 kg">197.70 kg / 438 lbs / 31 stone 4 lbs</option>
+                                            <option data-lbs="439 lbs" data-stone="31 stone 5 lbs" data-kg="198.10 kg">198.10 kg / 439 lbs / 31 stone 5 lbs</option>
+                                            <option data-lbs="440 lbs" data-stone="31 stone 6 lbs" data-kg="198.60 kg">198.60 kg / 440 lbs / 31 stone 6 lbs</option>
+                                            <option data-lbs="441 lbs" data-stone="31 stone 7 lbs" data-kg="199.00 kg">199.00 kg / 441 lbs / 31 stone 7 lbs</option>
+                                            <option data-lbs="442 lbs" data-stone="31 stone 8 lbs" data-kg="199.50 kg">199.50 kg / 442 lbs / 31 stone 8 lbs</option>
+                                            <option data-lbs="443 lbs" data-stone="31 stone 9 lbs" data-kg="199.90 kg">199.90 kg / 443 lbs / 31 stone 9 lbs</option>
+                                            <option data-lbs="444 lbs" data-stone="31 stone 10 lbs" data-kg="200.40 kg">200.40 kg / 444 lbs / 31 stone 10 lbs</option>
+                                            <option data-lbs="445 lbs" data-stone="31 stone 11 lbs" data-kg="200.80 kg">200.80 kg / 445 lbs / 31 stone 11 lbs</option>
+                                            <option data-lbs="446 lbs" data-stone="31 stone 12 lbs" data-kg="201.30 kg">201.30 kg / 446 lbs / 31 stone 12 lbs</option>
+                                            <option data-lbs="447 lbs" data-stone="31 stone 13 lbs" data-kg="201.70 kg">201.70 kg / 447 lbs / 31 stone 13 lbs</option>
+                                            <option data-lbs="448 lbs" data-stone="32 stone 0 lbs" data-kg="202.20 kg">202.20 kg / 448 lbs / 32 stone 0 lbs</option>
+                                            <option data-lbs="449 lbs" data-stone="32 stone 1 lbs" data-kg="202.60 kg">202.60 kg / 449 lbs / 32 stone 1 lbs</option>
+                                            <option data-lbs="450 lbs" data-stone="32 stone 2 lbs" data-kg="203.10 kg">203.10 kg / 450 lbs / 32 stone 2 lbs</option>
+                                            <option data-lbs="451 lbs" data-stone="32 stone 3 lbs" data-kg="203.50 kg">203.50 kg / 451 lbs / 32 stone 3 lbs</option>
+                                            <option data-lbs="452 lbs" data-stone="32 stone 4 lbs" data-kg="204.00 kg">204.00 kg / 452 lbs / 32 stone 4 lbs</option>
+                                            <option data-lbs="453 lbs" data-stone="32 stone 5 lbs" data-kg="204.40 kg">204.40 kg / 453 lbs / 32 stone 5 lbs</option>
+                                            <option data-lbs="454 lbs" data-stone="32 stone 6 lbs" data-kg="204.90 kg">204.90 kg / 454 lbs / 32 stone 6 lbs</option>
+                                            <option data-lbs="455 lbs" data-stone="32 stone 7 lbs" data-kg="205.30 kg">205.30 kg / 455 lbs / 32 stone 7 lbs</option>
+                                            <option data-lbs="456 lbs" data-stone="32 stone 8 lbs" data-kg="205.80 kg">205.80 kg / 456 lbs / 32 stone 8 lbs</option>
+                                            <option data-lbs="457 lbs" data-stone="32 stone 9 lbs" data-kg="206.20 kg">206.20 kg / 457 lbs / 32 stone 9 lbs</option>
+                                            <option data-lbs="458 lbs" data-stone="32 stone 10 lbs" data-kg="206.70 kg">206.70 kg / 458 lbs / 32 stone 10 lbs</option>
+                                            <option data-lbs="459 lbs" data-stone="32 stone 11 lbs" data-kg="207.10 kg">207.10 kg / 459 lbs / 32 stone 11 lbs</option>
+                                            <option data-lbs="460 lbs" data-stone="32 stone 12 lbs" data-kg="207.60 kg">207.60 kg / 460 lbs / 32 stone 12 lbs</option>
+                                            <option data-lbs="461 lbs" data-stone="32 stone 13 lbs" data-kg="208.00 kg">208.00 kg / 461 lbs / 32 stone 13 lbs</option>
+                                            <option data-lbs="462 lbs" data-stone="33 stone 0 lbs" data-kg="208.50 kg">208.50 kg / 462 lbs / 33 stone 0 lbs</option>
+                                            <option data-lbs="463 lbs" data-stone="33 stone 1 lbs" data-kg="208.90 kg">208.90 kg / 463 lbs / 33 stone 1 lbs</option>
+                                            <option data-lbs="464 lbs" data-stone="33 stone 2 lbs" data-kg="209.40 kg">209.40 kg / 464 lbs / 33 stone 2 lbs</option>
+                                            <option data-lbs="465 lbs" data-stone="33 stone 3 lbs" data-kg="209.80 kg">209.80 kg / 465 lbs / 33 stone 3 lbs</option>
+                                            <option data-lbs="466 lbs" data-stone="33 stone 4 lbs" data-kg="210.30 kg">210.30 kg / 466 lbs / 33 stone 4 lbs</option>
+                                            <option data-lbs="467 lbs" data-stone="33 stone 5 lbs" data-kg="210.70 kg">210.70 kg / 467 lbs / 33 stone 5 lbs</option>
+                                            <option data-lbs="468 lbs" data-stone="33 stone 6 lbs" data-kg="211.20 kg">211.20 kg / 468 lbs / 33 stone 6 lbs</option>
+                                            <option data-lbs="469 lbs" data-stone="33 stone 7 lbs" data-kg="211.60 kg">211.60 kg / 469 lbs / 33 stone 7 lbs</option>
+                                            <option data-lbs="470 lbs" data-stone="33 stone 8 lbs" data-kg="212.10 kg">212.10 kg / 470 lbs / 33 stone 8 lbs</option>
+                                            <option data-lbs="471 lbs" data-stone="33 stone 9 lbs" data-kg="212.50 kg">212.50 kg / 471 lbs / 33 stone 9 lbs</option>
+                                            <option data-lbs="472 lbs" data-stone="33 stone 10 lbs" data-kg="213.00 kg">213.00 kg / 472 lbs / 33 stone 10 lbs</option>
+                                            <option data-lbs="473 lbs" data-stone="33 stone 11 lbs" data-kg="213.40 kg">213.40 kg / 473 lbs / 33 stone 11 lbs</option>
+                                            <option data-lbs="474 lbs" data-stone="33 stone 12 lbs" data-kg="213.90 kg">213.90 kg / 474 lbs / 33 stone 12 lbs</option>
+                                            <option data-lbs="475 lbs" data-stone="33 stone 13 lbs" data-kg="214.30 kg">214.30 kg / 475 lbs / 33 stone 13 lbs</option>
+                                            <option data-lbs="476 lbs" data-stone="34 stone 0 lbs" data-kg="214.80 kg">214.80 kg / 476 lbs / 34 stone 0 lbs</option>
+                                            <option data-lbs="477 lbs" data-stone="34 stone 1 lbs" data-kg="215.20 kg">215.20 kg / 477 lbs / 34 stone 1 lbs</option>
+                                            <option data-lbs="478 lbs" data-stone="34 stone 2 lbs" data-kg="215.70 kg">215.70 kg / 478 lbs / 34 stone 2 lbs</option>
+                                            <option data-lbs="479 lbs" data-stone="34 stone 3 lbs" data-kg="216.10 kg">216.10 kg / 479 lbs / 34 stone 3 lbs</option>
+                                            <option data-lbs="480 lbs" data-stone="34 stone 4 lbs" data-kg="216.60 kg">216.60 kg / 480 lbs / 34 stone 4 lbs</option>
+                                            <option data-lbs="481 lbs" data-stone="34 stone 5 lbs" data-kg="217.00 kg">217.00 kg / 481 lbs / 34 stone 5 lbs</option>
+                                            <option data-lbs="482 lbs" data-stone="34 stone 6 lbs" data-kg="217.50 kg">217.50 kg / 482 lbs / 34 stone 6 lbs</option>
+                                            <option data-lbs="483 lbs" data-stone="34 stone 7 lbs" data-kg="217.90 kg">217.90 kg / 483 lbs / 34 stone 7 lbs</option>
+                                            <option data-lbs="484 lbs" data-stone="34 stone 8 lbs" data-kg="218.40 kg">218.40 kg / 484 lbs / 34 stone 8 lbs</option>
+                                            <option data-lbs="485 lbs" data-stone="34 stone 9 lbs" data-kg="218.80 kg">218.80 kg / 485 lbs / 34 stone 9 lbs</option>
+                                            <option data-lbs="486 lbs" data-stone="34 stone 10 lbs" data-kg="219.30 kg">219.30 kg / 486 lbs / 34 stone 10 lbs</option>
+                                            <option data-lbs="487 lbs" data-stone="34 stone 11 lbs" data-kg="219.70 kg">219.70 kg / 487 lbs / 34 stone 11 lbs</option>
+                                            <option data-lbs="488 lbs" data-stone="34 stone 12 lbs" data-kg="220.20 kg">220.20 kg / 488 lbs / 34 stone 12 lbs</option>
+                                            <option data-lbs="489 lbs" data-stone="34 stone 13 lbs" data-kg="220.60 kg">220.60 kg / 489 lbs / 34 stone 13 lbs</option>
+                                            <option data-lbs="490 lbs" data-stone="35 stone 0 lbs" data-kg="221.10 kg">221.10 kg / 490 lbs / 35 stone 0 lbs</option>
+                                            <option data-lbs="491 lbs" data-stone="35 stone 1 lbs" data-kg="221.50 kg">221.50 kg / 491 lbs / 35 stone 1 lbs</option>
+                                            <option data-lbs="492 lbs" data-stone="35 stone 2 lbs" data-kg="222.00 kg">222.00 kg / 492 lbs / 35 stone 2 lbs</option>
+                                            <option data-lbs="493 lbs" data-stone="35 stone 3 lbs" data-kg="222.40 kg">222.40 kg / 493 lbs / 35 stone 3 lbs</option>
+                                            <option data-lbs="494 lbs" data-stone="35 stone 4 lbs" data-kg="222.90 kg">222.90 kg / 494 lbs / 35 stone 4 lbs</option>
+                                            <option data-lbs="495 lbs" data-stone="35 stone 5 lbs" data-kg="223.30 kg">223.30 kg / 495 lbs / 35 stone 5 lbs</option>
+                                            <option data-lbs="496 lbs" data-stone="35 stone 6 lbs" data-kg="223.80 kg">223.80 kg / 496 lbs / 35 stone 6 lbs</option>
+                                            <option data-lbs="497 lbs" data-stone="35 stone 7 lbs" data-kg="224.20 kg">224.20 kg / 497 lbs / 35 stone 7 lbs</option>
+                                            <option data-lbs="498 lbs" data-stone="35 stone 8 lbs" data-kg="224.70 kg">224.70 kg / 498 lbs / 35 stone 8 lbs</option>
+                                            <option data-lbs="499 lbs" data-stone="35 stone 9 lbs" data-kg="225.10 kg">225.10 kg / 499 lbs / 35 stone 9 lbs</option>
+                                            <option data-lbs="500 lbs" data-stone="35 stone 10 lbs" data-kg="225.60 kg">225.60 kg / 500 lbs / 35 stone 10 lbs</option>
+                                            <option data-lbs="501 lbs" data-stone="35 stone 11 lbs" data-kg="226.00 kg">226.00 kg / 501 lbs / 35 stone 11 lbs</option>
+                                            <option data-lbs="502 lbs" data-stone="35 stone 12 lbs" data-kg="226.50 kg">226.50 kg / 502 lbs / 35 stone 12 lbs</option>
+                                            <option data-lbs="503 lbs" data-stone="35 stone 13 lbs" data-kg="226.90 kg">226.90 kg / 503 lbs / 35 stone 13 lbs</option>
+                                            <option data-lbs="504 lbs" data-stone="36 stone 0 lbs" data-kg="227.40 kg">227.40 kg / 504 lbs / 36 stone 0 lbs</option>
+                                            <option data-lbs="505 lbs" data-stone="36 stone 1 lbs" data-kg="227.80 kg">227.80 kg / 505 lbs / 36 stone 1 lbs</option>
+                                            <option data-lbs="506 lbs" data-stone="36 stone 2 lbs" data-kg="228.30 kg">228.30 kg / 506 lbs / 36 stone 2 lbs</option>
+                                            <option data-lbs="507 lbs" data-stone="36 stone 3 lbs" data-kg="228.70 kg">228.70 kg / 507 lbs / 36 stone 3 lbs</option>
+                                            <option data-lbs="508 lbs" data-stone="36 stone 4 lbs" data-kg="229.20 kg">229.20 kg / 508 lbs / 36 stone 4 lbs</option>
+                                            <option data-lbs="509 lbs" data-stone="36 stone 5 lbs" data-kg="229.60 kg">229.60 kg / 509 lbs / 36 stone 5 lbs</option>
+                                            <option data-lbs="510 lbs" data-stone="36 stone 6 lbs" data-kg="230.10 kg">230.10 kg / 510 lbs / 36 stone 6 lbs</option>
+                                            <option data-lbs="511 lbs" data-stone="36 stone 7 lbs" data-kg="230.50 kg">230.50 kg / 511 lbs / 36 stone 7 lbs</option>
+                                            <option data-lbs="512 lbs" data-stone="36 stone 8 lbs" data-kg="231.00 kg">231.00 kg / 512 lbs / 36 stone 8 lbs</option>
+                                            <option data-lbs="513 lbs" data-stone="36 stone 9 lbs" data-kg="231.40 kg">231.40 kg / 513 lbs / 36 stone 9 lbs</option>
+                                            <option data-lbs="514 lbs" data-stone="36 stone 10 lbs" data-kg="231.90 kg">231.90 kg / 514 lbs / 36 stone 10 lbs</option>
+                                            <option data-lbs="515 lbs" data-stone="36 stone 11 lbs" data-kg="232.30 kg">232.30 kg / 515 lbs / 36 stone 11 lbs</option>
+                                            <option data-lbs="516 lbs" data-stone="36 stone 12 lbs" data-kg="232.80 kg">232.80 kg / 516 lbs / 36 stone 12 lbs</option>
+                                            <option data-lbs="517 lbs" data-stone="36 stone 13 lbs" data-kg="233.20 kg">233.20 kg / 517 lbs / 36 stone 13 lbs</option>
+                                            <option data-lbs="518 lbs" data-stone="37 stone 0 lbs" data-kg="233.70 kg">233.70 kg / 518 lbs / 37 stone 0 lbs</option>
+                                            <option data-lbs="519 lbs" data-stone="37 stone 1 lbs" data-kg="234.10 kg">234.10 kg / 519 lbs / 37 stone 1 lbs</option>
+                                            <option data-lbs="520 lbs" data-stone="37 stone 2 lbs" data-kg="234.60 kg">234.60 kg / 520 lbs / 37 stone 2 lbs</option>
+                                            <option data-lbs="521 lbs" data-stone="37 stone 3 lbs" data-kg="235.00 kg">235.00 kg / 521 lbs / 37 stone 3 lbs</option>
+                                            <option data-lbs="522 lbs" data-stone="37 stone 4 lbs" data-kg="235.50 kg">235.50 kg / 522 lbs / 37 stone 4 lbs</option>
+                                            <option data-lbs="523 lbs" data-stone="37 stone 5 lbs" data-kg="235.90 kg">235.90 kg / 523 lbs / 37 stone 5 lbs</option>
+                                            <option data-lbs="524 lbs" data-stone="37 stone 6 lbs" data-kg="236.40 kg">236.40 kg / 524 lbs / 37 stone 6 lbs</option>
+                                            <option data-lbs="525 lbs" data-stone="37 stone 7 lbs" data-kg="236.80 kg">236.80 kg / 525 lbs / 37 stone 7 lbs</option>
+                                            <option data-lbs="526 lbs" data-stone="37 stone 8 lbs" data-kg="237.30 kg">237.30 kg / 526 lbs / 37 stone 8 lbs</option>
+                                            <option data-lbs="527 lbs" data-stone="37 stone 9 lbs" data-kg="237.70 kg">237.70 kg / 527 lbs / 37 stone 9 lbs</option>
+                                            <option data-lbs="528 lbs" data-stone="37 stone 10 lbs" data-kg="238.20 kg">238.20 kg / 528 lbs / 37 stone 10 lbs</option>
+                                            <option data-lbs="529 lbs" data-stone="37 stone 11 lbs" data-kg="238.60 kg">238.60 kg / 529 lbs / 37 stone 11 lbs</option>
+                                            <option data-lbs="530 lbs" data-stone="37 stone 12 lbs" data-kg="239.10 kg">239.10 kg / 530 lbs / 37 stone 12 lbs</option>
+                                            <option data-lbs="531 lbs" data-stone="37 stone 13 lbs" data-kg="239.50 kg">239.50 kg / 531 lbs / 37 stone 13 lbs</option>
+                                            <option data-lbs="532 lbs" data-stone="38 stone 0 lbs" data-kg="240.00 kg">240.00 kg / 532 lbs / 38 stone 0 lbs</option>
+                                            <option data-lbs="533 lbs" data-stone="38 stone 1 lbs" data-kg="240.40 kg">240.40 kg / 533 lbs / 38 stone 1 lbs</option>
+                                            <option data-lbs="534 lbs" data-stone="38 stone 2 lbs" data-kg="240.90 kg">240.90 kg / 534 lbs / 38 stone 2 lbs</option>
+                                            <option data-lbs="535 lbs" data-stone="38 stone 3 lbs" data-kg="241.30 kg">241.30 kg / 535 lbs / 38 stone 3 lbs</option>
+                                            <option data-lbs="536 lbs" data-stone="38 stone 4 lbs" data-kg="241.80 kg">241.80 kg / 536 lbs / 38 stone 4 lbs</option>
+                                            <option data-lbs="537 lbs" data-stone="38 stone 5 lbs" data-kg="242.20 kg">242.20 kg / 537 lbs / 38 stone 5 lbs</option>
+                                            <option data-lbs="538 lbs" data-stone="38 stone 6 lbs" data-kg="242.70 kg">242.70 kg / 538 lbs / 38 stone 6 lbs</option>
+                                            <option data-lbs="539 lbs" data-stone="38 stone 7 lbs" data-kg="243.10 kg">243.10 kg / 539 lbs / 38 stone 7 lbs</option>
+                                            <option data-lbs="540 lbs" data-stone="38 stone 8 lbs" data-kg="243.60 kg">243.60 kg / 540 lbs / 38 stone 8 lbs</option>
+                                            <option data-lbs="541 lbs" data-stone="38 stone 9 lbs" data-kg="244.00 kg">244.00 kg / 541 lbs / 38 stone 9 lbs</option>
+                                            <option data-lbs="542 lbs" data-stone="38 stone 10 lbs" data-kg="244.50 kg">244.50 kg / 542 lbs / 38 stone 10 lbs</option>
+                                            <option data-lbs="543 lbs" data-stone="38 stone 11 lbs" data-kg="244.90 kg">244.90 kg / 543 lbs / 38 stone 11 lbs</option>
+                                            <option data-lbs="544 lbs" data-stone="38 stone 12 lbs" data-kg="245.40 kg">245.40 kg / 544 lbs / 38 stone 12 lbs</option>
+                                            <option data-lbs="545 lbs" data-stone="38 stone 13 lbs" data-kg="245.80 kg">245.80 kg / 545 lbs / 38 stone 13 lbs</option>
+                                            <option data-lbs="546 lbs" data-stone="39 stone 0 lbs" data-kg="246.30 kg">246.30 kg / 546 lbs / 39 stone 0 lbs</option>
+                                            <option data-lbs="547 lbs" data-stone="39 stone 1 lbs" data-kg="246.70 kg">246.70 kg / 547 lbs / 39 stone 1 lbs</option>
+                                            <option data-lbs="548 lbs" data-stone="39 stone 2 lbs" data-kg="247.20 kg">247.20 kg / 548 lbs / 39 stone 2 lbs</option>
+                                            <option data-lbs="549 lbs" data-stone="39 stone 3 lbs" data-kg="247.60 kg">247.60 kg / 549 lbs / 39 stone 3 lbs</option>
+                                            <option data-lbs="550 lbs" data-stone="39 stone 4 lbs" data-kg="248.10 kg">248.10 kg / 550 lbs / 39 stone 4 lbs</option>
+                                            <option data-lbs="551 lbs" data-stone="39 stone 5 lbs" data-kg="248.50 kg">248.50 kg / 551 lbs / 39 stone 5 lbs</option>
+                                            <option data-lbs="552 lbs" data-stone="39 stone 6 lbs" data-kg="249.00 kg">249.00 kg / 552 lbs / 39 stone 6 lbs</option>
+                                            <option data-lbs="553 lbs" data-stone="39 stone 7 lbs" data-kg="249.40 kg">249.40 kg / 553 lbs / 39 stone 7 lbs</option>
+                                            <option data-lbs="554 lbs" data-stone="39 stone 8 lbs" data-kg="249.90 kg">249.90 kg / 554 lbs / 39 stone 8 lbs</option>
+                                            <option data-lbs="555 lbs" data-stone="39 stone 9 lbs" data-kg="250.30 kg">250.30 kg / 555 lbs / 39 stone 9 lbs</option>
+                                            <option data-lbs="556 lbs" data-stone="39 stone 10 lbs" data-kg="250.80 kg">250.80 kg / 556 lbs / 39 stone 10 lbs</option>
+                                            <option data-lbs="557 lbs" data-stone="39 stone 11 lbs" data-kg="251.20 kg">251.20 kg / 557 lbs / 39 stone 11 lbs</option>
+                                            <option data-lbs="558 lbs" data-stone="39 stone 12 lbs" data-kg="251.70 kg">251.70 kg / 558 lbs / 39 stone 12 lbs</option>
+                                            <option data-lbs="559 lbs" data-stone="39 stone 13 lbs" data-kg="252.10 kg">252.10 kg / 559 lbs / 39 stone 13 lbs</option>
+                                            <option data-lbs="560 lbs" data-stone="40 stone 0 lbs" data-kg="252.60 kg">252.60 kg / 560 lbs / 40 stone 0 lbs</option>
+                                            <option data-lbs="561 lbs" data-stone="40 stone 1 lbs" data-kg="253.00 kg">253.00 kg / 561 lbs / 40 stone 1 lbs</option>
+                                            <option data-lbs="562 lbs" data-stone="40 stone 2 lbs" data-kg="253.50 kg">253.50 kg / 562 lbs / 40 stone 2 lbs</option>
+                                            <option data-lbs="563 lbs" data-stone="40 stone 3 lbs" data-kg="253.90 kg">253.90 kg / 563 lbs / 40 stone 3 lbs</option>
+                                            <option data-lbs="564 lbs" data-stone="40 stone 4 lbs" data-kg="254.40 kg">254.40 kg / 564 lbs / 40 stone 4 lbs</option>
+                                            <option data-lbs="565 lbs" data-stone="40 stone 5 lbs" data-kg="254.80 kg">254.80 kg / 565 lbs / 40 stone 5 lbs</option>
+                                            <option data-lbs="566 lbs" data-stone="40 stone 6 lbs" data-kg="255.30 kg">255.30 kg / 566 lbs / 40 stone 6 lbs</option>
+                                            <option data-lbs="567 lbs" data-stone="40 stone 7 lbs" data-kg="255.70 kg">255.70 kg / 567 lbs / 40 stone 7 lbs</option>
+                                            <option data-lbs="568 lbs" data-stone="40 stone 8 lbs" data-kg="256.20 kg">256.20 kg / 568 lbs / 40 stone 8 lbs</option>
+                                            <option data-lbs="569 lbs" data-stone="40 stone 9 lbs" data-kg="256.60 kg">256.60 kg / 569 lbs / 40 stone 9 lbs</option>
+                                            <option data-lbs="570 lbs" data-stone="40 stone 10 lbs" data-kg="257.10 kg">257.10 kg / 570 lbs / 40 stone 10 lbs</option>
+                                            <option data-lbs="571 lbs" data-stone="40 stone 11 lbs" data-kg="257.50 kg">257.50 kg / 571 lbs / 40 stone 11 lbs</option>
+                                            <option data-lbs="572 lbs" data-stone="40 stone 12 lbs" data-kg="258.00 kg">258.00 kg / 572 lbs / 40 stone 12 lbs</option>
+                                            <option data-lbs="573 lbs" data-stone="40 stone 13 lbs" data-kg="258.40 kg">258.40 kg / 573 lbs / 40 stone 13 lbs</option>
+                                            <option data-lbs="574 lbs" data-stone="41 stone 0 lbs" data-kg="258.90 kg">258.90 kg / 574 lbs / 41 stone 0 lbs</option>
+                                            <option data-lbs="575 lbs" data-stone="41 stone 1 lbs" data-kg="259.30 kg">259.30 kg / 575 lbs / 41 stone 1 lbs</option>
+                                            <option data-lbs="576 lbs" data-stone="41 stone 2 lbs" data-kg="259.80 kg">259.80 kg / 576 lbs / 41 stone 2 lbs</option>
+                                            <option data-lbs="577 lbs" data-stone="41 stone 3 lbs" data-kg="260.20 kg">260.20 kg / 577 lbs / 41 stone 3 lbs</option>
+                                            <option data-lbs="578 lbs" data-stone="41 stone 4 lbs" data-kg="260.70 kg">260.70 kg / 578 lbs / 41 stone 4 lbs</option>
+                                            <option data-lbs="579 lbs" data-stone="41 stone 5 lbs" data-kg="261.10 kg">261.10 kg / 579 lbs / 41 stone 5 lbs</option>
+                                            <option data-lbs="580 lbs" data-stone="41 stone 6 lbs" data-kg="261.60 kg">261.60 kg / 580 lbs / 41 stone 6 lbs</option>
+                                            <option data-lbs="581 lbs" data-stone="41 stone 7 lbs" data-kg="262.00 kg">262.00 kg / 581 lbs / 41 stone 7 lbs</option>
+                                            <option data-lbs="582 lbs" data-stone="41 stone 8 lbs" data-kg="262.50 kg">262.50 kg / 582 lbs / 41 stone 8 lbs</option>
+                                            <option data-lbs="583 lbs" data-stone="41 stone 9 lbs" data-kg="262.90 kg">262.90 kg / 583 lbs / 41 stone 9 lbs</option>
+                                            <option data-lbs="584 lbs" data-stone="41 stone 10 lbs" data-kg="263.40 kg">263.40 kg / 584 lbs / 41 stone 10 lbs</option>
+                                            <option data-lbs="585 lbs" data-stone="41 stone 11 lbs" data-kg="263.80 kg">263.80 kg / 585 lbs / 41 stone 11 lbs</option>
+                                            <option data-lbs="586 lbs" data-stone="41 stone 12 lbs" data-kg="264.30 kg">264.30 kg / 586 lbs / 41 stone 12 lbs</option>
+                                            <option data-lbs="587 lbs" data-stone="41 stone 13 lbs" data-kg="264.70 kg">264.70 kg / 587 lbs / 41 stone 13 lbs</option>
+                                            <option data-lbs="588 lbs" data-stone="42 stone 0 lbs" data-kg="265.20 kg">265.20 kg / 588 lbs / 42 stone 0 lbs</option>
+                                            <option data-lbs="589 lbs" data-stone="42 stone 1 lbs" data-kg="265.60 kg">265.60 kg / 589 lbs / 42 stone 1 lbs</option>
+                                            <option data-lbs="590 lbs" data-stone="42 stone 2 lbs" data-kg="266.10 kg">266.10 kg / 590 lbs / 42 stone 2 lbs</option>
+                                            <option data-lbs="591 lbs" data-stone="42 stone 3 lbs" data-kg="266.50 kg">266.50 kg / 591 lbs / 42 stone 3 lbs</option>
+                                            <option data-lbs="592 lbs" data-stone="42 stone 4 lbs" data-kg="267.00 kg">267.00 kg / 592 lbs / 42 stone 4 lbs</option>
+                                            <option data-lbs="593 lbs" data-stone="42 stone 5 lbs" data-kg="267.40 kg">267.40 kg / 593 lbs / 42 stone 5 lbs</option>
+                                            <option data-lbs="594 lbs" data-stone="42 stone 6 lbs" data-kg="267.90 kg">267.90 kg / 594 lbs / 42 stone 6 lbs</option>
+                                            <option data-lbs="595 lbs" data-stone="42 stone 7 lbs" data-kg="268.30 kg">268.30 kg / 595 lbs / 42 stone 7 lbs</option>
+                                            <option data-lbs="596 lbs" data-stone="42 stone 8 lbs" data-kg="268.80 kg">268.80 kg / 596 lbs / 42 stone 8 lbs</option>
+                                            <option data-lbs="597 lbs" data-stone="42 stone 9 lbs" data-kg="269.20 kg">269.20 kg / 597 lbs / 42 stone 9 lbs</option>
+                                            <option data-lbs="598 lbs" data-stone="42 stone 10 lbs" data-kg="269.70 kg">269.70 kg / 598 lbs / 42 stone 10 lbs</option>
+                                            <option data-lbs="599 lbs" data-stone="42 stone 11 lbs" data-kg="270.10 kg">270.10 kg / 599 lbs / 42 stone 11 lbs</option>
+                                            <option data-lbs="600 lbs" data-stone="42 stone 12 lbs" data-kg="270.60 kg">270.60 kg / 600 lbs / 42 stone 12 lbs</option>
+                                            <option data-lbs="601 lbs" data-stone="42 stone 13 lbs" data-kg="271.00 kg">271.00 kg / 601 lbs / 42 stone 13 lbs</option>
+                                            <option data-lbs="602 lbs" data-stone="43 stone 0 lbs" data-kg="271.50 kg">271.50 kg / 602 lbs / 43 stone 0 lbs</option>
+                                            <option data-lbs="603 lbs" data-stone="43 stone 1 lbs" data-kg="271.90 kg">271.90 kg / 603 lbs / 43 stone 1 lbs</option>
+                                            <option data-lbs="604 lbs" data-stone="43 stone 2 lbs" data-kg="272.40 kg">272.40 kg / 604 lbs / 43 stone 2 lbs</option>
+                                            <option data-lbs="605 lbs" data-stone="43 stone 3 lbs" data-kg="272.80 kg">272.80 kg / 605 lbs / 43 stone 3 lbs</option>
+                                            <option data-lbs="606 lbs" data-stone="43 stone 4 lbs" data-kg="273.30 kg">273.30 kg / 606 lbs / 43 stone 4 lbs</option>
+                                            <option data-lbs="607 lbs" data-stone="43 stone 5 lbs" data-kg="273.70 kg">273.70 kg / 607 lbs / 43 stone 5 lbs</option>
+                                            <option data-lbs="608 lbs" data-stone="43 stone 6 lbs" data-kg="274.20 kg">274.20 kg / 608 lbs / 43 stone 6 lbs</option>
+                                            <option data-lbs="609 lbs" data-stone="43 stone 7 lbs" data-kg="274.60 kg">274.60 kg / 609 lbs / 43 stone 7 lbs</option>
+                                            <option data-lbs="610 lbs" data-stone="43 stone 8 lbs" data-kg="275.10 kg">275.10 kg / 610 lbs / 43 stone 8 lbs</option>
+                                            <option data-lbs="611 lbs" data-stone="43 stone 9 lbs" data-kg="275.50 kg">275.50 kg / 611 lbs / 43 stone 9 lbs</option>
+                                            <option data-lbs="612 lbs" data-stone="43 stone 10 lbs" data-kg="276.00 kg">276.00 kg / 612 lbs / 43 stone 10 lbs</option>
+                                            <option data-lbs="613 lbs" data-stone="43 stone 11 lbs" data-kg="276.40 kg">276.40 kg / 613 lbs / 43 stone 11 lbs</option>
+                                            <option data-lbs="614 lbs" data-stone="43 stone 12 lbs" data-kg="276.90 kg">276.90 kg / 614 lbs / 43 stone 12 lbs</option>
+                                            <option data-lbs="615 lbs" data-stone="43 stone 13 lbs" data-kg="277.30 kg">277.30 kg / 615 lbs / 43 stone 13 lbs</option>
+                                            <option data-lbs="616 lbs" data-stone="44 stone 0 lbs" data-kg="277.80 kg">277.80 kg / 616 lbs / 44 stone 0 lbs</option>
+                                            <option data-lbs="617 lbs" data-stone="44 stone 1 lbs" data-kg="278.20 kg">278.20 kg / 617 lbs / 44 stone 1 lbs</option>
+                                            <option data-lbs="618 lbs" data-stone="44 stone 2 lbs" data-kg="278.70 kg">278.70 kg / 618 lbs / 44 stone 2 lbs</option>
+                                            <option data-lbs="619 lbs" data-stone="44 stone 3 lbs" data-kg="279.10 kg">279.10 kg / 619 lbs / 44 stone 3 lbs</option>
+                                            <option data-lbs="620 lbs" data-stone="44 stone 4 lbs" data-kg="279.60 kg">279.60 kg / 620 lbs / 44 stone 4 lbs</option>
+                                            <option data-lbs="621 lbs" data-stone="44 stone 5 lbs" data-kg="280.00 kg">280.00 kg / 621 lbs / 44 stone 5 lbs</option>
+                                            <option data-lbs="622 lbs" data-stone="44 stone 6 lbs" data-kg="280.50 kg">280.50 kg / 622 lbs / 44 stone 6 lbs</option>
+                                            <option data-lbs="623 lbs" data-stone="44 stone 7 lbs" data-kg="280.90 kg">280.90 kg / 623 lbs / 44 stone 7 lbs</option>
+                                            <option data-lbs="624 lbs" data-stone="44 stone 8 lbs" data-kg="281.40 kg">281.40 kg / 624 lbs / 44 stone 8 lbs</option>
+                                            <option data-lbs="625 lbs" data-stone="44 stone 9 lbs" data-kg="281.80 kg">281.80 kg / 625 lbs / 44 stone 9 lbs</option>
+                                            <option data-lbs="626 lbs" data-stone="44 stone 10 lbs" data-kg="282.30 kg">282.30 kg / 626 lbs / 44 stone 10 lbs</option>
+                                            <option data-lbs="627 lbs" data-stone="44 stone 11 lbs" data-kg="282.70 kg">282.70 kg / 627 lbs / 44 stone 11 lbs</option>
+                                            <option data-lbs="628 lbs" data-stone="44 stone 12 lbs" data-kg="283.20 kg">283.20 kg / 628 lbs / 44 stone 12 lbs</option>
+                                            <option data-lbs="629 lbs" data-stone="44 stone 13 lbs" data-kg="283.60 kg">283.60 kg / 629 lbs / 44 stone 13 lbs</option>
+                                            <option data-lbs="630 lbs" data-stone="45 stone 0 lbs" data-kg="284.10 kg">284.10 kg / 630 lbs / 45 stone 0 lbs</option>
+                                            <option data-lbs="631 lbs" data-stone="45 stone 1 lbs" data-kg="284.50 kg">284.50 kg / 631 lbs / 45 stone 1 lbs</option>
+                                            <option data-lbs="632 lbs" data-stone="45 stone 2 lbs" data-kg="285.00 kg">285.00 kg / 632 lbs / 45 stone 2 lbs</option>
+                                            <option data-lbs="633 lbs" data-stone="45 stone 3 lbs" data-kg="285.40 kg">285.40 kg / 633 lbs / 45 stone 3 lbs</option>
+                                            <option data-lbs="634 lbs" data-stone="45 stone 4 lbs" data-kg="285.90 kg">285.90 kg / 634 lbs / 45 stone 4 lbs</option>
+                                            <option data-lbs="635 lbs" data-stone="45 stone 5 lbs" data-kg="286.30 kg">286.30 kg / 635 lbs / 45 stone 5 lbs</option>
+                                            <option data-lbs="636 lbs" data-stone="45 stone 6 lbs" data-kg="286.80 kg">286.80 kg / 636 lbs / 45 stone 6 lbs</option>
+                                            <option data-lbs="637 lbs" data-stone="45 stone 7 lbs" data-kg="287.20 kg">287.20 kg / 637 lbs / 45 stone 7 lbs</option>
+                                            <option data-lbs="638 lbs" data-stone="45 stone 8 lbs" data-kg="287.70 kg">287.70 kg / 638 lbs / 45 stone 8 lbs</option>
+                                            <option data-lbs="639 lbs" data-stone="45 stone 9 lbs" data-kg="288.10 kg">288.10 kg / 639 lbs / 45 stone 9 lbs</option>
+                                            <option data-lbs="640 lbs" data-stone="45 stone 10 lbs" data-kg="288.60 kg">288.60 kg / 640 lbs / 45 stone 10 lbs</option>
+                                            <option data-lbs="641 lbs" data-stone="45 stone 11 lbs" data-kg="289.00 kg">289.00 kg / 641 lbs / 45 stone 11 lbs</option>
+                                            <option data-lbs="642 lbs" data-stone="45 stone 12 lbs" data-kg="289.50 kg">289.50 kg / 642 lbs / 45 stone 12 lbs</option>
+                                            <option data-lbs="643 lbs" data-stone="45 stone 13 lbs" data-kg="289.90 kg">289.90 kg / 643 lbs / 45 stone 13 lbs</option>
+                                            <option data-lbs="644 lbs" data-stone="46 stone 0 lbs" data-kg="290.40 kg">290.40 kg / 644 lbs / 46 stone 0 lbs</option>
+                                            <option data-lbs="645 lbs" data-stone="46 stone 1 lbs" data-kg="290.80 kg">290.80 kg / 645 lbs / 46 stone 1 lbs</option>
+                                            <option data-lbs="646 lbs" data-stone="46 stone 2 lbs" data-kg="291.30 kg">291.30 kg / 646 lbs / 46 stone 2 lbs</option>
+                                            <option data-lbs="647 lbs" data-stone="46 stone 3 lbs" data-kg="291.70 kg">291.70 kg / 647 lbs / 46 stone 3 lbs</option>
+                                            <option data-lbs="648 lbs" data-stone="46 stone 4 lbs" data-kg="292.20 kg">292.20 kg / 648 lbs / 46 stone 4 lbs</option>
+                                            <option data-lbs="649 lbs" data-stone="46 stone 5 lbs" data-kg="292.60 kg">292.60 kg / 649 lbs / 46 stone 5 lbs</option>
+                                            <option data-lbs="650 lbs" data-stone="46 stone 6 lbs" data-kg="293.10 kg">293.10 kg / 650 lbs / 46 stone 6 lbs</option>
+                                            <option data-lbs="651 lbs" data-stone="46 stone 7 lbs" data-kg="293.50 kg">293.50 kg / 651 lbs / 46 stone 7 lbs</option>
+                                            <option data-lbs="652 lbs" data-stone="46 stone 8 lbs" data-kg="294.00 kg">294.00 kg / 652 lbs / 46 stone 8 lbs</option>
+                                            <option data-lbs="653 lbs" data-stone="46 stone 9 lbs" data-kg="294.40 kg">294.40 kg / 653 lbs / 46 stone 9 lbs</option>
+                                            <option data-lbs="654 lbs" data-stone="46 stone 10 lbs" data-kg="294.90 kg">294.90 kg / 654 lbs / 46 stone 10 lbs</option>
+                                            <option data-lbs="655 lbs" data-stone="46 stone 11 lbs" data-kg="295.30 kg">295.30 kg / 655 lbs / 46 stone 11 lbs</option>
+                                            <option data-lbs="656 lbs" data-stone="46 stone 12 lbs" data-kg="295.80 kg">295.80 kg / 656 lbs / 46 stone 12 lbs</option>
+                                            <option data-lbs="657 lbs" data-stone="46 stone 13 lbs" data-kg="296.20 kg">296.20 kg / 657 lbs / 46 stone 13 lbs</option>
+                                            <option data-lbs="658 lbs" data-stone="47 stone 0 lbs" data-kg="296.70 kg">296.70 kg / 658 lbs / 47 stone 0 lbs</option>
+                                            <option data-lbs="659 lbs" data-stone="47 stone 1 lbs" data-kg="297.10 kg">297.10 kg / 659 lbs / 47 stone 1 lbs</option>
+                                            <option data-lbs="660 lbs" data-stone="47 stone 2 lbs" data-kg="297.60 kg">297.60 kg / 660 lbs / 47 stone 2 lbs</option>
+                                            <option data-lbs="661 lbs" data-stone="47 stone 3 lbs" data-kg="298.00 kg">298.00 kg / 661 lbs / 47 stone 3 lbs</option>
+                                            <option data-lbs="662 lbs" data-stone="47 stone 4 lbs" data-kg="298.50 kg">298.50 kg / 662 lbs / 47 stone 4 lbs</option>
+                                            <option data-lbs="663 lbs" data-stone="47 stone 5 lbs" data-kg="298.90 kg">298.90 kg / 663 lbs / 47 stone 5 lbs</option>
+                                            <option data-lbs="664 lbs" data-stone="47 stone 6 lbs" data-kg="299.40 kg">299.40 kg / 664 lbs / 47 stone 6 lbs</option>
+                                            <option data-lbs="665 lbs" data-stone="47 stone 7 lbs" data-kg="299.80 kg">299.80 kg / 665 lbs / 47 stone 7 lbs</option>
+                                            <option data-lbs="666 lbs" data-stone="47 stone 8 lbs" data-kg="300.30 kg">300.30 kg / 666 lbs / 47 stone 8 lbs</option>
+                                            <option data-lbs="667 lbs" data-stone="47 stone 9 lbs" data-kg="300.70 kg">300.70 kg / 667 lbs / 47 stone 9 lbs</option>
+                                            <option data-lbs="668 lbs" data-stone="47 stone 10 lbs" data-kg="301.20 kg">301.20 kg / 668 lbs / 47 stone 10 lbs</option>
+                                            <option data-lbs="669 lbs" data-stone="47 stone 11 lbs" data-kg="301.60 kg">301.60 kg / 669 lbs / 47 stone 11 lbs</option>
+                                            <option data-lbs="670 lbs" data-stone="47 stone 12 lbs" data-kg="302.10 kg">302.10 kg / 670 lbs / 47 stone 12 lbs</option>
+                                            <option data-lbs="671 lbs" data-stone="47 stone 13 lbs" data-kg="302.50 kg">302.50 kg / 671 lbs / 47 stone 13 lbs</option>
+                                            <option data-lbs="672 lbs" data-stone="48 stone 0 lbs" data-kg="303.00 kg">303.00 kg / 672 lbs / 48 stone 0 lbs</option>
+                                            <option data-lbs="673 lbs" data-stone="48 stone 1 lbs" data-kg="303.40 kg">303.40 kg / 673 lbs / 48 stone 1 lbs</option>
+                                            <option data-lbs="674 lbs" data-stone="48 stone 2 lbs" data-kg="303.90 kg">303.90 kg / 674 lbs / 48 stone 2 lbs</option>
+                                            <option data-lbs="675 lbs" data-stone="48 stone 3 lbs" data-kg="304.30 kg">304.30 kg / 675 lbs / 48 stone 3 lbs</option>
+                                            <option data-lbs="676 lbs" data-stone="48 stone 4 lbs" data-kg="304.80 kg">304.80 kg / 676 lbs / 48 stone 4 lbs</option>
+                                            <option data-lbs="677 lbs" data-stone="48 stone 5 lbs" data-kg="305.20 kg">305.20 kg / 677 lbs / 48 stone 5 lbs</option>
+                                            <option data-lbs="678 lbs" data-stone="48 stone 6 lbs" data-kg="305.70 kg">305.70 kg / 678 lbs / 48 stone 6 lbs</option>
+                                            <option data-lbs="679 lbs" data-stone="48 stone 7 lbs" data-kg="306.10 kg">306.10 kg / 679 lbs / 48 stone 7 lbs</option>
+                                            <option data-lbs="680 lbs" data-stone="48 stone 8 lbs" data-kg="306.60 kg">306.60 kg / 680 lbs / 48 stone 8 lbs</option>
+                                            <option data-lbs="681 lbs" data-stone="48 stone 9 lbs" data-kg="307.00 kg">307.00 kg / 681 lbs / 48 stone 9 lbs</option>
+                                            <option data-lbs="682 lbs" data-stone="48 stone 10 lbs" data-kg="307.50 kg">307.50 kg / 682 lbs / 48 stone 10 lbs</option>
+                                            <option data-lbs="683 lbs" data-stone="48 stone 11 lbs" data-kg="307.90 kg">307.90 kg / 683 lbs / 48 stone 11 lbs</option>
+                                            <option data-lbs="684 lbs" data-stone="48 stone 12 lbs" data-kg="308.40 kg">308.40 kg / 684 lbs / 48 stone 12 lbs</option>
+                                            <option data-lbs="685 lbs" data-stone="48 stone 13 lbs" data-kg="308.80 kg">308.80 kg / 685 lbs / 48 stone 13 lbs</option>
+                                            <option data-lbs="686 lbs" data-stone="49 stone 0 lbs" data-kg="309.30 kg">309.30 kg / 686 lbs / 49 stone 0 lbs</option>
+                                            <option data-lbs="687 lbs" data-stone="49 stone 1 lbs" data-kg="309.70 kg">309.70 kg / 687 lbs / 49 stone 1 lbs</option>
+                                            <option data-lbs="688 lbs" data-stone="49 stone 2 lbs" data-kg="310.20 kg">310.20 kg / 688 lbs / 49 stone 2 lbs</option>
+                                            <option data-lbs="689 lbs" data-stone="49 stone 3 lbs" data-kg="310.60 kg">310.60 kg / 689 lbs / 49 stone 3 lbs</option>
+                                            <option data-lbs="690 lbs" data-stone="49 stone 4 lbs" data-kg="311.10 kg">311.10 kg / 690 lbs / 49 stone 4 lbs</option>
+                                            <option data-lbs="691 lbs" data-stone="49 stone 5 lbs" data-kg="311.50 kg">311.50 kg / 691 lbs / 49 stone 5 lbs</option>
+                                            <option data-lbs="692 lbs" data-stone="49 stone 6 lbs" data-kg="312.00 kg">312.00 kg / 692 lbs / 49 stone 6 lbs</option>
+                                            <option data-lbs="693 lbs" data-stone="49 stone 7 lbs" data-kg="312.40 kg">312.40 kg / 693 lbs / 49 stone 7 lbs</option>
+                                            <option data-lbs="694 lbs" data-stone="49 stone 8 lbs" data-kg="312.90 kg">312.90 kg / 694 lbs / 49 stone 8 lbs</option>
+                                            <option data-lbs="695 lbs" data-stone="49 stone 9 lbs" data-kg="313.30 kg">313.30 kg / 695 lbs / 49 stone 9 lbs</option>
+                                            <option data-lbs="696 lbs" data-stone="49 stone 10 lbs" data-kg="313.80 kg">313.80 kg / 696 lbs / 49 stone 10 lbs</option>
+                                            <option data-lbs="697 lbs" data-stone="49 stone 11 lbs" data-kg="314.20 kg">314.20 kg / 697 lbs / 49 stone 11 lbs</option>
+                                            <option data-lbs="698 lbs" data-stone="49 stone 12 lbs" data-kg="314.70 kg">314.70 kg / 698 lbs / 49 stone 12 lbs</option>
+                                            <option data-lbs="699 lbs" data-stone="49 stone 13 lbs" data-kg="315.10 kg">315.10 kg / 699 lbs / 49 stone 13 lbs</option>
+                                            <option data-lbs="700 lbs" data-stone="50 stone 0 lbs" data-kg="315.60 kg">315.60 kg / 700 lbs / 50 stone 0 lbs</option>
+                                            <option data-lbs="701 lbs" data-stone="50 stone 1 lbs" data-kg="316.00 kg">316.00 kg / 701 lbs / 50 stone 1 lbs</option>
+                                            <option data-lbs="702 lbs" data-stone="50 stone 2 lbs" data-kg="316.50 kg">316.50 kg / 702 lbs / 50 stone 2 lbs</option>
+                                            <option data-lbs="703 lbs" data-stone="50 stone 3 lbs" data-kg="316.90 kg">316.90 kg / 703 lbs / 50 stone 3 lbs</option>
+                                            <option data-lbs="704 lbs" data-stone="50 stone 4 lbs" data-kg="317.40 kg">317.40 kg / 704 lbs / 50 stone 4 lbs</option>
+                                            <option data-lbs="705 lbs" data-stone="50 stone 5 lbs" data-kg="317.80 kg">317.80 kg / 705 lbs / 50 stone 5 lbs</option>
+                                            <option data-lbs="706 lbs" data-stone="50 stone 6 lbs" data-kg="318.30 kg">318.30 kg / 706 lbs / 50 stone 6 lbs</option>
+                                            <option data-lbs="707 lbs" data-stone="50 stone 7 lbs" data-kg="318.70 kg">318.70 kg / 707 lbs / 50 stone 7 lbs</option>
+                                            <option data-lbs="708 lbs" data-stone="50 stone 8 lbs" data-kg="319.20 kg">319.20 kg / 708 lbs / 50 stone 8 lbs</option>
+                                            <option data-lbs="709 lbs" data-stone="50 stone 9 lbs" data-kg="319.60 kg">319.60 kg / 709 lbs / 50 stone 9 lbs</option>
+                                            <option data-lbs="710 lbs" data-stone="50 stone 10 lbs" data-kg="320.10 kg">320.10 kg / 710 lbs / 50 stone 10 lbs</option>
+                                            <option data-lbs="711 lbs" data-stone="50 stone 11 lbs" data-kg="320.50 kg">320.50 kg / 711 lbs / 50 stone 11 lbs</option>
+                                            <option data-lbs="712 lbs" data-stone="50 stone 12 lbs" data-kg="321.00 kg">321.00 kg / 712 lbs / 50 stone 12 lbs</option>
+                                            <option data-lbs="713 lbs" data-stone="50 stone 13 lbs" data-kg="321.40 kg">321.40 kg / 713 lbs / 50 stone 13 lbs</option>
+                                            <option data-lbs="714 lbs" data-stone="51 stone 0 lbs" data-kg="321.90 kg">321.90 kg / 714 lbs / 51 stone 0 lbs</option>
+                                            <option data-lbs="715 lbs" data-stone="51 stone 1 lbs" data-kg="322.30 kg">322.30 kg / 715 lbs / 51 stone 1 lbs</option>
+                                            <option data-lbs="716 lbs" data-stone="51 stone 2 lbs" data-kg="322.80 kg">322.80 kg / 716 lbs / 51 stone 2 lbs</option>
+                                            <option data-lbs="717 lbs" data-stone="51 stone 3 lbs" data-kg="323.20 kg">323.20 kg / 717 lbs / 51 stone 3 lbs</option>
+                                            <option data-lbs="718 lbs" data-stone="51 stone 4 lbs" data-kg="323.70 kg">323.70 kg / 718 lbs / 51 stone 4 lbs</option>
+                                            <option data-lbs="719 lbs" data-stone="51 stone 5 lbs" data-kg="324.10 kg">324.10 kg / 719 lbs / 51 stone 5 lbs</option>
+                                            <option data-lbs="720 lbs" data-stone="51 stone 6 lbs" data-kg="324.60 kg">324.60 kg / 720 lbs / 51 stone 6 lbs</option>
+                                            <option data-lbs="721 lbs" data-stone="51 stone 7 lbs" data-kg="325.00 kg">325.00 kg / 721 lbs / 51 stone 7 lbs</option>
+                                            <option data-lbs="722 lbs" data-stone="51 stone 8 lbs" data-kg="325.50 kg">325.50 kg / 722 lbs / 51 stone 8 lbs</option>
+                                            <option data-lbs="723 lbs" data-stone="51 stone 9 lbs" data-kg="325.90 kg">325.90 kg / 723 lbs / 51 stone 9 lbs</option>
+                                            <option data-lbs="724 lbs" data-stone="51 stone 10 lbs" data-kg="326.40 kg">326.40 kg / 724 lbs / 51 stone 10 lbs</option>
+                                            <option data-lbs="725 lbs" data-stone="51 stone 11 lbs" data-kg="326.80 kg">326.80 kg / 725 lbs / 51 stone 11 lbs</option>
+                                            <option data-lbs="726 lbs" data-stone="51 stone 12 lbs" data-kg="327.30 kg">327.30 kg / 726 lbs / 51 stone 12 lbs</option>
+                                            <option data-lbs="727 lbs" data-stone="51 stone 13 lbs" data-kg="327.70 kg">327.70 kg / 727 lbs / 51 stone 13 lbs</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a style="cursor:pointer;" class="clsStartingWeight_btnEdit" onclick="return Edit('clsStartingWeight');">Edit</a>
+                                        <a style="cursor:pointer;" class="clsStartingWeight_btnSave hidden" onclick="return Save('clsStartingWeight');">Save</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Height</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label class="clsHeight_lbl clsLabel">5ft 9"</label>
+
+                                        <select class="form-control clsHeight_txt hidden clsTextBox" data-val="true" data-val-number="The field HeightID must be a number." data-val-required="The HeightID field is required." id="HeightID" name="HeightID">
+                                            <option value="">-- Select your height --</option>
+                                            <option data-ft="4ft 10" data-cm="147">4&#39; 10 &#39;&#39; / 147cm</option>
+                                            <option data-ft="4ft 10.5" data-cm="149">4&#39; 10.5&#39;&#39; / 149cm</option>
+                                            <option data-ft="4ft 11" data-cm="150">4&#39; 11&#39;&#39; / 150cm</option>
+                                            <option data-ft="4ft 11.5" data-cm="151">4&#39; 11.5&#39;&#39; / 151cm</option>
+                                            <option data-ft="5ft" data-cm="152">5&#39; / 152cm</option>
+                                            <option data-ft="5ft 0.5" data-cm="154">5&#39; 0.5&quot; / 154cm</option>
+                                            <option data-ft="5ft 1" data-cm="155">5&#39; 1&#39;&#39; / 155cm</option>
+                                            <option data-ft="5ft 1.5" data-cm="156">5&#39; 1.5&quot; / 156cm</option>
+                                            <option data-ft="5ft 2" data-cm="157">5&#39; 2&#39;&#39; / 157cm</option>
+                                            <option data-ft="5ft 2.5" data-cm="159">5&#39; 2.5&#39;&#39; / 159cm</option>
+                                            <option data-ft="5ft 3" data-cm="160">5&#39; 3&#39;&#39; / 160cm</option>
+                                            <option data-ft="5ft 3.5" data-cm="161">5&#39; 3.5&#39;&#39; / 161cm</option>
+                                            <option data-ft="5ft 4" data-cm="163">5&#39; 4&#39;&#39; / 163cm</option>
+                                            <option data-ft="5ft 4.5" data-cm="164">5&#39; 4.5&#39;&#39; / 164cm</option>
+                                            <option data-ft="5ft 5" data-cm="165">5&#39; 5&#39;&#39; / 165cm</option>
+                                            <option data-ft="5ft 5.5" data-cm="166">5&#39; 5.5&#39;&#39; / 166cm</option>
+                                            <option data-ft="5ft 6" data-cm="168">5&#39; 6&#39;&#39; / 168cm</option>
+                                            <option data-ft="5ft 6.5" data-cm="169">5&#39; 6.5&#39;&#39; / 169cm</option>
+                                            <option data-ft="5ft 7" data-cm="170">5&#39; 7&#39;&#39; / 170cm</option>
+                                            <option data-ft="5ft 7.5" data-cm="171">5&#39; 7.5&#39;&#39; / 171cm</option>
+                                            <option data-ft="5ft 8" data-cm="173">5&#39; 8&#39;&#39; / 173cm</option>
+                                            <option data-ft="5ft 8.5" data-cm="174">5&#39; 8&#39;.5&#39;&#39; / 174cm</option>
+                                            <option data-ft="5ft 9" data-cm="175">5&#39; 9&#39;&#39; / 175cm</option>
+                                            <option data-ft="5ft 9.5" data-cm="177">5&#39; 9.5&#39;&#39; / 177cm</option>
+                                            <option data-ft="5ft 10" data-cm="178">5&#39; 10&#39;&#39;/ 178cm</option>
+                                            <option data-ft="5ft 10.5" data-cm="179">5&#39; 10.5&#39;&#39; / 179cm</option>
+                                            <option data-ft="5ft 11" data-cm="180">5&#39; 11&#39;&#39; / 180cm</option>
+                                            <option data-ft="5ft 11.5" data-cm="182">5&#39; 11.5&#39;&#39; / 182cm</option>
+                                            <option data-ft="6ft" data-cm="183">6&#39; / 183cm</option>
+                                            <option data-ft="6ft 0.5" data-cm="184">6&#39; 0.5&#39;&#39; / 184cm</option>
+                                            <option data-ft="6ft 1" data-cm="185">6&#39; 1&#39;&#39; / 185cm</option>
+                                            <option data-ft="6ft 1.5" data-cm="187">6&#39; 1.5&#39;&#39; / 187cm</option>
+                                            <option data-ft="6ft 2" data-cm="188">6&#39; 2&#39;&#39; / 188cm</option>
+                                            <option data-ft="6ft 2.5" data-cm="189">6&#39; 2.5&#39;&#39; / 189cm</option>
+                                            <option data-ft="6ft 3" data-cm="191">6&#39; 3&#39;&#39; / 191cm</option>
+                                            <option data-ft="6ft 3.5" data-cm="192">6&#39; 3.5&#39;&#39; / 192cm</option>
+                                            <option data-ft="6ft 4" data-cm="193">6&#39; 4&#39;&#39; / 193cm</option>
+                                            <option data-ft="6ft 4.5" data-cm="194">6&#39; 4.5&#39;&#39; / 194cm</option>
+                                            <option data-ft="6ft 5" data-cm="196">6&#39; 5&#39;&#39; / 196cm</option>
+                                            <option data-ft="6ft 5.5" data-cm="197">6&#39; 5.5&#39;&#39; / 197cm</option>
+                                            <option data-ft="6ft 6" data-cm="198">6&#39; 6&#39;&#39; / 198cm</option>
+                                            <option data-ft="6ft 6.5" data-cm="199">6&#39; 6.5&#39;&#39; / 199cm</option>
+                                            <option data-ft="6ft 7" data-cm="201">6&#39; 7&#39;&#39; / 201cm </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a style="cursor:pointer;" class="clsHeight_btnEdit" onclick="return Edit('clsHeight');">Edit</a>
+                                        <a style="cursor:pointer;" class="clsHeight_btnSave hidden" onclick="return Save('clsHeight');">Save</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Contact email</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>andy@gmail.com</label><input class="hidden" name="Andy Shanahan" type="text">
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Password</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>*************</label><input class="hidden" name="Andy Shanahan" type="text">
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Dashboard URL</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>/andyshan</label><input class="hidden" name="Andy Shanahan" type="text">
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+
+                                <!-- ./ END Collapse 2 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="billing_container">
+                        <div class="account_hdr">
+                            <h3>Billing</h3>
+                            <div class="arrow-links">
+                                <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp3"></i>
+                            </div>
+                        </div>
+                        <div class="collapse in" id="collp3">
+                            <div class="coll-2-content">
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Plan</label>
+                                    </div>
+                                    <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>
+                                            Monthly subscription<br>
+                                            <span>9.99 per month</span>
+                                        </label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Change plan</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Payment</label>
+                                    </div>
+                                    <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>
+                                            Card ending in 3109<br>
+                                            <span>Expires 20/20</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Update card details</a>
+                                    </div>
+                                </div>
+
+                                <!-- ./ END Collapse 2 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="billing_container">
+                        <div class="account_hdr">
+                            <h3>Targets</h3>
+                            <div class="arrow-links">
+                                <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp4"></i>
+                            </div>
+                        </div>
+                        <div class="collapse in" id="collp4">
+                            <div class="coll-2-content">
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Target weight</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>140 lbs</label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Goals</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Auto</label>
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+
+                                <!-- ./ END Collapse 2 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="billing_container">
+                        <div class="account_hdr">
+                            <h3>Sharing</h3>
+                            <div class="arrow-links">
+                                <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp5"></i>
+                            </div>
+                        </div>
+                        <div class="collapse in" id="collp5">
+                            <div class="coll-2-content">
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Food and Drink</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Share with Team<br> Weekly</label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Activity</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Off</label>
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Achievements</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Share with Coach and Team <br>Every two weeks</label>
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <!-- ./ END Collapse 2 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="billing_container">
+                        <div class="account_hdr">
+                            <h3>Team</h3>
+                            <div class="arrow-links">
+                                <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp6"></i>
+                            </div>
+                        </div>
+                        <div class="collapse in" id="collp6">
+                            <div class="coll-2-content">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Your Team</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Monster Munchers</label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label></label>
+                                    </div>
+                                    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 teamimg">
+                                        <img src="/Content/Data/PlayerProfileImages/01.png"><img src="/Content/Data/PlayerProfileImages/02.png"><img src="/Content/Data/PlayerProfileImages/03.png"><img src="/Content/Data/PlayerProfileImages/04.png"><img src="/Content/Data/PlayerProfileImages/05.png"><img src="/Content/Data/PlayerProfileImages/06.png"><img src="/Content/Data/PlayerProfileImages/07.png">
+                                    </div>
+
+                                </div>
+
+                                <!-- ./ END Collapse 2 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="billing_container">
+                        <div class="account_hdr">
+                            <h3>Reminders</h3>
+                            <div class="arrow-links">
+                                <i class="fas fa-angle-up pull-right" data-toggle="collapse" data-target="#collp7"></i>
+                            </div>
+                        </div>
+                        <div class="collapse in" id="collp7">
+                            <div class="coll-2-content">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Tracking</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Daily - 8pm</label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Plan activity</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Sundays - 4pm</label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Weigh-in</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Off</label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Progress photo</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Friday am Weekly</label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user_detail">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 blackc">
+                                        <label>Measurements</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 grayc">
+                                        <label>Friday am Weekly</label><input class="hidden" name="Andy" type="text">
+                                    </div>
+                                    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12 status_info"><img src="images/status_green.png"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 linkbluetext">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
+
+                                <!-- ./ END Collapse 2 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gap10"></div>
+            </div>
+        </div>
+        <!-- ================= ./END Row VI ===================-->
+    </div><!-- Row End-->
+</div><!-- Container End-->

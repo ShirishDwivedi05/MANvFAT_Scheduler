@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("ManOfTheMatchPlayerID")
+              .HtmlAttributes(new { style = "width:100%" })
+              .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("PlayerFullName")
+              .DataValueField("ManOfTheMatchPlayerID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                  read.Action("GetManOfTheMatchPlaysers", "DropDownLists");
+              });
+
+})
+)

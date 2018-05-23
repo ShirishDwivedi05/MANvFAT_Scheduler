@@ -1,0 +1,28 @@
+﻿
+@Styles.Render("~/Content/css-LeagueMap")
+@Scripts.Render("~/bundles/League-Map-js")
+
+<div class="row clsAboutMAnvFAT">
+    <!--Main content-->
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-4 clsdivListOfItems">
+                <div class='panel panel-primary'>
+                    <div class='panel-heading'>
+                        <strong>MANvFAT Leagues <span style="float:right; cursor:pointer;" class="glyphicon glyphicon-eye-close" onclick="HideShowListOfItems('hide');"></span></strong>
+                    </div>
+                    <div class='panel-body clsListOfItems'>
+                        <ol id="ListOfItems"></ol>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 clsdivMaps">
+                <div class="clsdivShowListOfItems" onclick="HideShowListOfItems('show');"><label class="label label-primary" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span> Show List of Leagues</label> </div>
+                <div class='input-group' style="width:50%;"> <input style='color:black;' type='text' class='form-control' placeholder='Enter Location to Search...' id='txtLocationSearch' /> <span class='input-group-addon'> <i style='cursor:pointer;' class='glyphicon glyphicon-search' onclick='return Set_MAP_SearchLocation();'></i> </span></div>
+                <div id="map">
+                    <div id="map_canvas" class="clsMAPCanvas"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

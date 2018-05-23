@@ -1,0 +1,222 @@
+﻿<style type="text/css">
+    #contact-form {
+   background-color:rgba(72,72,72,0.7);
+   padding: 10px 20px 30px 20px;
+   max-width:100%;
+   /*float: left;*/
+   left: 50%;
+   /*position: absolute;*/
+   margin-top:30px;
+   margin-bottom: 20px;
+   width: 500px;
+   /*margin-left: -260px;*/
+   border-radius:7px;
+   -webkit-border-radius:7px;
+   -moz-border-radius:7px;
+}
+        #contact-form h1, h4 {
+            color: white;
+        }
+
+#contact-form input,   
+#contact-form select,   
+#contact-form textarea,   
+#contact-form label { 
+   font-size: 15px;  
+   margin-bottom: 2px;
+   font-family: Arial, san-serif;
+} 
+#contact-form input,   
+#contact-form select,   
+#contact-form textarea { 
+   width:100%;
+   background: #fff;
+   border: 0; 
+   -moz-border-radius: 4px;  
+   -webkit-border-radius: 4px;  
+   border-radius: 4px;
+   margin-bottom: 25px;  
+   padding: 5px;  
+}  
+#contact-form input:focus,   
+#contact-form select:focus,   
+#contact-form textarea:focus {  
+   background-color: #E5E6E7; 
+}
+        #contact-form textarea {
+            width: 100%;
+            height: 150px;
+        }
+
+input:required, textarea:required {  
+   box-shadow: none;
+   -moz-box-shadow: none;  
+   -webkit-box-shadow: none;  
+   -o-box-shadow: none;  
+} 
+#contact-form .required {  
+   font-weight:bold;  
+   color: #E5E6E7;      
+}
+
+/* Hide success/failure message
+   (especially since the php is missing) */
+#failure, #success {
+   color: #6EA070; 
+   display:none;  
+}
+
+/* Make form look nice on smaller screens */
+@@media only screen and (max-width: 580px) {
+   #contact-form{
+      left: 3%;
+      margin-right: 3%;
+      width: 88%;
+      margin-left: 0;
+      padding-left: 3%;
+      padding-right: 3%;
+   }
+}
+
+#contact-form button[type="submit"]{
+     position: relative;
+padding: 13px 16px;
+display: block;
+width: 100%;
+text-transform: uppercase;
+border-top: 3px solid #e72f29;
+background: #e72f29;
+color: #fff;
+text-decoration: none;
+border-radius: 10px;
+text-align: center;
+cursor: pointer;
+    }
+#contact-form button[type="submit"]:hover {
+          background-color: #eee;
+color: #000;
+
+        }
+</style>
+
+<footer id="footer">
+    <div class="container">
+
+      
+
+        <!-- Start Footer-Top -->
+        <div class="footer-top clearfix">
+            <div>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-4">
+
+                        <div id="contact-form">
+                            <div>
+                                <h1>Contact us!</h1>
+                                <h4>Have a question or just want to get in touch?.</h4>
+                            </div>
+                            <p id="failure">Oopsie...message not sent.</p>
+                            <p id="success">Your message was sent successfully. Thank you!</p>
+
+                            <form method="post" action="/Home/Contact">
+                                <div>
+                                    <label for="name">
+                                        <span class="required">Name: *</span>
+                                       <input type="text" id="txtContactName" name="txtContactName" style="width:100%;" value="" placeholder="Your Name" required="required" tabindex="1"/>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="email">
+                                        <span class="required">Email: *</span>
+                                        <input type="email" id="txtContactEmail" name="txtContactEmail" value="" placeholder="Your Email" tabindex="2" required="required" />
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="message">
+                                        <span class="required">Message: *</span>
+                                        <textarea id="txtContactMsg" name="txtContactMsg" placeholder="Please write your message here." tabindex="5" required="required"></textarea>
+                                    </label>
+                                </div>
+                                <div>
+                                    <button name="submit" type="submit" id="submit">SEND</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="widget col-lg-3 col-md-3 col-sm-6">
+                <h5 class="widget-title">About FC</h5>
+                <p>MAN v FAT Football is a free 14 week football league only for guys who are BMI 30+. The league is decided not just on points won, but pounds lost. We give free support to every player with unique free resources, inspiration and 24/7 online support to help you lose weight, get fitter and enjoy the beautiful game.</p>
+                <ul class="contact-info custom-list">
+                    <li><i class="fa fa-map-marker"></i><span>10 Milk Street #230 Boston, MA 02108</span></li>
+                    <li><i class="fa fa-phone"></i><span>+1 (123) 456-7890</span></li>
+                    <li><i class="fa fa-envelope"></i><span><a href="mailto:example@example.com">example@example.com</a></span></li>
+                </ul>
+            </div>
+            <div class="widget col-lg-3 col-md-3 col-sm-6">
+                <h5 class="widget-title">Information</h5>
+                <ul class="custom-list">
+                    <li><a href="#">About the Club</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#">Our Team</a></li>
+                    <li><a href="#">Tickets and Membership</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">404 Error Page</a></li>
+                </ul>
+            </div>
+            <div class="widget col-lg-3 col-md-3 col-sm-6">
+                <h5 class="widget-title">Support</h5>
+                <ul class="custom-list">
+                    <li><a href="#">Terms and Conditions</a></li>
+                    <li><a href="#">Website Accessibility Statement</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Sitemap</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Account</a></li>
+                </ul>
+            </div>
+            @*<div class="widget col-lg-3 col-md-3 col-sm-6">
+                <h5 class="widget-title">Gallery</h5>
+                <ul class="gallery custom-list row">
+                    <li><a href="#"><img src="/Content/FrontEnd/img/gallery_footer.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="/Content/FrontEnd/img/gallery_footer2.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="/Content/FrontEnd/img/gallery_footer3.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="/Content/FrontEnd/img/gallery_footer4.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="/Content/FrontEnd/img/gallery_footer5.jpg" alt=""></a></li>
+                    <li><a href="#"><img src="/Content/FrontEnd/img/gallery_footer6.jpg" alt=""></a></li>
+                </ul>
+            </div>*@
+        </div>
+        <!-- End Footer-Top -->
+        <!-- Start Sposnors -->
+        <div class="row sponsors clearfix">
+            <div>
+                <h5 class="text-center">Featured in</h5>
+            </div>
+            <div class="col-md-12" style="padding-left: 20%;">
+                <div class="col-md-2 col-sm-4" style="vertical-align:central;">
+                    <img src="/Content/FrontEnd/img/sponsors/TheBBC.png" style="width:100%;" alt="">
+                </div>
+                <div class="col-md-2">
+                    <img src="/Content/FrontEnd/img/sponsors/the-guardian-logo.jpg" style="width:100%;  margin-left:0; padding-top: 20%;" alt="">
+                </div>
+                <div class="col-md-2">
+                    <img src="/Content/FrontEnd/img/sponsors/TheSun.jpg" style="width:100%;  margin-left:20px; padding-top: 10%;" alt="">
+                </div>
+                <div class="col-md-2">
+                    <img src="/Content/FrontEnd/img/sponsors/theTelegraph.jpg" style="width:100%;  margin-left:20px; padding-top: 20%;" alt="">
+                </div>
+            </div>
+        </div>
+        <!-- End Sponsors -->
+    </div>
+    <!-- Start Copyrights -->
+    <div class="row copyrights clearfix text-center">
+        <p class="col-lg-12">© Copyright @DateTime.Now.Year.ToString("yyyy") MANvFAT Football. All Rights Reserved</p>
+        <p>Designed and Developed by <a target="_blank" href="http://itbrainsolutions.co.uk">IT BRAIN SOLUTIONS Ltd</a></p>
+    </div>
+    <!-- End Copyrights -->
+</footer>

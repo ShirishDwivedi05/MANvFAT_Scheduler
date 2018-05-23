@@ -1,0 +1,22 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+<div class="alert alert-info">
+    <h2>You can share following link with Player. So, they can visit this link and update their Emergency contact details</h2>
+    <p>Player Emergency Contact Page Link: <strong><a href="@Model.EmergencyContactPageLink" target="_blank">@Model.EmergencyContactPageLink</a></strong></p>
+</div>
+
+        <table class="table table-striped">
+           
+            <tr>
+                <th>@Html.LabelFor(model => model.Emergency_ContactName, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.Emergency_ContactName, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.Emergency_ContactName, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.Emergency_ContactPhone, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.Emergency_ContactPhone, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.Emergency_ContactPhone, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.Emergency_Medication, new { @class = "control-label" })</th>
+                <td>@Html.TextAreaFor(model => model.Emergency_Medication, new { @class = "form-control", @style="width:500px; height:200px;" })@Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })</td>
+            </tr>
+        </table>

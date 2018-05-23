@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "ReferYourFriend";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+<style>
+    .clsErrorMsg {
+        display: none;
+    }
+  
+</style>
+
+@Scripts.Render("~/bundles/Referral-js")
+
+<div class="col-md-12">
+
+    <div class="row black pay-now div-Referral">
+        <div class="col-md-8 col-md-offset-2 banner">
+            <h1 class="clsLoveFootball text-center">
+                Refer friends and get £5 in cash!
+            </h1>
+
+            <div class="text-center">
+                <img class="imgReferImage" src="~/Content/FrontEnd/img/referImage.jpg" alt="Refer your Friend" />
+            </div>
+
+            <p class="lead">
+                Give your friends 50% off MAN v FAT Football Registration. You get £5 in cash when they use your link to register at MAN v FAT Football.
+            </p>
+            <div class="form-group">
+                <div class="alert alert-info">
+                    <p>If you are a registered MAN v FAT Football player then enter the email you registered with in the box below. You will then be redirected to your personally referral page where you can change your referral code and share it with friends.</p>
+                </div>
+
+                <div>
+                    @Html.Kendo().TextBox().Name("txtEmailAddress").HtmlAttributes(new { @style = "width:100%; font-size:35px;", @placeholder= "Add the email you registered with to access your personal referral page" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-danger clsErrorMsg"></div>
+                    <div class="text-center">
+                        <button type="button" id="btnValidateEmailAddress" class="btn btn-lg btn-group-justified btn-primary" onclick="return ValidateEmailAddress();"><span class="glyphicon glyphicon-check"></span> Get my Referral Code</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+@*<div style="height:1000px;">
+    <div class="text-center">
+        <img src="~/Content/FrontEnd/img/referImage.jpg" alt="Refer your Friend" />
+    </div>
+    <div class="col-md-8 col-md-offset-2">
+        <h2>Refer friends and get £5 in cash!</h2>
+        <p></p>
+
+        <div class="form-group">
+            <div class="alert alert-info">
+                Please enter your Email address to get your Referral Code.
+                <p>
+                    After confirmed email address you'll be redirected to your Personal Referral page where you can Change your Referral Code and Share it with your Friends.
+                </p>
+            </div>
+
+            <div>
+                @Html.Kendo().TextBox().Name("txtEmailAddress").HtmlAttributes(new { @style = "width:100%; font-size:35px;" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger clsErrorMsg"></div>
+                <div class="text-center">
+                    <button type="button" id="btnValidateEmailAddress" class="btn btn-lg btn-group-justified btn-primary" onclick="return ValidateEmailAddress();"><span class="glyphicon glyphicon-check"></span> Get my Referral Code</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+

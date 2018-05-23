@@ -1,0 +1,31 @@
+﻿@model List<MANvFAT_Football.Helpers.LatestPostFeeds>
+
+<style type="text/css">
+    .img_avater {
+        width: 80px;
+    }
+</style>
+
+<ul id="latest">
+    @foreach (var item in Model)
+            {
+        <text>
+
+            <li>
+                <a href="@item.Link">
+                    <span class="topic-title">@Html.Raw(item.Title)</span>
+                    <span class="avatars">
+                        @foreach (var item_users in item.users)
+                        {
+                            <text>
+                                <span class="avatar">
+                                    <img class="img-circle" src="@item_users.avatar_template" title="@item_users.username">
+                                </span>
+                            </text>
+                        }
+                    </span>
+                </a>
+            </li>
+        </text>
+    }
+</ul>

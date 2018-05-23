@@ -1,0 +1,100 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardLogin
+
+@{
+    ViewBag.Title = "Premium Dashboard";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<div id="home-slider" style="display:none;"></div>
+
+
+<div class="row clsAboutMAnvFAT">
+    <!--Main content-->
+    <div class="col-md-12">
+
+        <div class="row red">
+            <div class="col-md-12 text-center">
+                <h1>
+                    Login to your Premium Dashboard
+                </h1>
+            </div>
+        </div>
+        <div class="col-lg-10 col-lg-offset-1">
+            <div class="divMain">
+                @using (Html.BeginForm())
+                {
+                    @Html.HiddenFor(m => m.DashboardURLId)
+                    <div class="text-danger col-sm-12" style="text-align:center;">
+                        @Html.ValidationSummary(true, "Login was unsuccessful.")
+                        @if (!string.IsNullOrEmpty(Model.Reason))
+                        {
+                            <div class="alert alert-danger">
+                                @Model.Reason
+                            </div>
+                        }
+                    </div>
+                    <section>
+                        <div class="container">
+                            <div class="row divCookiesMsg" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6 col-md-offset-3 text-center alert alert-danger">
+                                        <h2>Cookies are Not Enabled</h2>
+                                        <h3>It seems like Cookies are not enabled on your browser, Please enable Browser Cookies and Refresh this Page to login.</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-6 col-md-offset-3 well">
+
+                                    <!-- ALERT -->
+                                    @*<div class="alert alert-mini alert-danger margin-bottom-30">
+                                            <strong>Oh snap!</strong> Login Incorrect!
+                                        </div>*@<!-- /ALERT -->
+
+                                    <div class="box-static box-border-top margin-top-10 padding-30">
+                                        <div class="box-title margin-bottom-30">
+                                            <h3>Please enter your Premium Dashboard Password</h3>
+                                        </div>
+                                        <br />
+                                        <form class="nomargin" method="post" action="#" autocomplete="off">
+                                            <div class="clearfix">
+
+                                                <!-- Password -->
+                                                <div class="form-group">
+                                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control required", @placeholder = "Password", @required = "" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+
+                                                <div class="col-md-6 col-sm-6 col-xs-6">
+
+                                                    <!-- Inform Tip -->
+                                                    <div class="form-tip pt-20">
+                                                        <a class="no-text-decoration size-13 margin-top-10 block" href="/Member/ForgottenPassword/@Model.DashboardURLId">Forgot Password?</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-sm-6 col-xs-6 text-right divLoginButton">
+
+                                                    <button class="btn btn-primary">LOG IN</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                }
+            </div>
+        </div>
+    </div>
+    <!-- End Container -->
+</div>
+
+
+
+
+

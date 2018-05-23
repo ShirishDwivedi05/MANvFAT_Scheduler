@@ -1,0 +1,42 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+<div style="overflow:hidden">
+
+   
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 marbot20 martop10">
+                    <h2 class="text-primary">Player Animated GIF</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="width:97%">
+                        <div class="demo-section">
+                            @(Html.Kendo().MultiSelect().Name("PlayerAnimImgs")
+                                .BindTo(Model.PlayerImgs)
+                                .DataTextField("FileName")
+                                .DataValueField("PlayerImageID")
+                                .ItemTemplate("<img src='#:data.ImageLink#' style='width:100px; height:100px;'>")
+                                 .TagTemplate("<img src='#:data.ImageLink#' style='width:100px; height:100px;'>")
+
+                                .AutoClose(false)
+                                .Placeholder("-- Select Images to Create Animated Gif Image --")
+                                .Filter(FilterType.Contains)
+                                .HtmlAttributes(new { @style = "width: 700px;" })
+                                 .Events(ev => ev.Select("PlayerAnimImgs_OnSelect").Deselect("PlayerAnimImgs_OnDeSelect"))
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row martop20">
+        <div class="col-md-12">
+            <input type="button" value="Create GIF" onclick="CreateAnimatedImg();" class="btn btn-primary" />
+            @*<button id="btnCreateGif" onclick="return CreateAnimatedImg();" class="btn btn-primary"><span class="glyphicon glyphicon-film"></span> Create GIF</button>*@
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+﻿
+<script>
+    $(document).ready(function () {
+
+        $(".clsMemberBenefitData").load("/Member/GetBenefits/" + $("#hdnDashboardURL").val(),
+            { PlayerID: $("#hdnPlayerID").val()}).show("bounce", 500);
+
+    });
+</script>
+<div class="clsMemberBenefitData"></div>

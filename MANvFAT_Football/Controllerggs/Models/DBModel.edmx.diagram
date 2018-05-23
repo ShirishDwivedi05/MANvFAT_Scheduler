@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2f694b17e7144832ad7ffe8d17914325" Name="Diagram1" ShowGrid="false" DisplayType="false">
+        <EntityTypeShape EntityType="DBModel.AchievementCategories" Width="1.5" PointX="3.75" PointY="58.375" />
+        <EntityTypeShape EntityType="DBModel.Achievements" Width="1.5" PointX="6" PointY="57.75" />
+        <EntityTypeShape EntityType="DBModel.Advertisements" Width="1.5" PointX="0.75" PointY="23.75" />
+        <EntityTypeShape EntityType="DBModel.AlertEvents" Width="1.5" PointX="12.25" PointY="12.75" />
+        <EntityTypeShape EntityType="DBModel.AuditLogs" Width="1.5" PointX="12.25" PointY="9.625" />
+        <EntityTypeShape EntityType="DBModel.Cities" Width="1.5" PointX="13.25" PointY="1" />
+        <EntityTypeShape EntityType="DBModel.Countries" Width="1.5" PointX="8.75" PointY="1" />
+        <EntityTypeShape EntityType="DBModel.DashboardNotifications" Width="1.5" PointX="6" PointY="1.5" />
+        <EntityTypeShape EntityType="DBModel.ELMAH_Error" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DBModel.ElmahErrorList" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DBModel.EmailDomainRestrictions" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="DBModel.Heights" Width="1.5" PointX="0.75" PointY="27.125" />
+        <EntityTypeShape EntityType="DBModel.HowActives" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="DBModel.PlayerAchievements" Width="1.5" PointX="8.25" PointY="27" />
+        <EntityTypeShape EntityType="DBModel.PlayerDailyActivities" Width="1.5" PointX="5.25" PointY="10.625" />
+        <EntityTypeShape EntityType="DBModel.PlayerDashboard" Width="1.5" PointX="5.25" PointY="41.25" />
+        <EntityTypeShape EntityType="DBModel.PlayerDashboardNotifications" Width="1.5" PointX="8.25" PointY="22.875" />
+        <EntityTypeShape EntityType="DBModel.PlayerImages" Width="1.5" PointX="5.25" PointY="6.5" />
+        <EntityTypeShape EntityType="DBModel.Players" Width="1.5" PointX="3" PointY="24.5" />
+        <EntityTypeShape EntityType="DBModel.PlayerScoreBreakdowns" Width="1.5" PointX="5.25" PointY="37.75" />
+        <EntityTypeShape EntityType="DBModel.PlayerWeeklyActivities" Width="1.5" PointX="5.25" PointY="34.375" />
+        <EntityTypeShape EntityType="DBModel.PlayerWeightLogs" Width="1.5" PointX="5.25" PointY="47.25" />
+        <EntityTypeShape EntityType="DBModel.PlayerWeights" Width="1.5" PointX="5.25" PointY="14.5" />
+        <EntityTypeShape EntityType="DBModel.PlayerWeightWeeks" Width="1.5" PointX="5.25" PointY="20.75" />
+        <EntityTypeShape EntityType="DBModel.Regions" Width="1.5" PointX="11" PointY="0.875" />
+        <EntityTypeShape EntityType="DBModel.Roles" Width="1.5" PointX="7.75" PointY="12.25" />
+        <EntityTypeShape EntityType="DBModel.SystemMessages" Width="1.5" PointX="12.25" PointY="6.5" />
+        <EntityTypeShape EntityType="DBModel.SystemSettings" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="DBModel.Titles" Width="1.5" PointX="0.75" PointY="30.5" />
+        <EntityTypeShape EntityType="DBModel.TrainingVideos" Width="1.5" PointX="7.75" PointY="5.75" />
+        <EntityTypeShape EntityType="DBModel.Users" Width="1.5" PointX="10" PointY="10.5" />
+        <EntityTypeShape EntityType="DBModel.UserSystemMessages" Width="1.5" PointX="14.5" PointY="9.875" />
+        <EntityTypeShape EntityType="DBModel.Weights" Width="1.5" PointX="9.75" PointY="3.75" />
+        <AssociationConnector Association="DBModel.FK_Achievements_AchievementCategories" />
+        <AssociationConnector Association="DBModel.FK_PlayerAchievements_Achievements" />
+        <AssociationConnector Association="DBModel.FK_Players_Advertisements" />
+        <AssociationConnector Association="DBModel.FK_AlertEvents_AdminUsers" />
+        <AssociationConnector Association="DBModel.FK_AlertEvents_AlertEvents" />
+        <AssociationConnector Association="DBModel.FK_AlertEvents_CoachUsers" />
+        <AssociationConnector Association="DBModel.FK_AuditLogs_Users" />
+        <AssociationConnector Association="DBModel.FK_Cities_Regions" />
+        <AssociationConnector Association="DBModel.FK_Regions_Countries" />
+        <AssociationConnector Association="DBModel.FK_PlayerDashboardNotifications_DashboardNotifications" />
+        <AssociationConnector Association="DBModel.FK_Players_Heights" />
+        <AssociationConnector Association="DBModel.FK_PlayerAchievements_Players" />
+        <AssociationConnector Association="DBModel.FK_PlayerDailyActivities_Players" />
+        <AssociationConnector Association="DBModel.FK_PlayerDashboard_Players" />
+        <AssociationConnector Association="DBModel.FK_PlayerDashboardNotifications_Players" />
+        <AssociationConnector Association="DBModel.FK_PlayerImages_Players" />
+        <AssociationConnector Association="DBModel.FK_Players_Titles" />
+        <AssociationConnector Association="DBModel.FK_PlayerScoreBreakdowns_Players" />
+        <AssociationConnector Association="DBModel.FK_PlayerWeeklyActivities_Players" />
+        <AssociationConnector Association="DBModel.FK_PlayerWeightLogs_Players" />
+        <AssociationConnector Association="DBModel.FK_PlayerWeights_Players" />
+        <AssociationConnector Association="DBModel.FK_PlayerWeightWeeks_Players" />
+        <AssociationConnector Association="DBModel.FK_Users_Roles" />
+        <AssociationConnector Association="DBModel.FK_SystemMessages_Users" />
+        <AssociationConnector Association="DBModel.FK_UserSystemMessages_SystemMessages" />
+        <AssociationConnector Association="DBModel.FK_UserSystemMessages_Users" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

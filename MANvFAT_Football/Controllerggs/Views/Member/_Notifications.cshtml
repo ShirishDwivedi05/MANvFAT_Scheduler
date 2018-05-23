@@ -1,0 +1,113 @@
+﻿
+@(Html.Kendo().Notification()
+    .Name("Member_Notifications")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .Height(100)
+    .Width(300)
+    .AutoHideAfter(2000)
+    .Templates(t =>
+    {
+        t.Add().Type("DailyActivity_notification").ClientTemplateID("dailyActivityTemplate");
+        t.Add().Type("WeeklyActivity_notification").ClientTemplateID("weeklyActivityTemplate");
+        t.Add().Type("Image_Uploaded_notification").ClientTemplateID("uploadedImageTemplate");
+        t.Add().Type("Image_BeforeAfter_notification").ClientTemplateID("imageBeforeAfterTemplate");
+        t.Add().Type("Image_GifCreated_notification").ClientTemplateID("gifCreatedTemplate");
+    })
+)
+
+<script id="dailyActivityTemplate" type="text/x-kendo-template">
+    <div class="clsNotificationTemplate">
+        <img src="/Content/FrontEnd/img/green_circle_tick.png" />
+        <h3>#= title #</h3>
+        <p>#= message #</p>
+
+    </div>
+</script>
+
+<script id="weeklyActivityTemplate" type="text/x-kendo-template">
+    <div class="clsNotificationTemplate">
+        <img src="/Content/FrontEnd/img/green_circle_tick.png" />
+        <h3>#= title #</h3>
+        <p>#= message #</p>
+    </div>
+</script>
+
+<script id="uploadedImageTemplate" type="text/x-kendo-template">
+    <div class="clsNotificationTemplate">
+        <img src="/Content/FrontEnd/img/green_circle_tick.png" />
+        <h3>#= title #</h3>
+        <p>#= message #</p>
+    </div>
+</script>
+
+<script id="imageBeforeAfterTemplate" type="text/x-kendo-template">
+    <div class="clsNotificationTemplate">
+        <img src="/Content/FrontEnd/img/green_circle_tick.png" />
+        <h3>#= title #</h3>
+        <p>#= message #</p>
+    </div>
+</script>
+
+<script id="gifCreatedTemplate" type="text/x-kendo-template">
+    <div class="clsNotificationTemplate">
+        <img src="/Content/FrontEnd/img/green_circle_tick.png" />
+        <h3>#= title #</h3>
+        <p>#= message #</p>
+    </div>
+</script>
+
+<script>
+
+    function DailyActivitySaved() {
+        var notification = $("#Member_Notifications").data("kendoNotification");
+
+                notification.show({
+            title: "Daily Activity",
+            message: "Daily Activity Saved!"
+        }, "DailyActivity_notification");
+
+        //notification.show({
+        //    title: "New E-mail",
+        //    message: "You have 1 new mail message!"
+        //}, "DailyActivity_notification");
+    }
+
+    function WeeklyActivitySaved() {
+        var notification = $("#Member_Notifications").data("kendoNotification");
+
+        notification.show({
+            title: "Weekly Activity",
+            message: "Weekly Activity Saved!"
+        }, "WeeklyActivity_notification");
+    }
+
+    function ProgressPhotoSaved() {
+        var notification = $("#Member_Notifications").data("kendoNotification");
+
+        notification.show({
+            title: "Progress photo",
+            message: "Your Progress photo uploaded Successfully!"
+        }, "Image_Uploaded_notification");
+    }
+
+    function ImageBeforeAfterSaved() {
+        var notification = $("#Member_Notifications").data("kendoNotification");
+
+        notification.show({
+            title: "Photo Collage",
+            message: "Your Before and After Image Created Successfully!"
+        }, "Image_BeforeAfter_notification");
+    }
+
+    function GifPhototSaved() {
+        var notification = $("#Member_Notifications").data("kendoNotification");
+
+        notification.show({
+            title: "Gif Photo",
+            message: "Your Animated Gif Image Created Successfully!"
+        }, "Image_GifCreated_notification");
+    }
+
+</script>
+

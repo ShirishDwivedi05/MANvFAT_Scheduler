@@ -1,0 +1,47 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+
+
+<div class="panel panel-default">
+
+    <div class="panel-heading" role="tab" id="headingTwo">
+        <h4 class="panel-title">
+            <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                Weekly Activity
+            </a>
+        </h4>
+    </div><!--/panel-heading -->
+
+    <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body clsPanelWeeklyActivity">
+
+
+            <input type="hidden" id="hdnWeeklyActivityDate" value="@DateTime.Now.Date" />
+
+            <div class="date-picker">
+                <span class="sp_btnCurrentWeek"><input type="button" id="btnTodayDate" class="btn btn-primary btn-sm" value="Today" onclick="SetCurrentWeek();" /></span>
+                <button type="button" class="btn btn-primary btn-xs" onclick="return PreviousWeek();"><span class="glyphicon glyphicon-chevron-left"></span></button>
+             
+                @Html.Kendo().DatePicker().Name("dt_WeeklyActivity").Events(ev => ev.Change("GetWeeklyActivityData")).Value(DateTime.Now.Date).Format("dd MMM yyyy")
+                
+                <button type="button" class="btn btn-primary btn-xs" onclick="return NextWeek();"><span class="glyphicon glyphicon-chevron-right"></span></button>
+
+                <span class="fa fa-share-alt clsWeeklyShare" onclick="ShowShareDiv(2);"></span>
+                <span class="fa fa-eye clsWeeklyData" onclick="ShowActivityDiv(2);"></span>
+
+            </div>
+
+            <div class="clsWeeklyActivityData" style="display: block;">
+
+            </div>
+            @{ Html.RenderPartial("FrontEnd/_ShareActivity", "Weekly"); }
+        </div>
+        <!-- End Container -->
+    </div>
+</div>
+
+
+
+
+
+
+

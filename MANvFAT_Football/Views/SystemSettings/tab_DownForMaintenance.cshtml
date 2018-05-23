@@ -1,0 +1,19 @@
+﻿@model MANvFAT_Football.Models.Repositories.SystemSettingsExt
+
+<table class="table">
+    <tr>
+        <th>@Html.LabelFor(m => m.DownForMaintenance, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().CheckBoxFor(m => m.DownForMaintenance).Label("")
+            @Html.ValidationMessageFor(m => m.DownForMaintenance, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+
+    <tr>
+        <th>@Html.LabelFor(m => m.DownForMaintenance_Timer, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().MaskedTextBoxFor(m => m.DownForMaintenance_Timer).Mask("99:99") e.g. (HH:mm => 22:30)
+            @Html.ValidationMessageFor(m => m.DownForMaintenance_Timer, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+</table>

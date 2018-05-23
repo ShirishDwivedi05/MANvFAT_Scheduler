@@ -1,0 +1,14 @@
+﻿@(Html.Kendo().DropDownList()
+                                            .Name("DayOfWeek")
+                                            .ValuePrimitive(true)
+                                            .Items(item =>
+                                            {
+                                                item.Add().Text("Monday").Value("1");
+                                                item.Add().Text("Tuesday").Value("2");
+                                                item.Add().Text("Wednesday").Value("3");
+                                                item.Add().Text("Thursday").Value("4");
+                                                item.Add().Text("Friday").Value("5");
+                                                item.Add().Text("Saturday").Value("6");
+                                                item.Add().Text("Sunday").Value("0");
+                                            })
+)

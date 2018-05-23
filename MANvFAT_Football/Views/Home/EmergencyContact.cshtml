@@ -1,0 +1,79 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerEmergencyDetails
+@{
+    ViewBag.Title = "Emergency Contact Details";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+<style>
+    .header {
+        color: #36A0FF;
+        font-size: 27px;
+        padding: 10px;
+    }
+
+   
+</style>
+
+<div id="home-slider" style="display:none;"></div>
+
+<div class="row clsAboutMAnvFAT">
+    <!--Main content-->
+    <div class="col-md-12">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 style="color:red;">
+                    Emergency Contacts
+                </h1>
+            </div>
+        </div>
+        <div class="col-lg-10 col-lg-offset-1">
+            <div class="alert alert-info text-center">
+                <p>Hi @Model.FullName, <br /> Please provide a contact name and number in the event of injury or illness. Please also provide details of any medication you take. </p>
+            </div>
+            @Html.HiddenFor(m=>m.PlayerID)
+            @Html.HiddenFor(m => m.EmailAddress)
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well well-sm">
+                    <form class="form-horizontal">
+                        <fieldset>
+
+                            <div class="form-group">
+                                <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-user bigicon"></i></span><span class="glyphicon glyphicon-asterisk text-danger" title="Emergency Contact Name Required"></span>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m=>m.Emergency_ContactName, new { @placeholder = "Who should we contact in case of an emergency?", @class="form-control"})
+                                </div>
+                               
+                            </div>
+
+                            <div class="form-group">
+                                <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-phone-square bigicon"></i></span><span class="glyphicon glyphicon-asterisk text-danger" title="Emergency Contact Phone Required"></span>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.Emergency_ContactPhone, new { @placeholder = "What is their phone number?", @class = "form-control" })
+                                </div>
+                               
+                            </div>
+
+                            <div class="form-group">
+                                <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-medkit bigicon"></i></span>
+                                <div class="col-md-8">
+                                    @Html.TextAreaFor(m => m.Emergency_Medication, new { @placeholder = "Please provide details of any medication you take.", @class = "form-control", @rows = "7" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg" onclick="return UpdateEmergencyDetails();">Submit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- End Container -->
+</div>
+
+@Scripts.Render("~/bundles/EmergencyContactDetails-js")

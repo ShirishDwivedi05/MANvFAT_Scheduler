@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "Member Tools and Benefits";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .clsToolBenefitImage
+    {
+        width:100px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function RefreshGrid(e) {
+        $("#Grid").data("kendoGrid").dataSource.read();
+    }
+
+    function BeforeSave_Users(e) {
+        var _IsTool = e.container.find("input[name=IsTool]").is(":checked");
+        var _IsBenefit = e.container.find("input[name=IsBenefit]").is(":checked");
+
+        //alert("_IsTool = " + _IsTool + " _IsBenefit = " + _IsBenefit);
+
+        if (_IsTool == false && _IsBenefit == false) {
+            OpenAlertModal("Error", "Please Select either it's a Tool or Benefit", "btn-danger", BootstrapDialog.TYPE_DANGER);
+            e.preventDefault();
+            return false;
+        }
+
+        if (_IsTool == true && _IsBenefit == true) {
+            OpenAlertModal("Error", "Please Select One Option either it's a Tool or Benefit", "btn-danger", BootstrapDialog.TYPE_DANGER);
+            e.preventDefault();
+            return false;
+        }
+    }
+
+    function OnInsertEdit(e) {
+        //if (e.model.isNew()) {
+        //    e.container.find("input[name=IsTool]").prop("checked", true).trigger('change');
+        //}
+    }
+
+    function ShowImage(url) {
+        window.open(url, "_blank");
+    }
+
+    function cmdAddImage(e) {
+       
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var MemberToolsBenefitID = dataItem.MemberToolsBenefitID;
+
+       // alert("MemberToolsBenefitID = " + MemberToolsBenefitID);
+        $("#hdnParamMemberToolsBenefitID").val(MemberToolsBenefitID);
+
+        $("#ModelUploadToolBenefitImage").modal('show');
+
+        e.preventDefault();
+    }
+
+</script>
+
+<h1>Member Tools &amp; Benefits</h1>
+<hr />
+
+
+@(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.MemberToolsBenefitsExt>()
+    .Name("Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax().Events(ev => ev.Sync("RefreshGrid"))
+    .PageSize(25)
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => {
+        model.Id(p => p.MemberToolsBenefitID);
+        model.Field(m => m.PictureURL).Editable(false);
+    })
+                .Create(update => update.Action("_Create", "MemberToolsBenefits"))
+                .Read(read => read.Action("_Read", "MemberToolsBenefits"))
+                .Update(update => update.Action("_Update", "MemberToolsBenefits"))
+                .Destroy(update => update.Action("_Destroy", "MemberToolsBenefits"))
+    .ServerOperation(false)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Title).Width(100);
+        columns.Bound(p => p.Summary).EditorTemplateName("TextArea").Width(110);
+        columns.Bound(p => p.Link).ClientTemplate("<a target='_blank' title='Click to open this Link (New Tab)' href='#=Link#'>#=Link#</a>").Width(80);
+        columns.Bound(p => p.LeagueName).EditorTemplateName("Leagues").Width(110);
+        columns.Bound(p => p.SortOrder).EditorTemplateName("Integer").Width(40);
+        columns.Bound(p => p.IsTool).ClientTemplate("#if(IsTool){#<span class='glyphicon glyphicon-ok'></span>#}#").HtmlAttributes(new { @class="text-center"}).Width(40);
+        columns.Bound(p => p.IsBenefit).ClientTemplate("#if(IsBenefit){#<span class='glyphicon glyphicon-ok'></span>#}#").HtmlAttributes(new { @class = "text-center" }).Width(40);
+        columns.Bound(p => p.PictureURL).Filterable(false).ClientTemplate("#if(PictureURL!=''){#<a target='_blank' href='#=PictureURL#'> <img class='clsToolBenefitImage' src='#=PictureURL#' /> </a>#}#").HtmlAttributes(new { @class = "text-center" }).Width(60);
+
+        columns.Command(command =>
+        {
+            command.Custom("cmdAddImage").Click("cmdAddImage").Text("Add Photo").HtmlAttributes(new { @class = "btn btn-danger" });
+            command.Edit().UpdateText("Insert/Update").HtmlAttributes(new { @class = "btn btn-primary" });
+            command.Destroy().HtmlAttributes(new { @class = "btn btn-danger" });
+
+        }).Width(150);
+    })
+    .ToolBar(tool =>
+    {
+        tool.Custom().Name("cmdAddNewRecord")
+        .Text("+ Add New Record")
+        .HtmlAttributes(new { @id = "cmdAddNewRecord", @class = "btn btn-primary" });
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Navigatable()
+     .Events(ev => ev.Save("BeforeSave_Users").Edit("OnInsertEdit"))
+    .Scrollable(scr => scr.Height(500))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+
+)
+
+<script>
+    $("#cmdAddNewRecord").click(function (e) {
+
+        var table = $("#Grid").data("kendoGrid");
+            var sorting = table.dataSource.sort();
+
+            if (sorting) {
+                table.dataSource.sort(null);
+            }
+            table.addRow();
+            e.preventDefault();
+            //put custom logic here
+        });
+</script>
+
+@{ Html.RenderPartial("_UploadToolBenefitPhoto"); }
+
+@Scripts.Render("~/bundles/Grid_Resizer-js")

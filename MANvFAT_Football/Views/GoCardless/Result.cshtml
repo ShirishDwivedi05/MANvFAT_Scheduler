@@ -1,0 +1,84 @@
+﻿@model MANvFAT_Football.Models.Repositories.GoCardlessResult
+
+@{
+    ViewBag.Title = "Result";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="row martop10">
+        <div class="col-md-12">
+            <div class="white-content">
+
+                @if ((bool)ViewBag.Status)
+                {
+
+                    <div class="row text-center">
+                        <div class="jumbotron alert alert-success">
+                            <h1 class="text-success">Payment Successful</h1>
+                            <h2 class="text-info">@ViewBag.Message</h2>
+                        </div>
+                    </div>
+                    if (Model.PaymentType == MANvFAT_Football.Models.Repositories.GoCardless_PaymentTypes.SinglePayment)
+                    {
+                        <div class="row">
+                            <div class="col-md-offset-4 col-md-4 ">
+                                <table class="table table-striped table-hover table-bordered">
+                                    <tr>
+                                        <th>Created Date/Time</th>
+                                        <td>@Model.Payment_Result.created_at.ToString("dd-MMMM-yyyy HH:mm")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Charge Date/Time</th>
+                                        <td>@Convert.ToDateTime(Model.Payment_Result.charge_date).ToString("dd-MMMM-yyyy")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Amount</th>
+                                        <td>@Model.Payment_Result.currency @Model.AmountPaid.ToString("N2")</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.PaymentType == MANvFAT_Football.Models.Repositories.GoCardless_PaymentTypes.Subscription)
+                    {
+                        <div class="row">
+                            <div class="col-md-offset-4 col-md-4 ">
+                                <table class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Charge Date</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.ListOfUpcoming_Payments)
+                                        {
+                                            <tr>
+                                                <td>@item.charge_date</td>
+                                                <td>£@item.amount.ToString("N2")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                }
+                else
+                {
+                    <div class="row text-center">
+                        <div class="jumbotron alert alert-danger">
+                            <h1 class="text-danger">Oops! Something went wrong</h1>
+                            <h2>Payment Unsuccessful</h2>
+                            <h2>@ViewBag.Message</h2>
+                            <h2>Please Contact us at <a href="mailto:football@manvfat.com">football@manvfat.com</a></h2>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

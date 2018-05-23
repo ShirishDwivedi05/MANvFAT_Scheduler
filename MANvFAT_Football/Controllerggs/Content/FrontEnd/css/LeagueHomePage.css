@@ -1,0 +1,124 @@
+﻿.tblFixtureDivisionTable .FixtureTableTeamName {
+    text-align: left !important;
+    width: 200px;
+}
+
+.tblFixtureDivisionTable .FixtureTableSequence {
+    background-color: #FF0000;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.tblFixtureDivisionTable .FixtureTableReading {
+    width: 100px;
+    text-align: right;
+}
+
+.HomeTeam_Score {
+    cursor: pointer;
+}
+
+.AwayTeam_Score {
+    cursor: pointer;
+}
+
+.tblScore {
+    width: 100%;
+}
+
+    .tblScore th {
+        width: 100px;
+        font-weight: bold;
+        border: none !important;
+    }
+
+.TopScorerTeamName {
+    width: 300px !important;
+    text-align: left !important;
+}
+
+.TopScorerPlayerName {
+    width: 300px !important;
+    text-align: left !important;
+}
+
+.TopScorerWeight {
+    width: 100px !important;
+    text-align: right !important;
+}
+/* THESE are for Fixture Results*/
+
+
+/* FAQS */
+
+#faqs a {
+    color: red !important;
+}
+
+#faqs .panel-title a {
+    color: white !important;
+}
+
+#faqs h2 {
+    color: red !important;
+    text-align: left;
+    padding-top: 20px;
+    font-size: 18px;
+}
+
+#faqs .panel-body p.lead {
+    font-family: "NexaSlabBlack";
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.panel-default > .panel-heading span {
+    float: left;
+}
+
+    .panel-default > .panel-heading span i {
+        background: red;
+        padding: 12px;
+        color: white;
+        font-size: 24px;
+        margin-right: 10px;
+        width: 50px;
+        text-align: center;
+    }
+
+@-moz-document url-prefix() {
+    .panel-default > .panel-heading span i {
+        padding: 12px 12px 12.5px 12px;
+    }
+}
+
+.panel-default > .panel-heading h4 {
+    background: #666;
+    padding: 10px 15px 9px 15px;
+}
+
+    .panel-default > .panel-heading h4 a:after {
+        content: "\f077";
+    }
+
+    .panel-default > .panel-heading h4 a.collapsed:after {
+        content: "\f078";
+    }
+
+.panel-default > .panel-heading a {
+    padding: 6px;
+    font-weight: normal;
+}
+
+.panel-default > .panel-heading {
+    background: none;
+    text-transform: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+    .panel-default > .panel-heading h4 {
+        text-transform: none;
+    }

@@ -1,0 +1,727 @@
+body {
+  padding-top: 60px;
+background: #f0f1f5;
+}
+
+.navbar-brand {
+  margin-top: 10px;
+}
+
+.navbar-right {
+  margin-right: 0;
+}
+
+.navbar-toggle {
+  margin-top: 15px;
+}
+
+.rotate_360 {
+    transition: all .5s ease-in-out;
+}
+
+    .rotate_360:hover {
+        transform: scale(1.5) rotate(-360deg);
+    }
+
+.cursor_pointer {
+    cursor: pointer;
+}
+
+/*Daily and Weekly Activities*/
+.spCurrentDate {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.clsActivityTextBox {
+    width: 98%;
+}
+
+.clsShareData_Daily, .clsData {
+    display: none;
+}
+
+.clsData, .clsShare {
+    cursor: pointer;
+}
+
+.glyphicon-ok {
+    font-size: 11px;
+}
+
+.clsRemoveActivity {
+    cursor: pointer;
+}
+
+.clsShareData_Weekly, .clsWeeklyData {
+    display: none;
+}
+
+.clsWeeklyData, .clsWeeklyShare {
+    cursor: pointer;
+}
+
+/*Main Page*/
+.clsPanelDailyActivity {
+    height: 518px;
+    overflow-y: auto;
+}
+
+.clsPanelWeeklyActivity {
+    /* height: 518px; */
+    height: auto;
+    overflow-y: auto;
+}
+
+.clsPanelImageGallery {
+    /*height: 508px; */
+    height: auto;
+    overflow-y: auto;
+}
+
+/*Image Gallery*/
+.divCreateGif, .divCreateBeforeAndAfterPhoto {
+    display: none;
+}
+
+/*Notifications*/
+
+.k-notification {
+    border: 0;
+}
+
+
+.k-notification-DailyActivity_notification.k-group {
+    background-color: transparent; /*rgba(0%,0%,0%,.7);*/
+    height: 75px;
+}
+
+.clsNotificationTemplate {
+    width: 300px;
+    height: 75px;
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+    .clsNotificationTemplate h3 {
+        font-size: 1em;
+        padding: 9px 0px 3px;
+    }
+
+    .clsNotificationTemplate img {
+        float: left;
+        margin: 10px 15px 5px 30px;
+        width: 40px;
+    }
+
+/*Achievement Panel*/
+
+#dashboard #achievements-list {
+    padding: 0;
+    margin: 20px 0;
+    list-style-type: none;
+}
+
+#dashboard .achievement, .notificaton {
+    padding: 20px;
+    margin: 5px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+#dashboard .achievement {
+    border-left: 5px solid #ff842b;
+}
+
+    #dashboard .achievement.trophy {
+      padding: 15px 20px 10px 69px;
+        background: #ffebb7 url('../assets/img/trophy-48.png') no-repeat 10px center;
+    }
+    #dashboard .achievement.bell {
+        padding: 15px 20px 10px 69px;
+        background: #ffebb7 url('../assets/img/bell-48.png') no-repeat 10px center;
+    }
+
+#dashboard .notification {
+    border-left-color: #1b809e;
+}
+
+#dashboard .achievement h4, #dashboard .notificaton h4 {
+  font-size: 14px;
+}
+
+#dashboard .achievement h4, .notificaton h4 {
+    color: #1b809e;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.alert-dismissable .close, .alert-dismissible .close {
+    right: -8px;
+}
+/* Added by John O 20/11/2017 */
+/* Weekly activity styles */
+#dashboard .weekday {
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ccc;
+    margin-bottom: 5px;
+}
+
+
+    #dashboard .weekday .k-checkbox {
+        margin-left: 10px;
+    }
+
+    #dashboard .weekday .date-and-time {
+        background: none;
+        border: solid 1px #ececec;
+    }
+
+    #dashboard .weekday .date {
+        display: inline-block;
+        padding: 5px;
+    }
+
+        #dashboard .weekday .date .date-weekday {
+            font-size: 16px;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+
+        #dashboard .weekday .date .date-daymonth {
+            display: inline-block;
+        }
+
+    #dashboard .weekday .time-spent {
+        display: inline-block;
+        padding: 5px 0;
+        float: right;
+    }
+
+        #dashboard .weekday .time-spent select {
+            height: 25px;
+            margin-right: 5px;
+        }
+
+        #dashboard .weekday .time-spent .k-numeric-wrap .k-state-default {
+            width: 50px;
+        }
+
+#dashboard span.k-widget.k-autocomplete.k-header.k-textbox.clsWeeklyActivityData.k-state-default {
+    width: 70% !important;
+}
+
+#dashboard .weekday #NewRow {
+    padding: 10px;
+    border-bottom: solid 1px #ccc;
+    margin: 15px 0 10px 0px;
+}
+
+#dashboard .clsRemoveActivity {
+    /*
+    float: left;
+    font-size: 20px;
+    margin-right: 5px;
+    padding-top: 3px;
+*/
+    float: none;
+    font-size: 20px;
+    margin-right: 5px;
+    padding-top: 0px;
+    position: absolute;
+    top: 12px;
+    left: 10px;
+}
+
+/*Copied from dashboard.css from john's website*/
+
+/* Dashboard styles */
+
+/* 9.1 daily activity */
+#dashboard {
+    padding: 40px 0;
+}
+
+    #dashboard .date-time, #dashboard .date-picker {
+        text-align: center;
+    }
+
+        #dashboard .date-time span {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+    #dashboard .date-picker {
+        padding-bottom: 10px;
+        border-bottom: dotted 1px #ccc;
+        margin-bottom: 10px;
+    }
+
+    #dashboard .clsWeeklyActivityData input[type='text'] {
+        /*padding: 15px !important;*/
+        width: 100% !important;
+    }
+
+/* Dashboard heading styles */
+
+#dashboard .panel-default > .panel-heading {
+    color: #545454;
+    background-color: rgb(245, 245, 245);
+    border-color: rgb(221, 221, 221);
+}
+
+#dashboard .panel-default>.panel-heading h4,
+#dashboard .panel-default>.panel-heading h4 a {
+  text-transform: capitalize;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+
+#dashboard .panel-default>.panel-heading a {
+  color: #545454;
+  padding: 5px;
+}
+
+#dashboard .panel-heading a:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e114";
+    float: right;
+    color: #545454 !important;
+    font-size: 14px;
+    margin-top: 0;
+
+}
+
+.panel-heading a.collapsed:after {
+    content: "\e080";
+}
+
+/* 9.2 Weekly activity styles */
+
+/*#dashboard .weekday .date-and-time {
+    background: white;
+    border: none;
+}*/
+
+#dashboard .clsWeeklyActivityData .weekday .date-and-time {
+    border: none;
+}
+
+#dashboard span.k-widget.k-autocomplete.k-header.k-textbox.clsActivity.k-state-default {
+    width: 83% !important;
+    margin-left: 0px;
+}
+
+.weekday .AddNewActivity {
+    padding-top: 10px;
+    display: block;
+}
+
+#dashboard .clsWeeklyActivityData .weekday .k-checkbox {
+    margin-left: 10px;
+}
+
+#dashboard .clsWeeklyActivityData .weekday .first .date-and-time {
+    background: #545454;
+    border: solid 1px #ececec;
+    margin-bottom: 10px;
+}
+
+    #dashboard .clsWeeklyActivityData .weekday .first .date-and-time .date {
+        color: white;
+        padding-bottom: 6px;
+    }
+
+#dashboard .clsWeeklyActivityData .weekday .weekday-activity:nth-child(odd) {
+    background-color: #ececec;
+}
+
+#dashboard .clsWeeklyActivityData .weekday .weekday-activity:nth-child(even) {
+    background-color: #f6f6f6;
+}
+
+#dashboard .clsWeeklyActivityData .weekday .weekday-activity {
+    margin: 0;
+    border-bottom: dotted 1px #ccc;
+    padding: 5px 10px;
+    position: relative;
+}
+
+#dashboard .clsWeeklyActivityData .weekday .date {
+    display: inline-block;
+    padding: 5px;
+}
+
+    #dashboard .clsWeeklyActivityData .weekday .date .date-weekday {
+        font-size: 16px;
+        font-weight: bold;
+        vertical-align: middle;
+    }
+
+    #dashboard .clsWeeklyActivityData .weekday .date .date-daymonth {
+        display: inline-block;
+    }
+
+#dashboard .clsWeeklyActivityData .weekday .time-spent {
+    display: inline-block;
+    padding: 5px 0;
+    float: right;
+}
+
+    #dashboard .clsWeeklyActivityData .weekday .time-spent select {
+        height: 25px;
+        margin-right: 5px;
+    }
+
+    #dashboard .clsWeeklyActivityData .weekday .time-spent .k-numeric-wrap .k-state-default {
+        width: 50px;
+    }
+
+#dashboard .clsRemoveActivity {
+    float: left;
+    font-size: 20px;
+    margin-right: 5px;
+    padding-top: 3px;
+}
+
+#dashboard .complete .clstxtActivity {
+    background: #ececec;
+    text-decoration: line-through;
+}
+
+#dashboard .date-picker span.fa {
+    font-size: 16px !important;
+    margin: 0 5px;
+}
+
+/* *************************************************************** */
+/* form control image replacement */
+/* hide the input, but have it still be clickable/navigable by screenreaders */
+#dashboard .weekday input[type='radio'],
+#dashboard .weekday input[type='checkbox'] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+    #dashboard .weekday input[type='radio'] + label,
+    #dashboard .weekday input[type='checkbox'] + label {
+        margin: 0;
+        clear: none;
+        cursor: pointer;
+        padding: 5px 0 5px 25px; /* Left padding makes room for image */
+        position: absolute;
+        height: 25px;
+        margin-left: 20px;
+        bottom: 6px;
+    }
+
+    /* image replacement using label background (SVG image with PNG fallback) */
+    #dashboard .weekday input[type='radio'] + label {
+        background: url('../assets/img/radio-buttons.png') 3px -24px no-repeat;
+        background: url('../assets/img/radio-buttons.svg') -3px 0 / 30px no-repeat, linear-gradient(transparent, transparent);
+    }
+
+    #dashboard .weekday input[type='radio']:checked + label {
+        background: url('../assets/img/radio-buttons.png') 3px 6px no-repeat;
+        background: url('../assets/img/radio-buttons.svg') -3px -30px / 30px no-repeat, linear-gradient(transparent, transparent);
+    }
+
+    #dashboard .weekday input[type='checkbox'] + label {
+        background: url('../assets/img/check-boxes.png') 0px 5px no-repeat;
+        background: url('../assets/img/check-boxes.svg') -4px 0 / 30px no-repeat, linear-gradient(transparent, transparent);
+    }
+
+    #dashboard .weekday input[type='checkbox']:checked + label {
+        background: url('../assets/img/check-boxes.png') 0px -32px no-repeat;
+        background: url('../assets/img/check-boxes.svg') -4px -30px / 30px no-repeat, linear-gradient(transparent, transparent);
+    }
+
+/* Data Visualisations */
+
+.tile.data-circle h4 {
+    font-size: 14px;
+    clear: both;
+    border-top: solid 5px #ccc;
+    padding-top: 5px;
+}
+
+.tile.data-circle p {
+    border-bottom: dotted 1px #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+
+/* Community latest panel */
+
+ul#latest {
+    margin: 0 0 20px 0;
+    padding: 0;
+}
+
+    ul#latest li {
+        list-style-type: none;
+        margin: 0 0 3px 0;
+        padding: 0;
+        font-size: 14px;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        clear: left;
+    }
+
+        ul#latest li h4 {
+            font-size: 18px;
+            line-height: auto;
+            margin-bottom: 4px;
+        }
+
+        ul#latest li a {
+            display: block;
+            padding: 5px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: auto;
+            border-radius: 4px;
+            background: #0086e9;
+        }
+
+            ul#latest li a img {
+                -webkit-border-radius: 25px;
+                -moz-border-radius: 25px;
+                border-radius: 25px;
+                width: 50px;
+                height: 50px;
+            }
+
+            ul#latest li a span.avatar {
+                display: table-cell;
+                width: 70px;
+                vertical-align: middle;
+            }
+
+            ul#latest li a span.topic-title {
+                display: table-cell;
+                vertical-align: middle;
+            }
+
+
+            ul#latest li a:hover {
+                background-color: #ff8e20;
+            }
+
+
+#dashboard .carousel-inner .tile {
+    padding: 20px;
+    background: white !important;
+}
+
+#dashboard .carousel-inner .item a {
+    color: white;
+}
+
+#dashboard .carousel-control {
+    background-image: none;
+}
+
+.carousel-control .glyphicon-chevron-left {
+    margin-left: -5px;
+}
+
+.carousel-control .glyphicon-chevron-right {
+    margin-right: -5px;
+}
+
+#dashboard .panel {
+    margin-bottom: 5px;
+}
+
+@media (min-width: 768px) {
+
+    #dashboard .panel {
+        margin-bottom: 20px;
+    }
+}
+
+#dashboard .item {
+    background: #545454;
+}
+
+#dashboard .carousel-caption {
+    position: relative;
+    position: relative;
+    text-align: left;
+    left: 0;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#dashboard .weekday #NewRow {
+    padding: 0;
+    border-bottom: none;
+    margin: 0;
+}
+
+
+
+/* Media queries to add scrolling in for desktop views */
+
+@media all and (min-width: 768px) {
+
+    /*Main Page*/
+    .clsPanelDailyActivity {
+        height: 518px;
+        overflow-y: auto;
+    }
+
+    .clsPanelWeeklyActivity {
+        height: 518px;
+        /* height: 956px; */
+        /* height: auto; */
+        overflow-y: auto;
+    }
+
+    .clsPanelImageGallery {
+        height: 508px;
+        /*height: auto; */
+        overflow-y: auto;
+    }
+}
+
+/*How Healthy Smilies*/
+
+form#smileys label > input[type="radio"] { /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+
+form#smileys label > img {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: border .2s ease;
+    transition: border .2s ease;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    margin: 0 5px;
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+}
+
+    form#smileys label > img:hover, form#smileys label > input[type="radio"]:checked {
+        -webkit-filter: grayscale(0);
+        filter: grayscale(0);
+    }
+
+.clsHowHealthySelected {
+    -webkit-filter: grayscale(0) !important;
+    filter: grayscale(0) !important;
+}
+
+    form #smileys input[type="radio"] {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: border .2s ease;
+    transition: border .2s ease;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    margin: 0 5px;
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+}
+
+
+
+    form#smileys input[type="radio"]:hover, form#smileys input[type="radio"]:checked {
+        -webkit-filter: grayscale(0);
+        filter: grayscale(0);
+    }
+
+  /*Locked Achievedments*/
+
+#dashboard .clsLocked .achievement {
+    background-color:#ccc;
+}
+
+#dashboard .clsAchievementCategory .tile .c100 {
+    cursor: pointer;
+    font-size: 84px;
+}
+
+/*Dashboard Notifications*/
+
+.clsPanelNotification {
+    overflow: auto;
+    height: 390px;
+}
+
+.k-icon.k-clear-value.k-i-close
+{
+    margin-top:1px;
+}
+
+#dashboard .achievement.trophy h4 {
+  font-size: 14px;
+}
+
+#dashboard .achievement.trophy {
+  padding: 15px 20px 10px 69px;
+}
+
+#dashboard .item {
+  background: white;
+  color: #545454;
+  height: 350px;
+}
+
+#dashboard .item img {
+  height: 200px;
+  width: auto;
+}
+
+#dashboard .carousel-inner .item h4 {
+  text-transform: capitalize;
+  font-size: 16px !important;
+}
+
+#dashboard .carousel-inner .item a {
+  color: #545454;
+}
+
+#dashboard .carousel-inner .carousel-caption {
+  text-shadow: none;
+}
+
+#dashboard .divPlayerImages, #dashboard .divPlayerGIFImages {
+  margin-left: 5px;
+  padding: 0;
+}
+
+#dashboard .divPlayerImages .imgPlayer {
+    float: left;
+    width: 170px;
+    height: auto;
+}
+
+@media all and (max-width: 1199px) {
+
+  #dashboard .clsAchievementCategory .tile .c100 {
+      font-size: 68px;
+  }
+
+}

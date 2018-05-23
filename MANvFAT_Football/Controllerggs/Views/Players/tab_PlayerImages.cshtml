@@ -1,0 +1,131 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+@{ Html.RenderPartial("_FancyBox"); }
+
+<script>
+    $(document).ready(function () {
+
+        CreatePlayerImagesList('@Model.PlayerID');
+
+    });
+</script>
+
+<style>
+    div.k-dropzone {
+        border: 1px solid #c5c5c5; /* For Default; Different for each theme */
+    }
+
+        div.k-dropzone em {
+            visibility: visible;
+        }
+</style>
+
+
+
+<div style="overflow:hidden">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 marbot20 martop10">
+                    <h2 class="text-primary">Player Images</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-11 alert alert-info">
+                    <p>Please select below or Upload Player image by (click on "Select Image Files..." button) or drag your Images into the Image Drop Area</p>
+                    <p>Player Progress Gallery Link: <strong><a href="@Model.ProgressGalleryLink" target="_blank">@Model.ProgressGalleryLink</a></strong> </p>
+                    <span title="This Image was marked for deletion by Player from his Progress Gallery" class="glyphicon glyphicon-flag text-danger" ></span> = This Image was marked for deletion by Player from his Progress Gallery
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="width:97%">
+                        @if ((bool)ViewBag.IsAdmin)
+                        {
+                            <div class="demo-section">
+                                @(Html.Kendo().Upload()
+                                .Name("PlayerImages")
+                                .Multiple(true)
+                                .ShowFileList(true)
+                                .Messages(m => m.Select("Select Image Files..."))
+                                .Async(a => a
+                                    .Save("SavePlayerImages", "PlayerImages", new { ParamPlayerID = Model.PlayerID })
+                                    .Remove("RemovePlayerImages", "PlayerImages", new { ParamPlayerID = Model.PlayerID })
+                                    .AutoUpload(true)
+
+                                ).Events(ev => ev.Success("BGImages_OnSuccess").Error("onError"))
+                                )
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="divListOfFundBGImages">
+
+        <div class="k-content wide">
+            <div id="lstPlayerImages"></div>
+            <div id="pager_PlayerImages" class="k-pager-wrap"> </div>
+        </div>
+
+        <script type="text/x-kendo-tmpl" id="template_PlayerImages">
+            <div class="divPlayerImages img-thumbnail" id="#:PlayerImageID#">
+                <div class="text-center marbot10">
+                    <input type="button" class="btn btn-sm #:btnCss#" value="Default" title="Click here to Make this Image as Default Player Image" onclick="OpenConfirmationModal('MakeDefaultPlayerImage','Make Default Player Image','Are you sure you want to Make this Image as Default Player image?','#:PlayerImageID#');" />
+                    <input type="button" class="btn btn-sm #:Display_btnCss#" value="#:Display_Text#" title="#:Display_Title#" onclick="OpenConfirmationModal('MakeImageDisplay','Display/Hide Image','Are you sure?','#:PlayerImageID#');" />
+                    <input type="button" class="btn btn-sm #:FrontSide_btnCss#" value="#:FrontSide_Text#" title="#:FrontSide_Title#" onclick="OpenConfirmationModal('MakeImageFrontSide','Mark as Front/Side Image','Are you sure you want to #:FrontSide_Text# ?','#:PlayerImageID#');" />
+                  <br />
+                    #if(IsFront){#
+                    <strong>Front</strong>
+                    #} else {# 
+                    <strong>Side</strong>
+                        #}#
+                    #if(MarkForDeletion){#
+                <span  onclick="OpenConfirmationModal('UnMarkForDeletion','Un-Mark Image for Deleted','Are you sure you want to Un-Mark this image for deletion, it will re-appear on Players Progress Gallery?','#:PlayerImageID#');" title="This Image was marked for deletion by Player from his Progress Gallery - Click to Un-Mark for Deletion" class="glyphicon glyphicon-flag text-danger"></span>
+                    #}#
+                    </div>
+                <div>
+                    <a class="fancybox-thumbs" data-fancybox-group="thumb" href="#:ImageLink#">
+                        <img class="imgPlayer" src="#:ImageLink#" id="#:FileName#" alt="#:FileName# image" />
+                    </a>
+                </div>
+              
+                <div style="position:absolute;">
+                    <img src="/Images/btnDelete.png" alt="Delete Image" title="Click here to Delete this Image" onclick="OpenConfirmationModal('DeleteBGImage','Delete Image','Are you sure you want to Delete this Image?','#:PlayerImageID#');" />
+                </div>
+                <div class="text-center" style="padding-top:52%;">
+                    <br />
+                    <button type="button" class="btn btn-sm btn-primary" title="Click here to edit Image Date" onclick="return EditImageDate('#:PlayerImageID#','#:UploadDateTime_Str#');"><span class="glyphicon glyphicon-time"></span> #:UploadDateTime_Str# <span class="glyphicon glyphicon-edit"></span></button>
+                </div>
+                </div>
+        </script>
+
+       
+
+        <style>
+            .divPlayerImages {
+                float: left;
+                /*width: 220px;*/
+                height: 240px;
+                margin-left: 20px;
+                margin-top: 20px;
+                padding: 8px;
+                cursor: pointer;
+            }
+
+                .divPlayerImages .imgPlayer {
+                    float: left;
+                    width: 275px;
+                    height: 150px;
+                    border-radius: 50px;
+                }
+        </style>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/tab-PlayerImages-js")
+
+@{ Html.RenderPartial("_ChangeImageDate"); }

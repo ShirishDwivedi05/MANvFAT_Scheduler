@@ -1,0 +1,87 @@
+﻿@model List<MANvFAT_Football.Models.SelectPlayer_Locked_Unlocked_Achievements_Dashboard_Result>
+<button type="button" class="btn btn-primary btn-sm" onclick="return LoadAchievements();"> <span class="glyphicon glyphicon-arrow-left"></span> Back</button>
+@{ #line 2 "D:\Workspace\MANvFATFootball\MANvFAT_Football-ProgressDashboard\MANvFAT_Football\Views\Member\_GetAchievement_Locked_UnLocked.cshtml"
+    /**/
+
+    var UnLocked_Achievements = Model.Where(m => m.AchievementStatus == "UNLOCKED");
+    var Locked_Achievements = Model.Where(m => m.AchievementStatus == "LOCKED");
+}
+@if (UnLocked_Achievements.Count() > 0)
+    {
+        <div class="text-center">
+            <h3>UNLOCKED</h3>
+        </div>
+        <ul id="achievements-list">
+
+            @foreach (var item in UnLocked_Achievements.Take(3))
+            {
+                <li>
+                    <div class="achievement trophy" id="">
+                        <h4>@item.Title (@item.Points)</h4>
+                        <p>
+                            @item.Description
+                        </p>
+                    </div>
+                </li>
+            }
+            @if (UnLocked_Achievements.Skip(3).ToList().Count > 0)
+            {
+                <li>
+                    <div class="btn btn-sm btn-info" id="div_cls_hidden_UnLockedAchivements" onclick="return Show_HideAchievements('cls_hidden_UnLockedAchivements');">view all...</div>
+                    <input type="hidden" id="hdn_cls_hidden_UnLockedAchivements" value="viewall" />
+                </li>
+                foreach (var item in UnLocked_Achievements.Skip(3))
+                {
+                    <li class="cls_hidden_UnLockedAchivements">
+                        <div class="achievement trophy" id="">
+                            <h4>@item.Title (@item.Points)</h4>
+                            <p>
+                                @item.Description
+                            </p>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+
+    }
+@if (Locked_Achievements.Count() > 0)
+{
+    <div class="text-center">
+        <h3>LOCKED</h3>
+    </div>
+    <ul id="achievements-list" class="clsLocked">
+
+        @foreach (var item in Locked_Achievements.Take(3))
+        {
+            <li>
+                <div class="achievement trophy" id="">
+                    <h4>@item.Title (@item.Points)</h4>
+                    <p>
+                        @item.Description
+                    </p>
+                </div>
+            </li>
+        }
+
+        @if (Locked_Achievements.Skip(3).ToList().Count > 0)
+        {
+            <li>
+                <div class="btn btn-sm btn-info" id="div_cls_hidden_LockedAchivements" onclick="return Show_HideAchievements('cls_hidden_LockedAchivements');">view all...</div>
+                <input type="hidden" id="hdn_cls_hidden_LockedAchivements" value="viewall" />
+            </li>
+            foreach (var item in Locked_Achievements.Skip(3))
+            {
+                <li class="cls_hidden_LockedAchivements">
+                    <div class="achievement trophy" id="">
+                        <h4>@item.Title (@item.Points)</h4>
+                        <p>
+                            @item.Description
+                        </p>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+
+}

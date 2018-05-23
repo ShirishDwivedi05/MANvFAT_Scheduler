@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="MAN v FAT Progress online tracking platform and weight management groups for men">
+    <meta name="author" content="">
+    <link rel="icon" href="images/logo-icon.png">
+
+    <!-- Title -->
+    <title>Online weight loss groups and food and drink tracking - MAN v FAT Progress&reg;</title>
+
+    <!-- Necessary CSS Files -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet"> 	<!-- Google Font -->
+    <link href="@Url.Content("~/Content/FrontEnd/progress/css/bootstrap.min.css")" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/bootstrap-theme.min.css")">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/bootstrap-dialog.min.css")">
+    <!-- bootstrap  -->
+    <link href="@Url.Content("~/Content/FrontEnd/progress/css/style.css")" rel="stylesheet">														<!-- Template Main css  -->
+    <link href="@Url.Content("~/Content/FrontEnd/progress/css/jquery.bxslider.css")" rel="stylesheet" />											<!-- Client Logo Slider  -->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/FrontEnd/progress/css/slick.css")">										<!-- Testimonial Slider -->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/FrontEnd/progress/css/slick-theme.css")">									<!-- Testimonial Slider -->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/FrontEnd/progress/css/jquery.fancybox.css")" media="screen" />				<!-- Video Popup -->
+
+
+
+</head>
+<body>
+    <div class="se-pre-con"></div>
+    <!-- header -->
+    @{ Html.RenderPartial("FrontEnd/Header"); }
+    <!-- header End-->
+    <!-- Main Body -->
+    @RenderBody()
+    <!-- Main Body -->
+    <!-- footer-->
+    @{ Html.RenderPartial("FrontEnd/Footer"); }
+    <!-- footer End-->
+    <script src="/Scripts/kendo/2017.3.1026/jquery.min.js"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>*@		<!-- librery -->
+    <script src="@Url.Content("~/Content/FrontEnd/progress/js/bootstrap.min.js")"></script>														<!-- bootstrap -->
+    <script src="@Url.Content("~/Content/FrontEnd/progress/js/jquery.bxslider.min.js")"></script>												<!-- For Logos Slider -->
+    <script src="@Url.Content("~/Content/FrontEnd/progress/js/slick.js")" type="text/javascript" charset="utf-8"></script>						<!-- For Testimonial Slider -->
+    <script type="text/javascript" src="@Url.Content("~/Content/FrontEnd/progress/js/jquery.fancybox.pack.js")"></script>						<!-- For Video Pop up -->
+    <script type="text/javascript" src="@Url.Content("~/Content/FrontEnd/progress/js/modernizr.custom.53451.js")"></script>						<!-- For Screenshot Details -->
+    <script type="text/javascript" src="@Url.Content("~/Content/FrontEnd/progress/js/jquery.gallery.js")"></script>								<!-- For Screenshot Details -->
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-waitingfor.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-dialog.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-dialog-override.js")"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            //Screenshot in details slider ==============================================
+
+            $(function () {
+                $('#dg-container').gallery();
+            });
+
+
+            //Testimonials slider ==============================================
+
+            $(".center").slick({
+                dots: true,
+                infinite: true,
+                centerMode: true,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                responsive: [
+                    {
+                        breakpoint: 600,
+                        settings: {
+                            mobileFirst: true,
+                            slidesToShow: 1,
+                        }
+                    }
+                ]
+            });
+
+            // Logo Slider ==============================================
+
+            $('.slider1').bxSlider({
+                slideWidth: 260,
+                minSlides: 2,
+                maxSlides: 4,
+                slideMargin: 10,
+            });
+
+
+            //Responsive Menu ==============================================
+
+            $("#menu-icon").click(function () { $("#menu").slideToggle("slow"); });
+
+
+            // Animate images and contents when Scroll	 ==============================================
+            (function ($) {
+                $.fn.visible = function (partial) {
+
+                    var $t = $(this),
+                        $w = $(window),
+                        viewTop = $w.scrollTop(),
+                        viewBottom = viewTop + $w.height(),
+                        _top = $t.offset().top,
+                        _bottom = _top + $t.height(),
+                        compareTop = partial === true ? _bottom : _top,
+                        compareBottom = partial === true ? _top : _bottom;
+
+                    return ((compareBottom <= viewBottom) && (compareTop >= viewTop));
+                };
+
+            })(jQuery);
+
+            var win = $(window);
+            var allMods = $(".module");
+            allMods.each(function (i, el) {
+                var el = $(el);
+                if (el.visible(true)) {
+                    el.addClass("already-visible");
+                }
+            });
+
+            win.scroll(function (event) {
+                allMods.each(function (i, el) {
+                    var el = $(el);
+                    if (el.visible(true)) {
+                        el.addClass("come-in");
+                    }
+                });
+
+            });// End Animate images and contents when Scroll
+
+
+
+            // Video popup ==============================================
+
+            $(".various").fancybox({
+                type: "iframe", //<--added
+                maxWidth: 800,
+                maxHeight: 600,
+                fitToView: false,
+                width: '70%',
+                height: '70%',
+                autoSize: false,
+                closeClick: false,
+                openEffect: 'none',
+                closeEffect: 'none'
+            });
+
+
+            // Number Count for Our strong numbers ==============================================
+
+            $('.count').each(function () {
+                $(this).prop('Counter', 0).animate({
+                    Counter: $(this).text()
+                }, {
+                        duration: 4000,
+                        easing: 'swing',
+                        step: function (now) {
+                            $(this).text(Math.ceil(now));
+                        }
+                    });
+            });
+
+
+            // Scroll to Section ==============================================
+
+            $('a[href^="#"]').on('click', function (event) {
+                var target = $(this.getAttribute('href'));
+                if (target.length) {
+                    event.preventDefault();
+                    $('html, body').stop().animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                }
+            });
+        });
+
+
+        // Animate loader off screen ==============================================
+
+        $(window).load(function () {
+
+            $(".se-pre-con").fadeOut("slow");;
+        });
+
+    </script>
+
+
+</body>
+</html>

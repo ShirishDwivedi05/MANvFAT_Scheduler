@@ -1,0 +1,95 @@
+﻿
+@model MANvFAT_Football.Models.Repositories.SystemSettingsExt
+
+
+<table class="table">
+    <tr>
+        <th>@Html.LabelFor(m => m.GoCardless_Mode, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().DropDownListFor(m => m.PayPal_Mode).BindTo(Model.PaymentModes).OptionLabel("--Select--")
+            @Html.ValidationMessageFor(m => m.PayPal_Mode, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+</table>
+
+
+
+
+@(Html.Kendo().TabStrip()
+    .Name("PayPalModes_tabstrip")
+            .Items(tabstrip =>
+            {
+                tabstrip.Add().Selected(true).Text("Live").Content(@<text>
+
+        <table class="table table-striped">
+            <tr>
+                <th>@Html.LabelFor(m => m.PayPalServerURL_Live, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.PayPalServerURL_Live, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.PayPalServerURL_Live, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(m => m.BusinessEmail_Live, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.BusinessEmail_Live, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.BusinessEmail_Live, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(m => m.NotifyURL_IPN_Live, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.NotifyURL_IPN_Live, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.NotifyURL_IPN_Live, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(m => m.ReturnURL_Live, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.ReturnURL_Live, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.ReturnURL_Live, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+          
+        </table>
+
+                </text>);
+                tabstrip.Add().Text("Sandbox").Content(@<text>
+
+                    <table class="table table-striped">
+                        <tr>
+                            <th>@Html.LabelFor(m => m.PayPalServerURL_SandBox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.PayPalServerURL_SandBox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.PayPalServerURL_SandBox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.BusinessEmail_SandBox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.BusinessEmail_SandBox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.BusinessEmail_SandBox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.NotifyURL_IPN_SandBox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.NotifyURL_IPN_SandBox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.NotifyURL_IPN_SandBox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.ReturnURL_SandBox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.ReturnURL_SandBox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.ReturnURL_SandBox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                       
+                    </table>
+
+                </text>);
+            })
+
+)
+

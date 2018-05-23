@@ -1,0 +1,121 @@
+﻿
+@model MANvFAT_Football.Models.Repositories.SystemSettingsExt
+
+
+<table class="table">
+    <tr>
+        <th>@Html.LabelFor(m => m.GoCardless_Mode, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().DropDownListFor(m => m.GoCardless_Mode).BindTo(Model.PaymentModes).OptionLabel("--Select--")
+            @Html.ValidationMessageFor(m => m.GoCardless_Mode, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+</table>
+
+
+
+
+@(Html.Kendo().TabStrip()
+    .Name("GoCardlessModes_tabstrip")
+            .Items(tabstrip =>
+            {
+                tabstrip.Add().Selected(true).Text("Live").Content(@<text>
+
+        <table class="table table-striped">
+            <tr>
+                <th>@Html.LabelFor(m => m.GoCardless_APIUrlLive, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.GoCardless_APIUrlLive, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.GoCardless_APIUrlLive, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(m => m.GoCardless_TokenUrlLive, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.GoCardless_TokenUrlLive, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.GoCardless_TokenUrlLive, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(m => m.GoCardless_ClientIDLive, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.GoCardless_ClientIDLive, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.GoCardless_ClientIDLive, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(m => m.GoCardless_ClientSecretLive, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.GoCardless_ClientSecretLive, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.GoCardless_ClientSecretLive, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(m => m.GoCardless_TokenLive, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.GoCardless_TokenLive, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.GoCardless_TokenLive, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(m => m.GoCardless_WebhookIDLive, htmlAttributes: new { @class = "control-label" })</th>
+                <td>
+                    @Html.TextBoxFor(m => m.GoCardless_WebhookIDLive, new { @class = "k-textbox form-control" })
+                    @Html.ValidationMessageFor(m => m.GoCardless_WebhookIDLive, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+        </table>
+
+                </text>);
+                tabstrip.Add().Text("Sandbox").Content(@<text>
+
+                    <table class="table table-striped">
+                        <tr>
+                            <th>@Html.LabelFor(m => m.GoCardless_APIUrlSandbox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.GoCardless_APIUrlSandbox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.GoCardless_APIUrlSandbox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.GoCardless_TokenUrlSandbox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.GoCardless_TokenUrlSandbox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.GoCardless_TokenUrlSandbox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.GoCardless_ClientIDSandbox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.GoCardless_ClientIDSandbox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.GoCardless_ClientIDSandbox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.GoCardless_ClientSecretSandbox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.GoCardless_ClientSecretSandbox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.GoCardless_ClientSecretSandbox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.GoCardless_TokenSandbox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.GoCardless_TokenSandbox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.GoCardless_TokenSandbox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.GoCardless_WebhookIDSandbox, htmlAttributes: new { @class = "control-label" })</th>
+                            <td>
+                                @Html.TextBoxFor(m => m.GoCardless_WebhookIDSandbox, new { @class = "k-textbox form-control" })
+                                @Html.ValidationMessageFor(m => m.GoCardless_WebhookIDSandbox, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                    </table>
+
+                </text>);
+            })
+
+)
+

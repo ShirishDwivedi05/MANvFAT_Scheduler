@@ -1,0 +1,725 @@
+﻿@model MANvFAT_Football.Models.Repositories.RegistrationExt
+
+@{
+    ViewBag.Title = "Registration_New";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvrVVmiCV_CjdhU0RHRWsG0rqmwTahcRM&libraries=places"
+        async defer></script>
+
+@Styles.Render("~/Content/css-registration")
+
+<style>
+    .sp_FreeLeaguePostCode, .sp_DepositAmount {
+        float:none !important;
+    }
+</style>
+<!--
+JO-NEW new page layout starts here
+Reg class kept intact to maintain consistancy with existing css
+as much as possible.
+-->
+@{
+    var _Heights = (SelectList)ViewBag.Heights;
+    var _Weights = (SelectList)ViewBag.Weights;
+    var _HowActives = (SelectList)ViewBag.HowActives;
+    var _PreferredPositions = (SelectList)ViewBag.PreferredPositions;
+    var _Advertisements = (SelectList)ViewBag.Advertisements;
+    var _ListOfLeagues = (SelectList)ViewBag.ListOfLeagues;
+    //string RegFeeWithBook = (string)ViewBag.RegFeeWithBook;
+    //string RegFeeWithoutBook = (string)ViewBag.RegFeeWithoutBook;
+    //long? PreSelectedLeagueID = (long?)ViewBag.PreSelectedLeagueID;
+    //bool IsLiveLeague = (bool)ViewBag.IsLiveLeague;
+    //bool IsPlannedLeague = (bool)ViewBag.IsLiveLeague;
+    //bool IsFreeLeague = (bool)ViewBag.IsLiveLeague;
+
+    bool DisplayLiveLeagueInfo = Model.PreSelectedLeagueID.HasValue && Model.IsLiveLeague;
+    bool DisplayPlannedLeagueInfo = Model.PreSelectedLeagueID.HasValue && Model.IsPlannedLeague;
+    bool DisplayFreeLeagueInfo = Model.PreSelectedLeagueID.HasValue && Model.IsFreeLeague;
+    
+}
+
+<style>
+    .div_LiveLeague, .div_PlannedLeague, .div_FreeLeague
+    {
+        display:none;
+    }
+</style>
+
+<div id="carousel-wrapper">
+
+  <div class="container wrapper">
+    <div class="row">
+      <div class="col-12-xs child">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" >
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+
+      <div class="item active">
+        <div class="row">
+          <div class="col-xs-5">
+            <a class="" href="https://manvfat.com/amazing-loser-jon-joyce/">
+              <img class="img-responsive" src="/Content/FrontEnd/assets/img/SLIDER-JON-JOYCE-2.png" alt="jon joyce" />
+            </a>
+          </div>
+          <div class="col-xs-7">
+
+            <div class="slide-caption">
+              <p>
+                “I just feel like a new man. I am a new man. I have lost a quarter of my starting body weight
+                in around 9 months, over 4 and a half stone”
+                <a href="https://manvfat.com/amazing-loser-jon-joyce/">read Jon’s story ></a>
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="item slide-alt">
+        <div class="row">
+          <div class="col-xs-8">
+            <a class="" href="https://shop.manvfat.com/">
+              <img class="img-responsive" src="/Content/FrontEnd/assets/img/SLIDER-SHOP.jpg" alt="shop now" />
+            </a>
+          </div>
+          <div class="col-xs-4">
+            <div class="slide-caption">
+
+              <p>
+                Get your kit on!<br />
+                Official MAN v FAT
+                Football shirts in sizes
+                up to 6XL
+                <a href="https://shop.manvfat.com/">Shop now ></a>
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="row">
+          <div class="col-xs-5">
+            <a class="" href="https://manvfat.com/amazing-losers-head-to-head-the-two-gallons/">
+              <img class="img-responsive" src="/Content/FrontEnd/assets/img/SLIDER-BEN-GALLON-2.png" alt="ben gallon" />
+            </a>
+          </div>
+          <div class="col-xs-7">
+            <div class="slide-caption">
+
+                <p>
+                    “I knew I needed to do something about my weight, MAN v FAT Football is what gave me the tools to do it and made me put the plan into action and turn my life around”
+                    <a href="https://manvfat.com/amazing-losers-head-to-head-the-two-gallons/">Ben Gallon ></a>
+                </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="item slide-alt">
+        <div class="row">
+          <div class="col-xs-8">
+            <a class="" href="https://manvfatfootball.org/Home/ReferYourFriend">
+              <img class="img-responsive" src="/Content/FrontEnd/assets/img/SLIDER-REFER-A-FRIEND-2.jpg" alt="refer a friend" />
+            </a>
+          </div>
+          <div class="col-xs-4">
+            <div class="slide-caption">
+
+              <p>
+                Refer a friend, they get
+                half price registration
+                and you get a fiver.
+                <a href="https://manvfatfootball.org/Home/ReferYourFriend">Learn more ></a>
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="row">
+          <div class="col-xs-5">
+            <a class="" href="#">
+              <img class="img-responsive" src="/Content/FrontEnd/assets/img/SLIDER-ROB-BIRD-2.png" alt="" />
+            </a>
+          </div>
+          <div class="col-xs-7">
+            <div class="slide-caption">
+
+              <p>
+                “I could not find the willpower to stick to healthy
+                eating, and exercise was boring. MAN v FAT
+                Football motivated me to keep going, it has
+                changed my life.”
+                <a href="#">Rob Bird</a>
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+      <span class="fa fa-4x fa-angle-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+      <span class="fa fa-4x fa-angle-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+<div class="Reg home-splash">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @if (ViewBag.RegSuccess != null)
+                {
+                    if ((bool)ViewBag.RegSuccess==false)
+                    {
+                        <text>
+                            <div class="row clsRegSuccess  banner alert alert-danger">
+                                <div style="width:58%;">
+                                    <div class="col-md-12">
+                                        <h1>Oops! Registration Failed</h1>
+                                        <br />
+                                        <h2>@Html.Raw(ViewBag.Msg)</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </text>
+                    }
+                }
+            </div>
+            <!-- JO-NEW start left column -->
+
+
+            <div class="col-md-7">
+                <div class="intro-text">
+                    <img src="/Content/FrontEnd/assets/img/fa-for-all.png" alt="" />
+                    <h1>Love football? Hate being fat?</h1>
+                    <h2>95% of MAN v FAT Players Lose Weight - sign up today!</h2>
+
+                    <a href="#SignUp" class="btn-mvf btn-mvf-green btn-default btn-block visible-xs">Sign up today <i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></a>
+
+                </div>
+
+                <div class="content-tabs clsRegTabs">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="clsTabFindALeague active"><a href="#findaleague" aria-controls="findaleague" role="tab" data-toggle="tab">Find a league</a></li>
+                        <li role="presentation" class="clsTabIsItForMe"><a href="#isitforme" aria-controls="isitforme" role="tab" data-toggle="tab">Is it for me?</a></li>
+                        <li role="presentation" class="clsTabCost"><a href="#cost" aria-controls="cost" role="tab" data-toggle="tab">How much is it?</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane" id="isitforme" style="height:635px;">
+                            <ul>
+                                <li>Designed exclusively for overweight men of any fitness level</li>
+                                <li>Join on your own or with mates and see how 95% of our players lose weight</li>
+                                <li>Expert 24/7 support provided to motivate, inform and inspire you</li>
+                                <li>Register as a player from just @Model.RegFeeWithoutBook and pay just £6 per week (paid in monthly installments)</li>
+                            </ul>
+                            <div class="videoWrapper">
+                                <iframe width="593" height="340" src="https://www.youtube.com/embed/SosjkQVo1S4" frameborder="0" allowfullscreen=""></iframe>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="cost" style="height:100%;">
+                            <h2 class="redtext">Get All of the Action</h2>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h3>Registration Payment</h3>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4>@Model.RegFeeWithoutBook</h4>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="redtext">OR</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h4>@Model.RegFeeWithBook</h4>
+                                            <p class="small">Man v Fat The Weight Loss Manual (£12.99 RRP)</p>
+                                        </div>
+                                    </div><!--/row -->
+                                </div><!--/col-md-5 -->
+                                <div class="col-md-2">
+                                    <div class="bigcross">+</div>
+                                </div>
+                                <div class="col-md-5">
+                                    <h3>Player Fees</h3>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4>£6</h4>
+                                            <p class="small">Per week, paid monthly<br />(£25 per month)</p>
+                                        </div>
+                                        @*<div class="col-md-2">
+                        <p class="redtext">OR</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>£79.99</h4>
+                        <p class="small">Per League (14 Games) Save 5%</p>
+                    </div>*@
+                                    </div><!--/row -->
+                                </div>
+                            </div><!--/row-->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <hr />
+                                    <h4>For Planned Leagues you only pay a £1 deposit to verify your ID. You pay nothing else until your league goes live when you would pay £8.99 registration and £6 player fees.</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <hr />
+                                    <h4>FOR FREE LEAGUES YOU PAY A ONE OFF DEPOSIT OF £10, WHICH IS RETURNED TO YOU AFTER YOU COMPLETE THE FIRST SEASON. YOU PAY NO OTHER FEES FOR THIS FIRST SEASON - IT'S FREE!</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane active" id="findaleague" style="height:860px;">
+                            <div>
+                                @{ Html.RenderPartial("_LeagueGoogleMap"); }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <section id="faqs" class="clsFaqs">
+                    <h2>Your questions answered</h2>
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <span><i class="fa fa-futbol-o" aria-hidden="true"></i></span>
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                      What is MAN v FAT Football?
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                  <p class="lead">Weigh, play, lose, win</p>
+                                  <p>
+                                    MAN v FAT Football is a football league only for guys who want to lose weight. Every player is
+                                    in the same situation and wants the same thing - to enjoy football, lose weight and get healthier.
+                                    Uniquely, the league is decided not just on points won, but pounds lost. We give support to
+                                    every player with unique resources, inspiration and 24/7 support to help you lose weight, get
+                                    fitter and enjoy the beautiful game.
+                                  </p>
+                                  <strong>Read one of our player’s views on the league <a href="https://manvfat.com/whats-it-like-to-be-part-of-a-man-v-fat-football-league/" target="_blank" title="Read one of our player’s views on the league here">here</a></strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <span><i class="fa fa-gbp" aria-hidden="true"></i></span>
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        How much does it cost?
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <p>
+                                        <b>For live leagues</b> (these are leagues that are currently running) it costs @Model.RegFeeWithoutBook to register as a player, or @Model.RegFeeWithBook with a copy of the five star rated The MAN v FAT Weight Loss Manual (RRP £12.99). You then sign up to a league and pay £25 per month.
+                                    </p>
+                                    <p>
+                                        <b>For planned leagues</b> (these are leagues that will become live leagues when we have enough players signed up to start them) it costs £1 to register as a player. We take this payment to reserve your place and so that we can verify your identity. When we have enough players to start the league you would be charged the remaining £8.99 to register fully and when your league started you would pay £25 per month. If you cancel the direct debit mandate with us then we assume that you do not want to be part of the league any more and you are deleted from the system.
+                                    </p>
+                                    <p>
+                                        <b>If you are joining a free league</b> then you pay nothing to register or play - your costs have already been covered by a funder, most often your local authority or a national funding body such as Sport England. Sometimes the funder asks us to take a deposit for players to ensure that they turn up - if this is the case then this deposit will be refunded providing you attend (which seems fair!)
+                                    </p>
+                                    <p>
+                                        The cost to your health of not signing up is potentially tragic.
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <span><i class="fa fa-question-circle-o" aria-hidden="true"></i></span>
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        How much will I lose?
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    That depends on how much you put into the league and how much of the support you take (the
+                                    more, the better!) In an assessed 14 week pilot scheme run by Solihull Council, players lost 22lbs
+                                    on average, with 62% hitting their 5% body weight target. The maximum weight lost by one
+                                    player was 67lbs and the maximum bodyweight percentage lost was 26%. 95% of players lose
+                                    weight.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingFour">
+                              <span><i class="fa fa-users" aria-hidden="true"></i></span>
+
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                        Why do men join the leagues?
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                                <div class="panel-body">
+                                    Because they love football and hate being fat. They see all the things that their weight is cheating
+                                    them of: the ability to play with their children (or how it’s embarrassing their kids), how much
+                                    their body hurts with aching joints, snoring and wheezing every time they climb the stairs, never
+                                    finding any clothes that fit... the list goes on. All of them join with the motivation to lose weight
+                                    and do so in a way that is truly enjoyable and inspiring.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingFive">
+                              <span><i class="fa fa-times" aria-hidden="true"></i></span>
+
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                        What if I am not fit enough to play?
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                                <div class="panel-body">
+                                    Because the leagues are not just decided on the games won on the pitch, but also on the weight
+                                    lost off it, you can join a team as a non-playing member. This means that you weigh in every
+                                    week and support your team. Your weight loss counts towards your team’s success. When you’ve
+                                    lost enough weight to feel comfortable joining in then you can get involved on the pitch.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingSix">
+                              <span><i class="fa fa-user-plus" aria-hidden="true"></i></span>
+
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                        Can I join on my own?
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                                <div class="panel-body">
+                                    Approximately 80% of players do. We put you into teams and help you to get to know the other players. Equally, if you have friends, colleagues or family who also want to lose weight then join with them and you can be in the same team. We even pay you a fiver for every player you introduce to the league.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingSeven">
+                              <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                        Where do you have leagues?
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                                <div class="panel-body">
+                                    We have a number of live leagues and free leagues all over the country. Take a look at the leagues page on this site to get a full run-down. We also have a number of Planned leagues where we are recruiting players and will launch a league in that area when we have enough guys signed up. Give us a call if you're a football club, company or local authority who wants to bring a league to your area - <a href="tel:08451630042">0845 163 0042</a>.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingEight">
+                              <span><i class="fa fa-commenting" aria-hidden="true"></i></span>
+
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                        I have another question
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+                                <div class="panel-body">
+                                    Take a look at our full list of FAQ <a href="http://bit.ly/MVFFFAQ" target="_blank">here</a>. If that doesn't answer your question give us a call on <a href="tel:08451630042">0845 163 0042</a> or email us on <a href="mailto:football@manvfat.com">football@manvfat.com</a> and we’ll do our best to help.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- JO-NEW end FAQs section -->
+
+
+
+
+
+            </div><!-- /col-md-7 -->
+            <!-- JO-NEW end left column -->
+            <!-- JO-NEW start right column -->
+            <div class="col-md-5 form-box">
+                <div class="RegForm">
+                    @using (Html.BeginForm("Registration", "Home", FormMethod.Post, new { @id = "RegistrationForm" }))
+    {
+                @* @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IsApply)
+    @Html.HiddenFor(m => m.PlayerID)
+    @Html.HiddenFor(m => m.FullName)*@
+                @Html.HiddenFor(m => m.ReferralCode)
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 class="clsPlayerReg">Sign Up</h2>
+                        <img style="margin-bottom: 20px;" class="img-responsive" src="/Content/FrontEnd/assets/img/mvffootball-banner.png" alt="">
+                    </div>
+
+                </div>
+
+                <div class="row" id="SignUp">
+                    <div class="col-md-12">
+                        <p class="lead">
+                            Join a league to get fitter and healthier in just 14 weeks.
+                            If you have any questions call 0845 163 0042 or email <a href="mailto:football@manvfat.com">football@manvfat.com</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- here are example form elements using the new styles -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- this heading with a span inside creates the number in the green circle -->
+                        <h3 class="form-number-1">Basic info</h3>
+
+                        <!-- this is a form email element with an icon next to it -->
+
+                        <label class="sr-only" for="email">Name</label>
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                        </div>
+
+                        <label for="email">Date of Birth</label>
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon"><i class="fa fa-calendar-o fa-fw"></i></span>
+                            @Html.TextBoxFor(m => m.DOB, new { @class = "form-control", @type = "date", @placeholder = "DD/MM/YYYY" })
+                        </div>
+                        <label for="email">Email</label>
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                            @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", @type = "email", @placeholder = "Email e.g. name@domain.com" })
+                        </div>
+
+                        <!-- this is a form text element with an icon next to it -->
+                        <label for="email">Mobile Number</label>
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                            @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", @type = "text", @placeholder = "Number" })
+                        </div>
+
+                        <h3 style="margin-top: 45px;" class="form-number-2">Your League</h3>
+
+                        <!-- begin example select box -->
+                        @if (Model.PreSelectedLeagueID.HasValue)
+    {<text>
+                        @Html.Hidden("SelectedLeagueID", Model.PreSelectedLeagueID.Value)
+
+                    </text>
+}
+else
+{
+                    <div class="input-group margin-bottom-sm">
+                        <span class="input-group-addon"><i class="fa fa-shield fa-fw"></i></span>
+                        @Html.DropDownListFor(m => m.SelectedLeagueID, _ListOfLeagues, new { @class = "form-control", onchange = "League_OnChange();" })
+                    </div>
+}
+                        <!-- begin live league box examples -->
+                        <div class="form-tile form-tile-red div_LiveLeague"
+                             style="@if (DisplayLiveLeagueInfo) {<text> display:block; </text>} else {<text> display:none; </text>}">
+                            <span><i class="fa fa-shield" aria-hidden="true"></i></span>
+                            <h4 class="form-tile-title h4_LeagueName">
+                                @Model.PreSelectedLeagueName
+                            </h4>
+                            <p>
+                                This is a LIVE LEAGUE which means it’s up and running now. Registration costs @Model.RegFeeWithoutBook. Your monthly direct debit payment is £25 which only starts when you are playing.
+                            </p>
+                    <a class="a_ListAllLeagues" href="/Home/Registration">List all Leagues</a>
+                    </div>
+
+                    <div class="form-tile form-tile-green div_PlannedLeague" style="@if (DisplayPlannedLeagueInfo) {<text> display:block; </text>} else {<text> display:none; </text>}">
+
+                        <span><i class="fa fa-shield" aria-hidden="true"></i></span>
+                        <h4 class="form-tile-title h4_LeagueName">
+                            @Model.PreSelectedLeagueName
+                        </h4>
+                        <p>
+                            This is a PLANNED LEAGUE. This means that when we have 30 men signed up we will launch the league. Reserving your place costs just £1. When the league is live you would then pay £8.99 to complete your registration and a monthly direct debit payment of £25 when your league has started.
+                        </p>
+                        <a class="a_ListAllLeagues" href="/Home/Registration">List all Leagues</a>
+                    </div>
+
+                    <div class="form-tile form-tile-yellow div_FreeLeague" style="@if (DisplayFreeLeagueInfo) {<text> display:block; </text>} else {<text> display:none; </text>}">
+
+                        <span><i class="fa fa-shield" aria-hidden="true"></i></span>
+                        <h4 class="form-tile-title h4_LeagueName">
+                            @Model.PreSelectedLeagueName
+                        </h4>
+                        <p>
+                            This is a FREE LEAGUE. A free season at this league is available for those who live in the following postcodes <span class="sp_FreeLeaguePostCode"></span>.
+                            </p>
+                        <p>
+                            Registration for this league is a <span class="sp_DepositAmount"></span> deposit which you get back at the end of the season.
+                        </p>
+                        <a class="a_ListAllLeagues" href="/Home/Registration">List all Leagues</a>
+                    </div>
+                    <!-- end live league box examples -->
+                    <!-- /col-md-12 -->
+                    <h3 style="margin-top: 45px;" class="form-number-3">Your Stats</h3>
+
+                    <div class="row martop20">
+                        <div>
+                            <label for="PositionID">What's your preferred position?<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-12">
+                                @Html.DropDownListFor(m => m.PositionID, _PreferredPositions, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row martop20">
+                        <div>
+                            <label for="HeightID">Height<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-12">
+                                @Html.DropDownListFor(m => m.HeightID, _Heights, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row martop20">
+                        <div>
+                            <label for="Weight">Weight<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-12">
+                            @Html.DropDownListFor(m => m.Weight, _Weights, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row martop20">
+                        <div>
+                            <label for="HowActiveID">How active are you?<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-12">
+                                @Html.DropDownListFor(m => m.HowActiveID, _HowActives, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row martop20">
+                        <div>
+                            <label for="PostCode">Your postcode<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.PostCode, new { @class = "form-control", @placeholder = "Post Code" })
+                        </div>
+                    </div>
+                    <div class="row martop20">
+                        <div>
+                            <label for="AdvertisementID">How Did You Hear about MAN v FAT Football?<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-12">
+                                @Html.DropDownListFor(m => m.AdvertisementID, _Advertisements, "-- Please Choose --", new { @class = "form-control", onchange = "Advertisement_OnChange();" })
+                        </div>
+                    </div>
+                    <div class="row martop20 divOtherDetails" style="display:none;">
+                        <div>
+                            <label for="Mobile"><span id="sp_OtherDetails">Other Details</span><span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-12">
+                            @Html.TextAreaFor(m => m.AdvertisementOtherDetails, new { @class = "form-control", @placeholder = "Please enter detail, i.e. how did you hear about MAN v FAT Football?" })
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 45px;" class="form-number-4">Terms and conditions</h3>
+
+                    <input type="hidden" id="BookRequested" name="BookRequested" value="false" />
+                    <div class="row martop20">
+                        <div>
+                            <label for="chkTnC" class="sr-only">Terms and conditions<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="checkbox-inline">
+                                <input type="checkbox" id="chkTnC" style="margin-right:10px; cursor:pointer;" /><label class="body terms-and-conditions" for="chkTnC"> I accept the <a href="https://manvfat.com/terms-and-conditions/" target="_blank">terms and conditions.</a></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row martop20 divPaymentConfirmtation" style="display:none;">
+                        <div class="col-md-12">
+                            <input type="checkbox" id="chkPaymentConfirmtation" style="margin-right:10px; cursor:pointer;" /><label style="width:330px;" class="body terms-and-conditions" for="chkPaymentConfirmtation"><span class="clsPaymentConfirmationText"> I understand after submission I'll be redirected to a payment page<br />where I'll add my payment details for registration.</span></label>
+                        </div>
+                    </div>
+                  
+                    <div class="row martop20 divSignMeUp pay-now">
+                        <div class="col-md-12">
+                            <h2 class="clsSignMeUp btn-mvf-green" onclick="SubmitRegistrationForm();">Sign up now!</h2>
+                        </div>
+                    </div>
+
+                    <div class="row martop20 divProcessing" style="display:none;">
+                        <div class="col-md-12">
+                            <h2 class="clsProcessing">Processing Please Wait...!</h2>
+                        </div>
+                    </div>
+                    <div class="row martop20">
+                        <div class="col-md-12">
+                            <p class="privacy">
+                                MAN v FAT Football will never share your email. 100% privacy guaranteed.
+                            </p>
+
+                            <p class="text-center clsPayLogo_GoCardless" style="display:none;">
+                                <img style="width:100%;" src="/Content/FrontEnd/img/gocardless.png" />
+                            </p>
+
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- /row -->
+
+
+
+}
+                </div><!--/Regform -->
+            </div><!--/col-md-5 -->
+            <!-- JO-NEW end right column -->
+            <!-- JO-NEW start FAQs section -->
+            <div class="row">
+                <div class="col-md-12">
+
+
+                </div>
+            </div>
+        </div><!-- /row -->
+    </div><!-- /container -->
+
+</div>   <!--/home-splash -->

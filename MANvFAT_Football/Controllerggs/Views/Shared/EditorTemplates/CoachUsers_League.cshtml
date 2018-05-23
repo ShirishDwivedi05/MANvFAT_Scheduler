@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("CoachUserID")
+              .HtmlAttributes(new { style = "width:100%" })
+               .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("FullName")
+              .DataValueField("CoachID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetCoachUsers", "DropDownLists");
+                  });
+
+              })
+)

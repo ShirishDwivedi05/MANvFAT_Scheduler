@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("AdminUserID")
+              .HtmlAttributes(new { style = "width:100%" })
+               .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("FullName")
+              .DataValueField("AdminUserID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetAdminUsers", "DropDownLists");
+                  });
+
+              })
+)

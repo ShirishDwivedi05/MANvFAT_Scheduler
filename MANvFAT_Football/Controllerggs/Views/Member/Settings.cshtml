@@ -1,0 +1,264 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+
+    var rdFrequency = Model.ShareDataFrequency.HasValue ? Model.ShareDataFrequency.Value : 0;
+    var rdShareTo = Model.ShareDataWith.HasValue ? Model.ShareDataWith.Value : 0;
+
+}
+
+<script src="svg4everybody.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
+
+@Scripts.Render("~/bundles/ProgressDashboard-Settings-js")
+@Styles.Render("~/Content/ProgressDashboard-Settings-css")
+
+<link href="~/Content/MaterialTimePicker/mdtimepicker.css" rel="stylesheet" />
+<script src="~/Content/MaterialTimePicker/mdtimepicker.js"></script>
+
+<input type="hidden" id="hdnPlayerID" value="@Model.PlayerID" />
+<input type="hidden" id="hdnDashboardURL" value="@Model.DashboardURL" />
+<input type="hidden" id="hdnPlayerDashboardID" value="@Model.PlayerDashboardID" />
+<input type="hidden" id="hdnPlayerHeight_cm" value="@Model.PlayerHeight_cm" />
+<input type="hidden" id="hdnIsFirstLogin" value="@Model.IsFirstLogin.ToString()" />
+
+
+<style>
+    .clsPasswordHints li {
+        list-style-type: circle;
+    }
+
+    .clsErrorMsg, .clsDashboardValidation, .clsUpdateSettings, .div_ReminderTime {
+        display: none;
+    }
+
+    .div_ReminderTime {
+        margin-top: 15px;
+    }
+    #ReminderTime {
+        width: 120px;
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+        height: 50px;
+        cursor: pointer;
+    }
+</style>
+
+<div id="dashboard">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Row 2 col-1 -->
+                   
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#pnlDashboardSettings" aria-expanded="true" aria-controls="pnlDashboardSettings">
+                                    Video
+                                </a>
+                            </h4>
+                        </div><!--/panel-heading -->
+
+                        <div id="pnlDashboardSettings" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body text-center">
+                                <section>
+                                    <iframe style="width:100%;height:540px;" src="https://www.youtube.com/embed/qzzn0GFGRIA" frameborder="0" allowfullscreen=""></iframe>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <!-- Row 2 col-1 -->
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#pnlDashboardSettings" aria-expanded="true" aria-controls="pnlDashboardSettings">
+                                    Dashboard Settings
+                                </a>
+                            </h4>
+                        </div><!--/panel-heading -->
+
+                        <div id="pnlDashboardSettings" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+
+                                <section>
+                                    <div class="form-group">
+                                        <div class="alert alert-info">
+                                            Pick your own URL for your Premium Dashboard - whatever you choose will be added to <b>www.manvfatfootball.org/member/YOURCHOICEHERE</b> and make it easier for you to remember
+                                        </div>
+                                        @Html.LabelFor(m => m.DashboardURL)
+                                        <div>
+
+                                            @Html.Kendo().TextBoxFor(m => m.DashboardURL).HtmlAttributes(new { @style = "width:100%", @onblur = "ValidateDashboardURL();" })
+                                            <div class="alert alert-danger clsDashboardValidation"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        @Html.LabelFor(m => m.DashboardPassword)
+                                        <div>
+                                            @Html.PasswordFor(m => m.DashboardPassword, new { @style = "width:100%" })
+                                            @Html.ValidationMessageFor(m => m.DashboardPassword)
+                                            <p class="small">
+                                                <ul class="clsPasswordHints">
+                                                    <li>Minimum 6 Characters</li>
+                                                    <li>at least one Capital letter</li>
+                                                    <li>at least one Number</li>
+                                                    <li>and any special character required to score 100% strong password</li>
+                                                </ul>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.TargetWeight)
+                                        <div>
+                                            <div class="alert alert-info clsHealthyBMIWeight">
+                                            </div>
+                                            @Html.Kendo().NumericTextBoxFor(m => m.TargetWeight).HtmlAttributes(new { @style = "width:100px" }) (KG)
+                                            @Html.ValidationMessageFor(m => m.TargetWeight)
+                                        </div>
+                                    </div>
+
+                                </section>
+                            </div>
+                        </div><!--/panel-collapse -->
+                    </div><!--/panel -->
+                </div>
+
+                <div class="col-md-6">
+                    <!-- Row 2 col-1 -->
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#pnlShareData" aria-expanded="true" aria-controls="collapseSix">
+                                    Share Your Data
+                                </a>
+                            </h4>
+                        </div><!--/panel-heading -->
+
+                        <div id="pnlShareData" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body text-center">
+                                <div class="alert alert-info">
+                                    Setup how to share your "Food &amp; Drink", "Weekly Activities" &amp; Achievements Data with your Coach, Team or Both
+                                </div>
+                                <div class="">
+                                    <input type="radio" value="1" id="rdDaily" name="rdFrequency" @if (rdFrequency == 1) { <text> checked="checked" </text> } /><label for="rdDaily">&nbsp;Daily</label>&nbsp;
+                                    <input type="radio" value="2" id="rdWeekly" name="rdFrequency" @if (rdFrequency == 2) { <text> checked="checked" </text> } /><label for="rdWeekly">&nbsp;Weekly</label>&nbsp;
+                                    <input type="radio" value="3" id="rdMonthly" name="rdFrequency" @if (rdFrequency == 3) { <text> checked="checked" </text> } /><label for="rdMonthly">&nbsp;Monthly</label>
+                                </div>
+                                <div class="divDayOfWeek" @if (rdFrequency != 2) { <text> style="display:none;" </text> }>
+                                    Select Day of Week: @(Html.Kendo().DropDownList()
+.Name("drpDayOfWeek")
+.Value(Model.DayOfWeek.ToString())
+.Items(item =>
+{
+item.Add().Text("Monday").Value("1");
+item.Add().Text("Tuesday").Value("2");
+item.Add().Text("Wednesday").Value("3");
+item.Add().Text("Thursday").Value("4");
+item.Add().Text("Friday").Value("5");
+item.Add().Text("Saturday").Value("6");
+item.Add().Text("Sunday").Value("0");
+})
+                                    )
+                                </div>
+                                <div class="form-group">
+                                    <label for="txtEmail_@Model">Who do you want to share it with?</label>
+                                    <div>
+                                        <input type="radio" value="1" id="rdSendToCoach" name="rdShareTo" @if (rdShareTo == 1) { <text> checked="checked" </text> } /><label for="rdSendToCoach">&nbsp;Share with my Coach</label>&nbsp;
+                                        <br />
+                                        <input type="radio" value="2" id="rdSendToTeam" name="rdShareTo" @if (rdShareTo == 2) { <text> checked="checked" </text> } /><label for="rdSendToTeam">&nbsp;Share with my Team</label>&nbsp;
+                                        <br />
+                                        <input type="radio" value="3" id="rdSendToTeam_Coach" name="rdShareTo" @if (rdShareTo == 3) { <text> checked="checked" </text> } /><label for="rdSendToTeam_Coach">&nbsp;Both</label>
+                                    </div>
+                                    <div>
+                                        <label for="txtMsgBody_@Model">Additional Recipients?</label>
+
+                                        @Html.Kendo().TextBox().Name("txtAdditionalRecipients").Value(Model.AdditionalRecipients).HtmlAttributes(new { @style = "width:90%" })
+                                        <p>use semicolon (;) to separate multiple emails e.g. emailA@domain.com;emailB@domain.com</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="txtMsgBody_@Model">Add an optional Message?</label>
+                                    <div>
+                                        @Html.TextArea("txtMsgBody", Model.OptionalMessage, 5, 8, new { @style = "width:90%" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--/panel-collapse -->
+                    </div><!--/panel -->
+                </div>
+            </div><!--/row -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Row 2 col-1 -->
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#pnlDashboardSettings" aria-expanded="true" aria-controls="pnlDashboardSettings">
+                                    Dashboard Reminder
+                                </a>
+                            </h4>
+                        </div><!--/panel-heading -->
+
+                        <div id="pnlDashboardSettings" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body text-center">
+                                <section>
+                                    <div class="form-group">
+                                        <div class="alert alert-info">
+                                            Please select either you want daily email reminders which reminds to log your food and drink for the day and to tick off any weekly activity sessions you've completed
+                                        </div>
+                                        <div>
+                                            <label for="rd_SendDailyReminder">SEND ME A REMINDER</label> <input type="checkbox" id="rd_SendDailyReminder" />
+                                        </div>
+                                        <div class="div_ReminderTime text-center">
+                                            <label for="ReminderTime">
+                                                Please set when would you like to receive Reminder?
+                                            </label>
+                                            <input type="text" id="ReminderTime" class="k-textbox" value="@(Model.ReminderTime.HasValue ? Model.ReminderTime.Value.ToString() : "")" title="Click to select Time" /> Hours
+
+                                            @*@(Html.Kendo().IntegerTextBoxFor(m => m.ReminderTime)
+    .Min(1)
+    .Max(24)
+    .HtmlAttributes(new { @style = "width:100px;" })
+                                            )*@
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-danger clsErrorMsg"></div>
+                    <div class="text-center">
+                        <button type="button" id="btnSaveDashboardSettings" class="btn btn-lg btn-group-justified btn-primary" onclick="return SaveSettings();"><span class="glyphicon glyphicon-saved"></span> Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/panel-group -->
+</div><!--/dashboard -->

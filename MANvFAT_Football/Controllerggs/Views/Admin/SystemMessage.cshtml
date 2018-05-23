@@ -1,0 +1,138 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.UserSystemMessageExt>
+@{
+    ViewBag.Title = "System Message";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="margin-bottom:10px;">
+    <a class="btn btn-info" href="/Admin/HistoricalSystemMessages">Show All Previous System Messages</a>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+
+        <h2>System Message</h2>
+    </div>
+    <div class="panel-body">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Message Date</th>
+                    <th>Subject</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <text>
+                <tr>
+                    <td>
+                        @item.SystemMessageDateTime.ToString("dd/MM/yyyy HH:mm")
+                    </td>
+                    <td>
+                        @item.SystemMessageSubject
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="ShowMessage('@item.UserSystemMessageID')"><span class="glyphicon glyphicon-bullhorn"></span> Show Message</button>
+                    </td>
+                </tr>
+                    </text>
+                }
+            </tbody>
+        </table>
+
+        @foreach (var item in Model)
+        {
+            <text>
+        <div class="modal fade" id="Model_Message_@item.UserSystemMessageID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header bg-primary">
+                        <button type="button" class="close"
+                                data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <h4>
+                            System Message
+                        </h4>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Subject</th>
+                                <td>@item.SystemMessageSubject</td>
+                            </tr>
+
+                        </table>
+                        <div>
+                            @Html.Raw(item.SystemMessage)
+                        </div>
+
+                        <div class="text-center">
+                            @Html.Kendo().CheckBox().Name("chkAccepted").Label(" I confirmed that I have read this message")
+                        </div>
+                    </div>
+
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-success" onclick="return DismissMessage('@item.UserSystemMessageID');"><span class="glyphicon glyphicon-ok"></span> Dismiss &amp; Close</button> &nbsp;
+                        <button type="button" class="btn btn-warning" data-dismiss="modal"><span class="glyphicon glyphicon-remove-circle"></span> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            </text>
+}
+    </div>
+</div>
+
+
+
+<script>
+
+    //id = UserSystemMessageID
+    function ShowMessage(id) {
+    
+        $("#Model_Message_"+id).modal('show');
+    }
+
+    //id = UserSystemMessageID
+    function DismissMessage(id) {
+        if ($("#chkAccepted").is(":checked") == false) {
+            OpenAlertModal("Error", "Please Confirm you have read this System Message by selecting the checkbox","btn-danger", BootstrapDialog.TYPE_DANGER);
+        }
+        else {
+            $.ajax({
+                url: "/Admin/DismissSystemMessage",
+                data: { UserSystemMessageID: id},
+                dataType: "json",
+                type: "POST",
+                error: function (e) {
+                    //alert("Error  = "+e.responseText);
+                },
+                success: function (data) {
+                    location.href = "/Admin/Index";
+                }
+            });
+        }
+    }
+</script>
+
+<style>
+    .modal-header {
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        -webkit-border-top-left-radius: 6px;
+        -webkit-border-top-right-radius: 6px;
+        -moz-border-radius-topleft: 6px;
+        -moz-border-radius-topright: 6px;
+    }
+</style>

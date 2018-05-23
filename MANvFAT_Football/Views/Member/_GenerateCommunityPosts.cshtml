@@ -1,0 +1,13 @@
+﻿@model List<MANvFAT_Football.Helpers.LatestPostFeeds>
+<ul id="latest">
+@foreach (var item in Model)
+{
+    var user = item.users.FirstOrDefault();
+    string ImageLink = "";
+    if(user!=null)
+    {
+        ImageLink = user.avatar_template;
+    }
+    <li><a target="_blank" href="@item.Link"><span class="avatar"><img src="@ImageLink"></span><span class="topic-title">@Html.Raw(item.Title)</span></a></li>
+}
+</ul>

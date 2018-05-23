@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("LeagueID")
+              .HtmlAttributes(new { style = "width:100%" })
+              .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("LeagueName")
+              .DataValueField("LeagueID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                  read.Action("GetLeagues_LocalAuth", "DropDownLists");
+              });
+
+})
+)

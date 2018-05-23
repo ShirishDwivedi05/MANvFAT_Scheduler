@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="checkboxes" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="60px" height="120px" viewBox="0 0 60 120" enable-background="new 0 0 60 120" xml:space="preserve">
+<g id="selected">
+	<polygon id="box" fill="#43433B" points="33.44,105.24 13.96,91.17 22.27,79.66 30.26,85.43 39.6,72.53 12.53,72.53 12.53,107.46    47.46,107.46 47.46,85.88  "/>
+	<polygon id="tick" fill="#43433B" points="46.37,68.47 30.96,89.76 22.97,83.99 18.29,90.47 32.74,100.9 52.84,73.15  "/>
+</g>
+<g id="unselected">
+	<path id="square_1_" fill="#43433B" d="M12.53,12.53v34.93h34.93V12.53H12.53z M40.65,40.65h-21.3v-21.3h21.29L40.65,40.65   L40.65,40.65z"/>
+</g>
+</svg>

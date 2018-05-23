@@ -1,0 +1,14 @@
+﻿<script>
+    $(document).ready(function () {
+
+        $(".clsCommunityData").load("/Member/GetPosts/" + $("#hdnDashboardURL").val(),
+            { PlayerID: $("#hdnPlayerID").val()}).show("bounce", 500);
+
+    });
+</script>
+
+<div id="divLatestPostFeeds_Fixtures" class="clsCommunityData"></div>
+
+
+
+

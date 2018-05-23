@@ -1,0 +1,43 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+
+
+        <table class="table table-striped">
+           
+            <tr>
+                <th>@Html.LabelFor(model => model.WorkPhone, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.WorkPhone, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.WorkPhone, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.Landline, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.Landline, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.Landline, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.Mobile, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.Mobile, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.AddressLine1, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.AddressLine1, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.AddressLine1, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.AddressLine2, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.AddressLine2, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.AddressLine2, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.Country, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.Country, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.City, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.City, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.PostCode, new { @class = "control-label" })</th>
+                <td>@Html.TextBoxFor(model => model.PostCode, new { @class = "form-control txtBoxWidth" })@Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "text-danger" })</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.Notes, new { @class = "control-label" })</th>
+                <td>@Html.TextAreaFor(model => model.Notes, new { @class = "form-control", @style="width:500px; height:200px;" })@Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })</td>
+            </tr>
+        </table>

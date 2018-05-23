@@ -1,0 +1,109 @@
+ .ui-slider-horizontal .ui-slider-range-min{
+        background: #FF0000;
+    }
+    .ui-slider-horizontal .ui-state-default {
+        background: white;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: -10px;
+        z-index: 3;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(0, 0, 0, 0.1)));
+        background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
+        background-image: -moz-linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
+        background-image: -o-linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
+        background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
+        -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
+        border-radius: 50%;
+    }
+
+        .ui-slider-horizontal .ui-state-default:after {
+            content: "";
+            display: block;
+            width: 18px;
+            height: 18px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0.13)), color-stop(100%, rgba(255, 255, 255, 0)));
+            background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.13), rgba(255, 255, 255, 0));
+            background-image: -moz-linear-gradient(rgba(0, 0, 0, 0.13), rgba(255, 255, 255, 0));
+            background-image: -o-linear-gradient(rgba(0, 0, 0, 0.13), rgba(255, 255, 255, 0));
+            background-image: linear-gradient(rgba(0, 0, 0, 0.13), rgba(255, 255, 255, 0));
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            border-radius: 50%;
+        }
+
+    .ui-widget.ui-widget-content {
+       
+        height: 20px;
+        border-radius: 10px;
+    }
+
+
+    .ui-slider-horizontal .ui-state-default:active {
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0.1)), color-stop(100%, rgba(0, 0, 0, 0.12)));
+        background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.12));
+        background-image: -moz-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.12));
+        background-image: -o-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.12));
+        background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.12));
+    }
+
+     body, .menu-mobile {
+        font-family: 'Arial', sans-serif;
+        font-size: 14px;
+    }
+
+    .txtWeight_SliderResult {
+        display: block;
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        margin: 10px 0 0 0;
+        width: 100%;
+    }
+
+    .clsFinalBMI {
+        display: block;
+        font-size: 45px;
+        font-weight: bold;
+        text-align: center;
+        margin: 10px 0 0 0;
+        width: 100%;
+        color: orangered;
+    }
+
+    .form_controll {
+        clear: both;
+        padding: 10px 20px;
+        background: #eaf2f4;
+        margin-bottom: 10px;
+        border-left: solid 5px #79c7d9;
+    }
+
+    .lblSummary, .lblBMI{
+        font-size:25px;
+    }
+
+    .tblSummary{
+
+    }
+
+    .tblSummary th{
+        width:100px;
+    }

@@ -1,0 +1,66 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+
+    string CurrentDomain = (string)ViewBag.CurrentDomain;
+    string ReferralLink = CurrentDomain + "/refercode/" + Model.ReferralCode;
+}
+
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5925d051bc33759c"></script>
+
+<style>
+    .clsErrorMsg {
+        display: none;
+    }
+</style>
+
+@Scripts.Render("~/bundles/Referral-js")
+
+<input type="hidden" id="hdnPlayerID" value="@Model.PlayerID" />
+<input type="hidden" id="hdnReferralCode" value="@Model.ReferralCode" />
+@*<div class="text-center">
+        <img src="~/Content/FrontEnd/img/referImage.jpg" alt="Refer your Friend" />
+    </div>*@
+
+<div class="col-md-12">
+
+    <div class="row black pay-now div-Referral">
+        <div class="col-md-8 col-md-offset-2 banner">
+            <h1 class="clsLoveFootball text-center">
+                Refer friends and get £5 in cash!
+            </h1>
+
+            <p class="lead">
+                Give your friends 50% off MAN v FAT Football Registration. You get £5 in cash when they use your link to register at MAN v FAT Football.
+            </p>
+            <div class="form-group">
+                <div class="alert alert-info">
+                    Here you can change your Referral Code and share it with your friends.
+                    <p>
+                        URL for your friends to get register at MANvFAT Football using your referral code: <a href="@ReferralLink" target="_blank">@ReferralLink</a>
+                    </p>
+                </div>
+                @Html.LabelFor(m => m.ReferralCode)
+                <div>
+                    @Html.Kendo().TextBoxFor(m => m.ReferralCode).HtmlAttributes(new { @style = "width:100%; font-size:35px;", @onblur = "ValidateReferralCode();" })
+                </div>
+
+                <div class="text-center">
+                    <div style="display:inline;" data-url="@ReferralLink" data-note="@ReferralLink" data-title="Referral Code to register at MANvFAT Football" class="addthis_inline_share_toolbox"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-danger clsErrorMsg"></div>
+                    <div class="text-center">
+                        <button type="button" id="btnSaveDashboardSettings" class="btn btn-lg btn-group-justified btn-primary" onclick="return SaveReferralCode();"><span class="glyphicon glyphicon-saved"></span> Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

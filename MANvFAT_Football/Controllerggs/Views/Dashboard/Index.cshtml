@@ -1,0 +1,216 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dashboard</h2>
+
+<!--Players Per-League-->
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">Players Per-League</div>
+            <div class="panel-body">
+                @(Html.Kendo().Grid<MANvFAT_Football.Models.SelectPlayersPerLeague_Result>()
+    .Name("PlayersPerLeague_Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(25)
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.LeagueID))
+                .Read(read => read.Action("_ReadPlayersPerLeague", "Dashboard"))
+    .ServerOperation(true)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.LeagueName).ClientTemplate("<a title='Click here to open League Details' href='/Leagues/Details/#=LeagueID#'>#=LeagueName#</a>").Title("League").Width(150);
+        columns.Bound(p => p.TotalPlayers).Title("Total Player").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.LivePlayers).Title("Players in Team").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.GhostPlayers).Title("Ghost Team Players").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.NonTeamedPlayers).Title("Non Teamed Players").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+    .Selectable()
+
+                )
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--League Stats-->
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">League Stats</div>
+            <div class="panel-body">
+                @(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.LeagueStats>()
+    .Name("LeagueLossPercent_Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(25)
+    .Sort(sort => sort.Add(s => s.LeagueLossPercent).Descending())
+    .Filter(filter => filter.Add(f => f.LiveLeague).IsEqualTo(true))
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.LeagueID))
+                .Read(read => read.Action("_ReadLeagueStats", "Dashboard"))
+    .ServerOperation(true)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.LeagueName).ClientTemplate("<a title='Click here to open League Details' href='/Leagues/Details/#=LeagueID#'>#=LeagueName#</a>").Title("League").Width(150);
+        columns.Bound(p => p.LiveLeague).ClientTemplate("#if(LiveLeague){#Yes#}else{#No#}#").HeaderTemplate("Is<br />Live?").Width(30);
+        columns.Bound(p => p.LeagueLossPercent).Format("{0:N2}%").HeaderTemplate("Lost<br />%").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.LeagueTotalLossKG).Format("{0:N2}").Title("Loss<br />(kg)").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.LeaguePercentLossPercent).Format("{0:N2}").Title("% Lost<br />Avg.").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.LeagueHit5OrMoreBMV).Title("5+<br />BMV").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.LossCurrent_PrevWeek).HeaderTemplate("Current / Prev<br />Week Loss").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.AvgMissingPlayers).Format("{0:N2}").HeaderTemplate("Avg. Missing<br />Players").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.LeagueTotalPlayersUnderBMI25).Format("{0:N0}").HeaderTemplate("Players<br/>On<br/>Maintenance").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 10, 25, 50, 100 }))
+    .Sortable(s => s.SortMode(GridSortMode.MultipleColumn))
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+    .Selectable()
+
+                )
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--How did you hear about MANvFAT Football?-->
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">How did you hear about MANvFAT Football?</div>
+            <div class="panel-body">
+                @(Html.Kendo().Grid<MANvFAT_Football.Models.SelectAdvertisementPercentAge_Result>()
+    .Name("AdvertisementPercentAge_Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(25).Sort(sort => sort.Add(s => s.PercentAge).Descending())
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.AdvertisementID))
+                .Read(read => read.Action("_ReadAdvertisementPercent", "Dashboard"))
+    .ServerOperation(true)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Advertisement).ClientTemplate("#if(AdvertisementID==15){# <a title='Click here to open Other Details' href='/Dashboard/OtherDetails'>#=Advertisement#</a> #}else{# #=Advertisement# #}# ").Title("Advertisement").Width(150);
+        columns.Bound(p => p.PercentAge).Format("{0:N2}%").Title("Percent").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 10, 25, 50, 100 }))
+    .Sortable(s => s.SortMode(GridSortMode.MultipleColumn))
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+    .Selectable()
+
+                )
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Players Per-Region/City (Planned Leagues)-->
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">Players Per-Region/City (Planned Leagues)</div>
+            <div class="panel-body">
+                @(Html.Kendo().Grid<MANvFAT_Football.Models.SelectPlayersPerLeague_CityRegion_Result>()
+    .Name("PlayersPerLeague_CityRegion_Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(25)
+    .Group(grp => grp.Add(g => g.RegionName))
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.LeagueID))
+                .Read(read => read.Action("_ReadPlayersPerLeague_CityRegion", "Dashboard"))
+    .ServerOperation(true)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.RegionName).Title("Region").Width(50);
+        columns.Bound(p => p.CityName).Title("City").Width(50);
+        columns.Bound(p => p.LeagueName).Title("League").ClientTemplate("<a title='Click here to open League Details' href='/Leagues/Details/#=LeagueID#'>#=LeagueName#</a>").Width(100);
+        columns.Bound(p => p.TotalPlayers).HeaderTemplate("Total<br />Players").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+        columns.Bound(p => p.NonTeamedPlayers).HeaderTemplate("Non-Teamed<br />Players").HtmlAttributes(new { @style = "text-align:right;" }).Width(50);
+
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+    .Selectable()
+    .Groupable()
+
+                )
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Non-Payment Players-->
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading" title="Those Players who didn't paid for Registration'">Non-Payment Players</div>
+            <div class="panel-body">
+                @(Html.Kendo().Grid<MANvFAT_Football.Models.SelectNonPaymentPlayers_Result>()
+    .Name("NonPaymentPlayers_Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(25).Sort(sort => sort.Add(s => s.RegistrationDate).Descending())
+
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.PlayerID))
+                .Read(read => read.Action("_ReadNonPaymentPlayers", "Dashboard"))
+    .ServerOperation(true)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.FullName).ClientTemplate("<a title='Click here to open Player Details' href='/Players/Details/#=PlayerID#'>#=FullName#</a>").Title("Player").Width(80);
+        columns.Bound(p => p.RegistrationDate).Format("{0:dd/MM/yyyy HH:mm}").Title("Reg. Date").Width(80);
+        columns.Bound(p => p.LeagueName).Title("League").Width(80);
+        columns.Bound(p => p.Mobile).Width(80);
+        columns.Bound(p => p.EmailAddress).Title("Email").Width(80);
+        columns.Bound(p => p.Address).Width(80);
+
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+    .Selectable()
+
+                )
+            </div>
+        </div>
+    </div>
+</div>

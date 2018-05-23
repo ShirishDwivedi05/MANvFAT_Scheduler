@@ -1,0 +1,10 @@
+﻿<script>
+    $(document).ready(function () {
+
+        $(".clsMemberToolData").load("/Member/GetTools/" + $("#hdnDashboardURL").val(),
+            { PlayerID: $("#hdnPlayerID").val()}).show("bounce", 500);
+
+    });
+</script>
+
+<div class="clsMemberToolData"></div>

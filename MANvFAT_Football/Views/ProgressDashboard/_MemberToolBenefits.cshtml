@@ -1,0 +1,52 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.MemberToolsBenefitsExt>
+@{
+    bool IsFirstItem = true;
+    string CarouselControlID = Convert.ToString(ViewBag.CarouselControlID);
+}
+<div id="@CarouselControlID" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <li data-target="#@CarouselControlID" data-slide-to="@i" @if (i == 0) { <text> class="active" </text> }></li>
+        }
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        @foreach (var item in Model)
+        {
+            <div class="item @if (IsFirstItem) {<text> active </text> } ">
+                @if (string.IsNullOrEmpty(item.PictureURL))
+                {
+                    <text>
+                        <img src="@Url.Content("~/Images/ManvFat-Football-logo-Stacked-RGB.jpg")" alt="...">
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        <img src="@Url.Content(item.PictureURL)" alt="...">
+                    </text>
+                }
+
+                <div class="carousel-caption">
+                    <h4><a target="_blank" href="@item.Link">@item.Title</a></h4>
+                    <br />
+                    <div style="color:black;">@item.Summary</div>
+                </div>
+            </div>
+            IsFirstItem = false;
+        }
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#@CarouselControlID" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#@CarouselControlID" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>

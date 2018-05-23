@@ -1,0 +1,130 @@
+﻿
+<div class="modal fade" id="ModelUploadToolBenefitImage" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header clsBtnPlayerProgress">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Upload Tool/Benefit Photo <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <form role="form">
+
+                    <input type="hidden" id="hdnParamMemberToolsBenefitID" />
+                    <p><b>Note:</b><br /> Maximum File size limit = 4MB<br />Allowed file types are .png, .jpeg, .jpg or .bmp<br />Maximum Image resolution = 800x600</p>
+                    @(Html.Kendo().Upload()
+                                .Name("ToolBenefit_Photo")
+                                .Multiple(false)
+                                .ShowFileList(true).Messages(m => m.DropFilesHere("Drop Images here to upload"))
+                                .Messages(m => m.Select("Select Image File..."))
+                                .Async(a => a
+                                    .Save("SaveToolBenefit_Photo", "MemberToolsBenefits")
+                                    .Remove("RemoveToolBenefit_Photo", "MemberToolsBenefits")
+                                    .AutoUpload(true)
+
+                                ).Events(ev => ev.Error("ToolBenefit_Photo_OnError").Success("ToolBenefit_Photo_OnSuccess")
+                                .Upload("ToolBenefit_Photo_OnUpload").Select("ToolBenefit_Photo_OnSelect")).HtmlAttributes(new { @title = "File size limit = 4MB and allowed file types are .png, .jpeg, .jpg or .bmp", @accept = "image/png, image/jpg, image/jpeg, image/bmp" })
+                               
+                                .Validation(m => m.AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".bmp" }).MaxFileSize(4194304))
+                    )
+
+                    <div class="clsInfoDiv alert alert-success" style="display:none;">
+
+                    </div>
+                    <div class="clsErrorDiv alert alert-danger" style="display:none;">
+
+                    </div>
+                </form>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function ToolBenefit_Photo_OnSuccess(e) {
+      
+        RefreshGrid();
+        $(".k-upload-files.k-reset").find("li").remove();
+        $(".k-upload-status-total").hide();
+            $("#ModelUploadToolBenefitImage").modal('hide');
+           
+    }
+
+    function ToolBenefit_Photo_OnError(e) {
+        OpenAlertModal("Error:", e.XMLHttpRequest.responseText, "btn-danger", BootstrapDialog.TYPE_DANGER);
+    }
+
+    function ToolBenefit_Photo_OnUpload(e) {
+
+        $(".clsErrorDiv").slideUp();
+        
+        e.data = { paramMemberToolsBenefitID: $("#hdnParamMemberToolsBenefitID").val() };
+
+        return e.data;
+    }
+
+    function ToolBenefit_Photo_OnSelect(e) {
+
+                var ValidExtentions = [];
+                ValidExtentions.push(".jpg");
+                ValidExtentions.push(".jpeg");
+                ValidExtentions.push(".png");
+                ValidExtentions.push(".bmp");
+
+                //  var Filesize_Limit = 4096;
+
+                var files = e.files;
+                $.each(files, function () {
+
+                    var extension = this.extension.toLowerCase();
+                    var IsValidImageExtension = $.inArray(extension, ValidExtentions);
+                    //alert("ext = " + extension + " ValidExtentions =" + FoundInArray);
+                    //-1 When no element found, so Image Extension is not Valid
+                    if (IsValidImageExtension == -1) {
+
+                        $(".clsErrorDiv").text("Please upload a valid image file e.g. .jpg, .jpeg .png, .bmp");
+                        $(".clsErrorDiv").slideDown();
+
+                        e.preventDefault();
+                    }
+
+                    //Check File Size, we have limit of 4mb i.e. 4096KB
+                    //if (this.size > 0) {
+                    //    var _fileSize = Math.ceil(this.size / 1024)
+                    //   // var info = " (" + _fileSize + " KB)";
+                    //   // alert("FIle size = " + info);
+
+                    //    if (_fileSize > Filesize_Limit)
+                    //    {
+                    //        $(".clsErrorDiv").text("File size limit exceeded. Only upto 4MB Image file size allowed. Please try again.");
+                    //        $(".clsErrorDiv").slideDown();
+
+                    //        e.preventDefault();
+                    //    }
+                    //}
+
+                });
+
+          
+
+    }
+</script>

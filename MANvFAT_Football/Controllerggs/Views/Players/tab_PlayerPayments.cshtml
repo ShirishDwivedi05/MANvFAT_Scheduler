@@ -1,0 +1,495 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+<div style="overflow:hidden" class="martop20">
+
+    <div class="list-group">
+
+        <script type="text/javascript">
+            function RefreshPlayerPayments_Grid() {
+                $("#PlayerPayments_Grid").data("kendoGrid").dataSource.read();
+            }
+
+            $("#cmdAddNewContact").click(function (e) {
+
+                var table = $("#PlayerPayments_Grid").data("kendoGrid");
+                var sorting = table.dataSource.sort();
+
+                if (sorting) {
+                    table.dataSource.sort(null);
+                }
+                table.addRow();
+                e.preventDefault();
+                //put custom logic here
+            });
+
+            //Get GoCardless Payment
+            function cmdViewPayment_OnClick(e) {
+                e.preventDefault();
+
+                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+                if (dataItem.PaidWithPayPal == true) {
+                    OpenAlertModal("Information", "Player paid with Paypal. You can confirm the payment status from within PayPal.", "btn-info", BootstrapDialog.TYPE_INFO);
+                    return false;
+                }
+
+                if (dataItem.GoCardless_PaymentID == null || dataItem.ManualPaymentReceived == true) {
+                    OpenAlertModal("Information", "It's Manual payment so we can't retrieve payment information from GoCardless OR he didn't gone through the payment process at GoCardless", "btn-info", BootstrapDialog.TYPE_INFO);
+                    return false;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/GoCardless/GoCardless_GetSinglePayment',
+                    data: { PlayerPaymentID: dataItem.PlayerPaymentID },
+                    dataType: "json",
+                    beforeSend: function () {
+                        ProcessingWindow("Retrieving Payment details, Please Wait...!!!");
+                    },
+                    error: function (e) {
+                        return false;
+                    },
+                    success: function (data) {
+                        CloseWindow();
+                        if (data.status) {
+
+                            $("#hdnPaymentID").val(data.Payment.id);
+                            $("#hdnContributorID").val(dataItem.PlayerPaymentID);
+
+                            $("#dlg_Heading").text("GoCardless - Payment Details");
+
+                            $("#pPaymentID").text(data.Payment.id);
+                            $("#pCreatedDateTime").text(data.Payment.created_at);
+                            $("#pChargeDateTime").text(data.Payment.charge_date);
+                            $("#pAmount").text(data.Payment.amount);
+                            $("#pStatus").text(data.Payment.status);
+
+                            //Customer Details
+                            $("#pCustomer_id").text(data.Payment.Customer_id);
+                            $("#pCustomer_created_at").text(data.Payment.Customer_created_at);
+                            $("#pCustomer_email").text(data.Payment.Customer_email);
+                            $("#pCustomer_given_name").text(data.Payment.Customer_given_name);
+                            $("#pCustomer_family_name").text(data.Payment.Customer_family_name);
+                            $("#pCustomer_address_line1").text(data.Payment.Customer_address_line1);
+                            $("#pCustomer_address_line2").text(data.Payment.Customer_address_line2);
+                            $("#pCustomer_address_line3").text(data.Payment.Customer_address_line3);
+                            $("#pCustomer_city").text(data.Payment.Customer_city);
+                            $("#pCustomer_region").text(data.Payment.Customer_region);
+                            $("#pCustomer_postal_code").text(data.Payment.Customer_postal_code);
+                            $("#pCustomer_country_code").text(data.Payment.Customer_country_code);
+                            $("#pCustomer_language").text(data.Payment.Customer_language);
+
+                            //Display Cancellation Reason if Payment was Cancelled
+                            if (data.Payment.status == "cancelled") {
+                                $("#btnCancelPayment").css('display', 'none');
+                                $("#tbody_CancelPayment").css('display', 'none');
+
+                                //Only display Payment Cancellation details from Contributors table if payment is cancelled
+                                $("#pPaymentCancellationDate").text(data.Payment.PaymentCancellation_DateTime);
+                                $("#pPaymentCancelledByUsername").text(data.Payment.PaymentCancellation_ByUserName);
+                                $("#pPaymentCancellationReason").text(data.Payment.PaymentCancellation_Reason);
+                                $("#tbody_PaymentCancelled").css('display', '');
+                            }
+                            else {
+                                $("#btnCancelPayment").css('display', '');
+                                $("#tbody_PaymentCancelled").css('display', 'none');
+                                $("#tbody_CancelPayment").css('display', 'none');
+                            }
+
+                            $(".model_PaymentDetails").modal("show");
+
+                            //This function will Update the Payzella status from GoCardless Status
+                            //defined in /Scripts/GlobalValidations
+                            UpdateGoCardlessPaymentStatuses(dataItem.PlayerPaymentID);
+
+                        }
+                        else {
+                            OpenAlertModal("Error", data.Msg, "btn-danger", BootstrapDialog.TYPE_DANGER);
+
+                            //This function will Update the Payzella status from GoCardless Status
+                            //defined in /Scripts/GlobalValidations
+                            UpdateGoCardlessPaymentStatuses(dataItem.PlayerPaymentID);
+                        }
+                    }
+                });
+            }
+
+            function CancelPayment_Confirmation() {
+                $("#tbody_CancelPayment").slideDown();
+                return false;
+            }
+
+            //Cancel GoCardless Payment
+            function CancelPayment() {
+                var PaymentID = $("#hdnPaymentID").val();
+                var ContributorID = $("#hdnContributorID").val();
+
+                // alert("PaymentID = " + PaymentID + " ContributorID = " + ContributorID);
+                if ($("#txtPaymentCancelReason").val() != "") {
+                    $("#lbl_txtPaymentCancelReason").css('display', 'none');
+                    $.ajax({
+                        type: "POST",
+                        url: '/GoCardless/GoCardless_CancelPayment',
+                        data: { PlayerPaymentID: PlayerPaymentID, PaymentCancellation_Reason: $("#txtPaymentCancelReason").val() },
+                        dataType: "json",
+                        beforeSend: function () {
+                            ProcessingWindow("Payment Cancellation is in progress, Please Wait...!!!");
+                        },
+                        error: function (e) {
+                            return false;
+                        },
+                        success: function (data) {
+                            CloseWindow();
+                            if (data.status) {
+                                ClosePaymentDialogue();
+                                OpenAlertModal("Information", "Payment has been cancelled.", "btn-info", BootstrapDialog.TYPE_INFO);
+                            }
+                            else {
+                                OpenAlertModal("Error", data.Msg, "btn-danger", BootstrapDialog.TYPE_DANGER);
+                            }
+                        }
+                    });
+                }
+                else {
+                    $("#lbl_txtPaymentCancelReason").text("Please enter Payment Cancellation reason.");
+                    $("#lbl_txtPaymentCancelReason").css('display', '');
+                }
+
+                return false;
+            }
+
+            function ClosePaymentDialogue() {
+                $(".model_PaymentDetails").modal("hide");
+                $("#tbody_CancelPayment").slideUp();
+                return false;
+            }
+
+            $("#cmdAddNewPayment").click(function (e) {
+
+                var table = $("#PlayerPayments_Grid").data("kendoGrid");
+                var sorting = table.dataSource.sort();
+
+                if (sorting) {
+                    table.dataSource.sort(null);
+                }
+                table.addRow();
+                e.preventDefault();
+                //put custom logic here
+                return false;
+            });
+
+            function cmdPayLink_OnClick(e) {
+                e.preventDefault();
+                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+                $.ajax({
+                    type: "POST",
+                    url: '/GoCardless/GetPayLink',
+                    data: { PlayerPaymentID: dataItem.PlayerPaymentID },
+                    dataType: "json",
+                    error: function (e) {
+                        return false;
+                    },
+                    success: function (data) {
+
+                        OpenConfirmationModal("Create_SendPaymentLink", "Create and Send Payment Link",
+                            "PayLink:<br /><div class='text-info text-center'>You can copy and send this link in email manually or Click on Yes to send it automatically to Player by Email.</div>" +
+                            "Link: <a href='" + data.PayLink + "' target='_blank' title='Click here to Test the URL'><input type='text' style='width:99%; cursor:pointer;' readonly='readonly' value='" + data.PayLink + "' class='k-textbox' /></a>" +
+                            "<div class='text-danger text-center'>Are you sure you want to Create and Send Payment Link?</div>", dataItem.PlayerPaymentID);
+                    }
+                });
+
+            }
+
+            function Create_SendPaymentLink(id) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '/GoCardless/CreateAndSendPayLink',
+                    data: { PlayerPaymentID: id },
+                    dataType: "json",
+                    error: function (e) {
+                        return false;
+                    },
+                    success: function (data) {
+
+                        if (data.status) {
+                            OpenAlertModal("Information", "Payment Link has been sent to Player.", "btn-primary", BootstrapDialog.TYPE_PRIMARY);
+                        }
+                        else {
+                            OpenAlertModal("Error", data.Msg, "btn-danger", BootstrapDialog.TYPE_DANGER);
+                        }
+                    }
+                });
+            }
+
+            function DisplayPayLink(id) {
+
+            }
+        </script>
+
+        <div>
+            @(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.PlayerPaymentsExt>()
+                    .Name("PlayerPayments_Grid")
+        .DataSource(dataSource => dataSource
+        .Ajax().Events(ev => ev.Sync("RefreshPlayerPayments_Grid").Error("DisplayGridError"))
+        //.Aggregates(aggrt =>
+        //{
+        //    aggrt.Add(p => p.Paid).Sum();
+        //})
+        .PageSize(25)
+        .Sort(s => s.Add(ss => ss.PaymentDateTime).Descending())
+        .ServerOperation(false)
+        .Model(model =>
+        {
+            model.Id(p => p.PlayerPaymentID);
+            //model.Field(p => p.DatePaid).Editable(false);
+            model.Field(p => p.PlayerFullName).Editable(false);
+            model.Field(p => p.Reviewed).Editable(false);
+
+        })
+                .Read(read => read.Action("_Read", "PlayerPayments", new { ParamPlayerID = Model.PlayerID }))
+                .Create(update => update.Action("_Create", "PlayerPayments", new { ParamPlayerID = Model.PlayerID }))
+                .Update(update => update.Action("_Update", "PlayerPayments"))
+                .Destroy(update => update.Action("_Destroy", "PlayerPayments"))
+        )
+
+        .Columns(columns =>
+        {
+
+            columns.Command(
+
+                command =>
+                {
+
+                    command.Edit().UpdateText("Save").HtmlAttributes(new { @class = "btn btn-primary btn-MVF" });
+                    command.Destroy().HtmlAttributes(new { @class = "btn btn-danger btn-MVF" });
+                    command.Custom("cmdViewPayment").Text("View Payment").Click("cmdViewPayment_OnClick").HtmlAttributes(new { @class = "btn btn-info btn-MVF" });
+                    command.Custom("cmdPayLink").Text("Pay Link").Click("cmdPayLink_OnClick").HtmlAttributes(new { @class = "btn btn-warning btn-MVF", @Title = "Create and Send Gocardless Payment Link" });
+
+                    //command.Custom("cmdNotes").Text("Notes").Click("cmdNotes").HtmlAttributes(new { @class = "btn btn-info btn-MVF" });
+                    //command.Custom("cmdReviewYes").Text("Yes").Click("cmdReviewYes").HtmlAttributes(new { @class = "btn btn-success btn-MVF" });
+                    //command.Custom("cmdReviewNo").Text("No").Click("cmdReviewNo").HtmlAttributes(new { @class = "btn btn-danger btn-MVF" });
+                }).Width(150);
+
+            //columns.Bound(p => p.PlayerFullName).Title("Name").Width(100);
+            columns.Bound(p => p.PaymentStatusID).EditorTemplateName("PaymentStatuses").ClientTemplate("#=PaymentStatus#").Title("Status").Width(70);
+            columns.Bound(p => p.PaymentDateTime).EditorTemplateName("Date").Format("{0:dd/MMM/yyyy}").Title("Date").Width(70);
+            columns.Bound(p => p.Amount).EditorTemplateName("CurrencyNoSymbol").Format("{0:N2}").Width(50);
+            columns.Bound(p => p.PaymentTypeID).EditorTemplateName("PaymentTypes").ClientTemplate("#=PaymentType#").Title("Type").Width(70);
+            columns.Bound(p => p.IgnoreSync).ClientTemplate("#if(IgnoreSync){#Yes#}else{#No#}#").HeaderTemplate("Ignore<br />Sync").Width(50);
+            columns.Bound(p => p.BookRequested).ClientTemplate("#if(BookRequested){#Yes#}else{#No#}#").HeaderTemplate("Book<br />Req.").Width(50);
+            // columns.Bound(p => p.IsDepositAmount).ClientTemplate("#if(IsDepositAmount){#Yes#}else{#No#}#").Title("Deposit?").Width(50);
+            columns.Bound(p => p.ManualPaymentReceived).ClientTemplate("#if(ManualPaymentReceived){#Yes#}else{#No#}#").HeaderTemplate("Manual<br />Payment<br />Received?").Width(60);
+            columns.Bound(p => p.GoCardless_PaymentID).HeaderTemplate("GoCardless<br />Payment ID").Width(80);
+            columns.Bound(p => p.GoCardless_CustomerID).HeaderTemplate("GoCardless<br />Customer ID").Width(80);
+            //columns.Bound(p => p.GoCardless_BankAccountID).HeaderTemplate("GoCardless<br />Bank ID").Width(80);
+            // columns.Bound(p => p.Reviewed).Title("Reviewed").ClientTemplate("#if(Reviewed){#<div class='text-center'><span class='text-success glyphicon glyphicon-ok'></span></div>#}#").Width(30);
+            columns.Bound(p => p.GoCardless_Token).Hidden(true);
+            columns.Bound(p => p.PlayerID).Hidden(true);
+            columns.Bound(p => p.Reviewed).Hidden(true);
+            columns.Bound(p => p.ReviewedByUserID).Hidden(true);
+            columns.Bound(p => p.ReviewedDateTime).Hidden(true);
+            columns.Bound(p => p.Notes).Hidden(true);
+            columns.Bound(p => p.MandateID).Hidden(true);
+            columns.Bound(p => p.Cause).Hidden(true);
+            columns.Bound(p => p.Description).Hidden(true);
+            columns.Bound(p => p.Webhook_EventID).Hidden(true);
+            columns.Bound(p => p.PaidWithPayPal).Hidden(true);
+            columns.Bound(p => p.FlowURL).Hidden(true);
+            columns.Bound(p => p.SessionToken).Hidden(true);
+
+
+        })
+           .ToolBar(tool =>
+           {
+               tool.Create().Text("Add New Payment")
+                   .HtmlAttributes(new { @class = "btn btn-primary btn-MVF" });
+               tool.Excel().HtmlAttributes(new { @class = "btn btn-warning btn-MVF" });
+           })
+
+            .Scrollable(scrollable => scrollable.Height(400))
+            .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+            .Sortable()
+            .Navigatable()
+            .Excel(ex => ex.FileName("PlayerPayments.xlsx").AllPages(true).Filterable(true))
+            .Filterable()
+            )
+        </div>
+    </div>
+</div>
+
+<!--Display Payment Details Modal-->
+
+<style>
+    .clsPaymentTable th {
+        text-align: left !important;
+    }
+</style>
+
+<div class="row" style="margin-right:0; margin-left:0;">
+    <div class="col-md-10">
+
+        <div class="modal fade model_PaymentDetails" tabindex="-1" role="dialog" aria-labelledby="dlgHeading" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="text-primary" id="dlg_Heading"></h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <input type="hidden" id="hdnPaymentID" />
+                                <input type="hidden" id="hdnContributorID" />
+
+                                @(Html.Kendo().TabStrip()
+.Name("ContactPaymentDetails_Tab")
+        .Items(tabstrip =>
+        {
+            tabstrip.Add().Selected(true).Text("Payment Details")
+            .Content(@<text>
+                                    <table class="table table-striped table-hover clsPaymentTable">
+                                        <tr>
+                                            <th>Payment ID</th>
+                                            <td><div id="pPaymentID"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Created Date/Time</th>
+                                            <td><div id="pCreatedDateTime"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Charge Date/Time</th>
+                                            <td><div id="pChargeDateTime"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Amount</th>
+                                            <td><div id="pAmount"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <td><div id="pStatus"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="text-align:center;">
+                                                <button id="btnCancelPayment" onclick="return CancelPayment_Confirmation();" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancel this Payment</button>
+                                            </td>
+                                        </tr>
+                                        <tbody id="tbody_PaymentCancelled" style="display:none;">
+
+                                            <tr>
+                                                <th>Payment Cancellation Date</th>
+                                                <td><div id="pPaymentCancellationDate"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Payment Cancelled By</th>
+                                                <td><div id="pPaymentCancelledByUsername"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Payment Cancellation Reason</th>
+                                                <td><div id="pPaymentCancellationReason"></div></td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody id="tbody_CancelPayment" style="display:none;">
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <table class="table">
+                                                        <tr>
+                                                            <th>Please enter Reason to cancel this payment</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                @Html.TextArea("txtPaymentCancelReason", new { @style = "width:90%; height:100px;" })
+                                                                <div class="alert alert-danger" id="lbl_txtPaymentCancelReason" style="display:none;"></div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <p class="text-danger">Are you sure you want to cancel this payment?</p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                <button id="btnNo" onclick="return ClosePaymentDialogue();" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span> No</button>
+                                                                <button id="btnYes" onclick="return CancelPayment();" class="btn btn-warning"><span class="glyphicon glyphicon-remove"></span> Yes</button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+            </text>);
+            tabstrip.Add().Text("Customer Details").Content(@<text>
+
+                                    <table class="table table-striped table-hover clsPaymentTable">
+                                        <tr>
+                                            <th>Customer ID</th>
+                                            <td><div id="pCustomer_id"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Created at</th>
+                                            <td><div id="pCustomer_created_at"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <td><div id="pCustomer_email"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <td><div id="pCustomer_given_name"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Last Name</th>
+                                            <td><div id="pCustomer_family_name"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Address Line 1</th>
+                                            <td><div id="pCustomer_address_line1"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Address Line 2</th>
+                                            <td><div id="pCustomer_address_line2"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Address Line 3</th>
+                                            <td><div id="pCustomer_address_line3"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>City</th>
+                                            <td><div id="pCustomer_city"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Region</th>
+                                            <td><div id="pCustomer_region"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Post Code</th>
+                                            <td><div id="pCustomer_postal_code"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Country COde</th>
+                                            <td><div id="pCustomer_country_code"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Language</th>
+                                            <td><div id="pCustomer_language"></div></td>
+                                        </tr>
+                                    </table>
+            </text>);
+
+        }
+
+))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal" value="Close" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@{ Html.RenderPartial("PaymentNotesDialog"); }*@
+

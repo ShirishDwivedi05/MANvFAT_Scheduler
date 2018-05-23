@@ -1,0 +1,282 @@
+﻿
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- title -->
+    <title>MAN v FAT Progress&reg;</title>
+    <!-- Links -->
+    <!-- Bootstrap-->
+    <script src="~/Content/ProgressDashbaord/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+
+    <link href="~/Content/kendo/2017.3.1026/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/kendo/2017.3.1026/kendo.bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/kendo/2017.3.1026/kendo.all.min.js"></script>
+    <script src="~/Scripts/kendo/2017.3.1026/kendo.aspnetmvc.min.js"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,,400,500,600" rel="stylesheet">
+    <link href="~/Content/ProgressDashbaord/css/bootstrap.css" rel="stylesheet">
+    <link href="~/Content/ProgressDashbaord/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/Content/ProgressDashbaord/css/jquery.mCustomScrollbar.css">
+
+    <link href="~/Content/ProgressDashbaord/css/style.min.css" rel="stylesheet">
+    <link href="~/Content/ProgressDashbaord/css/KendoUI-Custom.css" rel="stylesheet">
+
+    <!-- All plugins min -->
+    <script type="text/javascript" src="~/Content/ProgressDashbaord/js/plugins.min.js"></script>
+    <!-- plugin js  -->
+    <script type="text/javascript" src="~/Content/ProgressDashbaord/js/plugin.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/index.js"></script>
+
+    <script src="~/Content/ProgressDashbaord/js/charts.js"></script>
+    <!-- weight js  -->
+    <script src="~/Content/ProgressDashbaord/js/weight/hammer.min.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/weight/rxcss.min.js"></script>
+    <script type="text/javascript" src="~/Content/ProgressDashbaord/js/weight/Rx.umd.js"></script>
+    <script type="text/javascript" src="~/Content/ProgressDashbaord/js/weight/weight-calc.js"></script>
+    <script src="~/Scripts/bootstrap-waitingfor.js"></script>
+    <script src="~/Scripts/views_js/Dashboard/ImageGallery.js"></script>
+    <script src="~/Scripts/bootstrap-dialog.js"></script>
+    <script src="~/Scripts/bootstrap-dialog-override.js"></script>
+    <script src="~/Scripts/views_js/tab_PlayerImages.js"></script>
+    <script src="~/Content/ProgressDashbaord/js/dropzone.js"></script>
+    <link href="~/Content/ProgressDashbaord/css/basic.css" rel="stylesheet" />
+    <link href="~/Content/ProgressDashbaord/css/dropzone.css" rel="stylesheet" />
+    <script src="~/Content/ProgressDashbaord/js/script2.js"></script>
+
+    @Scripts.Render("~/bundles/ProgressDashboard-js")
+
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TKKVW6F');
+    </script>
+    <!-- End Google Tag Manager -->
+    <!--Cookies Consent-->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            //it will hide the Sign Up button
+            // TestBrowserForCookies();
+
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#aa0000",
+                        "text": "#ffdddd"
+                    },
+                    "button": {
+                        "background": "#ff0000"
+                    }
+                },
+                "position": "bottom-right"
+            });
+
+        });
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            $(".numberTextOnly").on("keypress keyup blur", function (event) {
+                //this.value = this.value.replace(/[^0-9\.]/g,'');
+                $(this).val($(this).val().replace(/[^0-9\.]/g, ''));
+                if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                    event.preventDefault();
+                }
+            });
+            //Apply the Green Background with tick when user click or focus within the text box
+            $('.inp-change-background').on('change blur', function () {
+
+                var $this = $(this);
+                var value = $.trim($this.val());
+
+                $this.toggleClass('filled-background', value.length !== 0);
+            }).change();
+
+            //Clear the Green Background with tick when user click or focus within the text box
+            $('.inp-change-background').on('click focus', function () {
+                $(this).addClass('form-control');
+                $(this).removeClass('filled-background');
+            });
+
+
+            GetWeights(1);
+            // $('.dropzone').html5imageupload({ url: 'PlayerImages/SavePlayerImages', data: { ParamPlayerID: '75315' } });
+            Dropzone.options.dropzoneJsForm = {
+
+                //prevents Dropzone from uploading dropped files immediately
+                autoProcessQueue: false,
+
+                init: function () {
+                    var submitButton = document.querySelector("#submit-all");
+                    var myDropzone = this; //closure
+
+                    submitButton.addEventListener("click", function () {
+                        myDropzone.processQueue(); //tell Dropzone to process all queued files
+                    });
+
+                }
+            };
+        });
+
+        function GetWeights(e) {
+
+            var dt = $("#dt_measurement").val();
+            $("#wtheader").text('YOUR MEASUREMENTS' + ' - ' + dt);
+            GetYourWeightData();
+        }
+    </script>
+    <style>
+        span[role=button].k-select {
+            left: 0;
+            border-left: 0;
+            border-right: 1px solid rgb(231, 231, 231);
+            border-radius: 0;
+        }
+
+        .k-picker-wrap {
+            padding-left: 26px;
+            padding-right: 0;
+        }
+
+        .grey {
+            color: #9b9b9b;
+            font-family: b left: 0;
+            border-left: 0;
+            border-right: 1px solid rgb(231, 231, 231);
+            border-radius: 0;
+        }
+
+        span[role=button].k-select {
+            left: 0;
+            border-left: 0;
+            border-right: 1px solid rgb(231, 231, 231);
+            border-radius: 0;
+        }
+
+        .k-picker-wrap {
+            padding-left: 26px;
+            padding-right: 0;
+        }
+
+        .grey {
+            color: #9b9b9b;
+            font-family: bebas_neueregular;
+        }
+
+        .product {
+            float: left;
+            width: 200px;
+            height: 200px;
+            margin: 0;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+            .product img {
+                float: left;
+                width: 200px;
+                height: 200px;
+            }
+
+            .product h3 {
+                margin: 0;
+                padding: 10px 0 0 10px;
+                font-size: .9em;
+                overflow: hidden;
+                font-weight: normal;
+                float: left;
+                max-width: 100px;
+                text-transform: uppercase;
+            }
+
+        .k-pager-wrap {
+            border-top: 0;
+        }
+
+        .demo-section .k-listview:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+    </style>
+
+
+
+</head>
+<body class="test-rows">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKKVW6F"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div id="main-wrapper">
+        <!-- Header section  start-->
+        <header>
+
+            <div class="row setting-row">
+                <!-- head Top -->
+                @if (ViewBag.ModelIsLogin != null && Convert.ToBoolean(ViewBag.ModelIsLogin) == true)
+                {
+                    Html.RenderPartial("Dashboard/Header_Blank");
+                }
+                else
+                {
+                    <div class="top-head">
+                        @{ Html.RenderPartial("Dashboard/Header"); }
+
+                        @{ Html.RenderPartial("Dashboard/Header_Stats"); }
+                    </div>
+                                Html.RenderPartial("Dashboard/Header_Notifications");
+                            }
+                <!-- container -->
+
+            </div>
+        </header>
+        <!-- Header section  End-->
+        <div class="MainContent">
+            @RenderBody()
+        </div>
+        <!-- Start Footer -->
+        @{ Html.RenderPartial("Dashboard/Footer"); }
+        <!-- End Footer -->
+        <!-- Start Back-to-Top -->
+        <a href="#" id="back-to-top">
+            <i class="fa fa-angle-up"></i>
+        </a>
+        <!-- End Back-to-Top -->
+    </div>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-81816066-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+</body>
+</html>

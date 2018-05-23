@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "Players";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+
+        function RefreshGrid(e) {
+            $("#Grid").data("kendoGrid").dataSource.read();
+        }
+</script>
+<h1>Players</h1>
+
+
+<hr />
+
+@(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.PlayersGrid>()
+    .Name("Grid")
+    .DataSource(dataSource => dataSource
+    .Ajax().Events(ev => ev.Sync("RefreshGrid"))
+    .Sort(s=>s.Add(sort=>sort.RegistrationDate).Descending())
+    .PageSize(25)
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.PlayerID))
+                .Read(read => read.Action("_Read", "Players"))
+                .Destroy(update => update.Action("_Destroy", "Players"))
+    .ServerOperation(true)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.PaymentFlag).ClientTemplate("<div class='text-center'>#=PaymentFlag#</div>").Title("").Locked(true).Width(40);
+        columns.Bound(p => p.Active).ClientTemplate("<div class='text-center'>#if(Active){#<span class='glyphicon glyphicon-certificate flgSuccess green'></span>#}else {#<span class='glyphicon glyphicon-certificate flgDanger red'></span>#}#</div>").Title("").Locked(true).Width(40);
+        columns.Bound(p => p.FullName).ClientTemplate("<a href='/Players/Details/#=PlayerID#'>  #=FullName#</a>").Title("Player Name").Width(200).Locked(true);
+        columns.Bound(p => p.EmailAddress).Width(200).Title("Email");
+        columns.Bound(p => p.DOB).Format("{0:dd/MM/yyyy}").Width(100);
+        columns.Bound(p => p.Weight).HeaderTemplate("Weight<br/>(kg)").HtmlAttributes(new { @style="text-align:right;"}).Width(100);
+        columns.Bound(p => p.BMI).HtmlAttributes(new { @style = "text-align:right;" }).Width(80);
+        // columns.Bound(p => p.Position).Title("Position").Width(80);
+        columns.Bound(p => p.Mobile).Width(100);
+        columns.Bound(p => p.LeagueName).Title("League").Width(300);
+        columns.Bound(p => p.TeamName).Title("Team").Width(150);
+        columns.Bound(p => p.City).Width(100);
+        columns.Bound(p => p.RegistrationDate).Format("{0:dd/MM/yyyy}").Width(100).Title("Reg.<br/>Date");
+        columns.Bound(p => p.Advertisement).Title("How Hear about MANvFAT?").Width(200);
+        // columns.Bound(p => p.AdvertisementOtherDetails).Title("Other Details").Width(80);
+
+        //columns.Bound(p => p.Active).ClientTemplate("#if(Active){#Yes#}else{#No#}#").Title("Active").Width(50);
+        //columns.Bound(p => p.Featured).ClientTemplate("#if(Featured){#Yes#}else{#No#}#").Title("Featured").Width(50);
+
+        if ((bool)ViewBag.IsAdmin)
+        {
+            columns.Command(command =>
+            {
+                command.Custom("cmdDelete").Text("X Delete").Click("cmdDeletePlayer").HtmlAttributes(new { @class = "btn btn-danger" });
+            }).Width(100);
+        }
+    })
+
+    .ToolBar(tool =>
+    {
+        if ((bool)ViewBag.IsAdmin)
+        {
+            tool.Custom().Name("cmdAddNewRecord")
+           .Text("+ Add New Record")
+           .HtmlAttributes(new { @id = "cmdAddNewRecord", @class = "btn btn-primary" });
+
+            tool.Custom().Text("Export to Excel").HtmlAttributes(new { @id = "cmdPlayerExportToExcel", @class = "btn btn-warning" });
+        }
+    })
+
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Navigatable()
+    //.Groupable()
+    .Scrollable(scr => scr.Height(370))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+
+
+)
+
+
+
+<script>
+        $("#cmdAddNewRecord").click(function (e) {
+            e.preventDefault();
+            location.href = '/Players/Details/0';
+        });
+
+        $("#cmdPlayerExportToExcel").click(function (e) {
+            e.preventDefault();
+            location.href = '/Players/ExportToExcel';
+        });
+
+        function cmdDeletePlayer(e) {
+
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var PlayerID = dataItem.PlayerID;
+            
+            OpenConfirmationModal("DeletePlayer", "Delete Player", "Are you sure you want to Delete this Player?", PlayerID);
+
+        }
+
+
+
+        function DeletePlayer(id) {
+
+            $.ajax({
+                type: "POST",
+                url: '/Players/DeletePlayer',
+                data: { PlayerID: id },
+                dataType: "json",
+                error: function (e) {
+                    return false;
+                },
+                success: function (data) {
+
+                    if (data.status) {
+                        OpenAlertModal("Information", "Player has been Deleted", "btn-primary", BootstrapDialog.TYPE_PRIMARY);
+                        RefreshGrid();
+                    }
+                    else {
+                        OpenAlertModal("Error", data.Msg, "btn-danger", BootstrapDialog.TYPE_DANGER);
+                    }
+                }
+            });
+
+
+        }
+</script>
+@Scripts.Render("~/bundles/Grid_Resizer-js")

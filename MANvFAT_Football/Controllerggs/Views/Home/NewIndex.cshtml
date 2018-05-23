@@ -1,0 +1,209 @@
+﻿@model MANvFAT_Football.Models.Repositories.RegistrationExt
+
+@{
+    var _Heights = ViewBag.Heights!=null ?(SelectList)ViewBag.Heights:null;
+
+
+    var _Advertisements = ViewBag.Advertisements!=null?(SelectList)ViewBag.Advertisements:null;
+
+
+}
+@{
+    ViewBag.Title = "NewIndex";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+<div class="Reg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @if (ViewBag.RegSuccess != null)
+                {
+                    if ((bool)ViewBag.RegSuccess == false)
+                    {
+                        <text>
+                            <div class="row clsRegSuccess  banner alert alert-danger">
+                                <div style="width:58%;">
+                                    <div class="col-md-12">
+                                        <h1>Oops! Registration Failed</h1>
+                                        <br />
+                                        <h2>@Html.Raw(ViewBag.Msg)</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            <div class="row clsRegSuccess  banner alert alert-success">
+                                <div style="width:58%;">
+                                    <div class="col-md-12">
+                                        <h1>The user has been registered successfully</h1>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </text>
+    }
+}
+            </div>
+            <!-- JO-NEW start left column -->
+
+@if (ViewBag.RegSuccess == null)
+{
+
+            <!-- JO-NEW start right column -->
+            <div class="col-md-12 form-box">
+                <div class="RegForm">
+                    @using (Html.BeginForm("NewIndex", "Home", FormMethod.Post, new { @id = "RegistrationFormnew" }))
+                    {
+                        @* @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.IsApply)
+                            @Html.HiddenFor(m => m.PlayerID)
+                            @Html.HiddenFor(m => m.FullName)*@
+                        @Html.HiddenFor(m => m.ReferralCode)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2 class="clsPlayerReg">Sign Up</h2>
+                              </div>
+
+                        </div>
+
+
+                <!-- here are example form elements using the new styles -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- this heading with a span inside creates the number in the green circle -->
+                                <h3 class="form-number-1">Basic info</h3>
+
+                                <!-- this is a form email element with an icon next to it -->
+
+                                <label class="sr-only" for="email">Name</label>
+                                <div class="input-group margin-bottom-sm">
+                                    <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                                </div>
+
+                                <label for="email">Date of Birth</label>
+                                <div class="input-group margin-bottom-sm">
+                                    <span class="input-group-addon"><i class="fa fa-calendar-o fa-fw"></i></span>
+                                    @Html.TextBoxFor(m => m.DOB, new { @class = "form-control", @type = "date", @placeholder = "DD/MM/YYYY" })
+                                </div>
+                                <label for="email">Email</label>
+                                <div class="input-group margin-bottom-sm">
+                                    <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                                    @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", @type = "email", @placeholder = "Email e.g. name@domain.com" })
+                                </div>
+
+                                <!-- this is a form text element with an icon next to it -->
+                                <label for="email">Mobile Number</label>
+                                <div class="input-group margin-bottom-sm">
+                                    <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                                    @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", @type = "text", @placeholder = "Number" })
+                                </div>
+
+                               
+                      
+
+                                <div class="row martop20">
+                                    <div>
+                                        <label for="HeightID">Height<span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(m => m.HeightID, _Heights, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                             
+                              
+
+                                <div class="row martop20">
+                                    <div>
+                                        <label for="PostCode">Your postcode<span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        @Html.TextBoxFor(m => m.PostCode, new { @class = "form-control", @placeholder = "Post Code" })
+                                    </div>
+                                </div>
+                                <div class="row martop20">
+                                    <div>
+                                        <label for="AdvertisementID">How Did You Hear about us?<span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(m => m.AdvertisementID, _Advertisements, "-- Please Choose --", new { @class = "form-control", onchange = "Advertisement_OnChange();" })
+                                    </div>
+                                </div>
+                                <div class="row martop20 divOtherDetails" style="display:none;">
+                                    <div>
+                                        <label for="Mobile"><span id="sp_OtherDetails">Other Details</span><span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        @Html.TextAreaFor(m => m.AdvertisementOtherDetails, new { @class = "form-control", @placeholder = "Please enter detail, i.e. how did you hear about MAN v FAT Football?" })
+                                    </div>
+                                </div>
+
+                                <h3 style="margin-top: 45px;" class="form-number-4">Terms and conditions</h3>
+
+                                <input type="hidden" id="BookRequested" name="BookRequested" value="false" />
+                                <div class="row martop20">
+                                    <div>
+                                        <label for="chkTnC" class="sr-only">Terms and conditions<span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="checkbox-inline">
+                                            <input type="checkbox" id="chkTnC" style="margin-right:10px; cursor:pointer;" /><label class="body terms-and-conditions" for="chkTnC"> I accept the <a href="https://manvfat.com/terms-and-conditions/" target="_blank">terms and conditions.</a></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row martop20 divPaymentConfirmtation" style="display:none;">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" id="chkPaymentConfirmtation" style="margin-right:10px; cursor:pointer;" /><label style="width:330px;" class="body terms-and-conditions" for="chkPaymentConfirmtation"><span class="clsPaymentConfirmationText"> I understand after submission I'll be redirected to a payment page<br />where I'll add my payment details for registration.</span></label>
+                                    </div>
+                                </div>
+
+                                <div class="row martop20 divSignMeUp pay-now">
+                                    <div class="col-md-12">
+                                        <h2 class="clsSignMeUp btn-mvf-green" onclick="SubmitRegistrationForm();">Sign up now!</h2>
+                                    </div>
+                                </div>
+
+                                <div class="row martop20 divProcessing" style="display:none;">
+                                    <div class="col-md-12">
+                                        <h2 class="clsProcessing">Processing Please Wait...!</h2>
+                                    </div>
+                                </div>
+                                <div class="row martop20">
+                                    <div class="col-md-12">
+                                        <p class="privacy">
+                                            MAN v FAT Football will never share your email. 100% privacy guaranteed.
+                                        </p>
+
+                                        <p class="text-center clsPayLogo_GoCardless" style="display:none;">
+                                            <img style="width:100%;" src="/Content/FrontEnd/img/gocardless.png" />
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                <!-- /row -->
+
+
+
+                    }
+                </div><!--/Regform -->
+            </div>
+
+}
+            <div class="row">
+                <div class="col-md-12">
+
+
+                </div>
+            </div>
+        </div><!-- /row -->
+    </div><!-- /container -->
+
+</div> 
+

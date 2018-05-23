@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("PlayerID")
+              .HtmlAttributes(new { style = "width:100%" })
+              .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("FullName")
+              .DataValueField("PlayerID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                  read.Action("GetPlayersForTeam", "DropDownLists", new { ParamTeamID = (long)ViewBag.TeamID });
+              });
+
+})
+)

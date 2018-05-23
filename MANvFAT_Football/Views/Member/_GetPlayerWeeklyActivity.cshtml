@@ -1,0 +1,328 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.vmWeeklyActivity>
+
+
+<script>
+    $(document).ready(function () {
+
+        ApplyAutoComplete(0);
+        $('.inp-change-background').on('change blur', function () {
+
+            var $this = $(this);
+            var value = $.trim($this.val());
+
+            $this.toggleClass('filled-background', value.length !== 0);
+        }).change();
+
+        //Clear the Green Background with tick when user click or focus within the text box
+        $('.inp-change-background').on('click focus', function () {
+            $(this).addClass('form-control');
+            $(this).removeClass('filled-background');
+        });
+    });
+    function ActivityComplete_OnChange() {
+    
+        var id = this.element.attr("id");
+        var StrIndex = id.split("_");
+
+        var ctrlId = StrIndex[0];
+        var dbID = StrIndex[1];
+        var activityDate = StrIndex[2];
+        var activityName = '';
+        var activity = '';
+        if ($("#txtActivity_" + dbID).length>0)
+        {
+            activityName= $("#txtActivity_" + dbID).val();
+        }
+        if ($("#ActivityTimeID_" + dbID).length > 0) {
+            activity= $("#ActivityTimeID_" + dbID).val();
+        }
+            //ddl ActivityTimeID_
+        // alert("myid = "+myid);
+        if (activityName.length==0)
+        {
+            $("#txtActivity_" + dbID).css('border', '1px solid red');
+        }
+        if (activity.length == 0) {
+            $("#ActivityTimeID_" + dbID).css('border', '1px solid red');
+        }
+        if (activityName.length > 0 && activity.length > 0) {
+            SaveWData(id);
+            $(this).addClass("filled-background");
+        }
+    }
+    function ApplyAutoComplete(id) {
+
+        if (id == 0) {
+            $(".clsActivity").kendoAutoComplete({
+                dataSource: {
+                    type: "jsonp",
+                    serverFiltering: false,
+                    minLength: 1,
+                    transport: {
+                        read: "/Member/GetWeeklyActivityAutoComplete/" + $("#hdnDashboardURL").val() + "?paramPlayerID=" + $("#hdnPlayerID").val()
+                    }
+                },
+                filter: "startswith",
+                placeholder: "",
+                separator: ", ",
+
+                filtering: function (e) {
+                    // alert(e.filter.value);
+                    if (e.filter.value == "") {
+                        e.preventDefault();
+                        //e.sender.dataSource.data([]);
+                    }
+                }
+
+            });
+        }
+        else {
+            $(".clsActivity_" + id).kendoAutoComplete({
+                dataSource: {
+                    type: "jsonp",
+                    serverFiltering: false,
+                    minLength: 1,
+                    transport: {
+                        read: "/Member/GetWeeklyActivityAutoComplete/" + $("#hdnDashboardURL").val() + "?paramPlayerID=" + $("#hdnPlayerID").val()
+                    }
+                },
+                filter: "startswith",
+                placeholder: "",
+                separator: ", ",
+
+                filtering: function (e) {
+                    // alert(e.filter.value);
+                    if (e.filter.value == "") {
+                        e.preventDefault();
+                    }
+                }
+            });
+        }
+    }
+
+    function ActivityTimeID_OnChange() {
+        debugger;
+        var myid = this.element.attr("id");
+        // alert("myid = "+myid);
+        SaveWData(myid);
+        $(this).addClass("filled-background");
+    }
+
+</script>
+
+@{int SequenceNo = 0; }
+<input type="hidden" id="hdnWeeklyActivityDate" value="@DateTime.Now.Date.ToString("dd MMM yyyy")" />
+<div class="gap10"></div>
+<div class="col-lg-12 nomrgpad">
+    <!-- Wrapper for slides -->
+    <div class="box-accor">
+        <!-- Food List  -->
+        <div class="food_list">
+
+            @foreach (var item in Model)
+            {
+                string chkbox_ControlID = "chkCompleted_" + item.PlayerWeeklyActivityID + "_" + item.ActivityDate.ToString("dd MMM yyyy");
+
+                string header = "headingOne";
+                if (item.ActivityDate.ToShortDateString() == DateTime.Now.ToShortDateString() && item.ListOfWeeklyActivities.Where(x=>x.Completed==true).ToList().Count==0)
+                {
+                    header = "headingTwo";
+                }
+
+                else if (item.ListOfWeeklyActivities.Where(x => x.Completed == true).ToList().Count == 0)
+                {
+                    header = "headingThree";
+                }
+                else if (item.ActivityDate.ToShortDateString() == DateTime.Now.ToShortDateString())
+                {
+                    header = "headingTwo";
+                }
+                string collapseClass = "collapse";
+                if (SequenceNo == 1)
+                {
+                    collapseClass = "collapse in";
+                }
+
+                bool AlreadyDone = false;
+                <div id="accordion" class="weekly_activity">
+                    <div id="divWeeklyActivity_@item.PlayerWeeklyActivityID" class="card">
+                        <div class="card-header card_@item.PlayerWeeklyActivityID" id="@header">
+                            <h5 class="mb-0">
+                                <button class="fas btn btn-link" data-toggle="collapse" data-target="#collapse1_@item.PlayerWeeklyActivityID" aria-expanded="true" aria-controls="collapse1_@item.PlayerWeeklyActivityID">
+                                    <h3>@item.ActivityDate.ToString("ddd") @item.ActivityDate.ToString("dd MMM")</h3>
+                                    <i class="fas fa-angle-up"></i>
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapse1_@item.PlayerWeeklyActivityID" class="@collapseClass" aria-labelledby="@header" data-parent="#accordion">
+                           
+                            <div class="card-body formbody clearfix">
+                                @foreach (var item_activity in item.ListOfWeeklyActivities)
+                                {
+                                    SequenceNo++;
+                                    int ActivityTimeSelectedIndex = item_activity.ActivityTime.HasValue ? item_activity.ActivityTime.Value / 15 : 0;
+
+
+                                    if (AlreadyDone)
+                                    {
+                                        <div>
+                                            <input type="hidden" id="hdntxtActivity_@item_activity.PlayerWeeklyActivityID" value="@item_activity.Activity" />
+                                            <input type="hidden" id="hdnActivityTimeID_@item_activity.PlayerWeeklyActivityID" value="@item_activity.ActivityTime" />
+                                            <input type="hidden" id="hdnchkCompleted_@item_activity.PlayerWeeklyActivityID" value="@item_activity.Completed.ToString()" />
+
+
+                                            <div>
+                                                <span id="remove_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-remove-sign text-danger clsRemoveActivity" title="Click to remove this activity" onclick="RemoveActivity('@item_activity.PlayerWeeklyActivityID')"></span>
+
+
+                                                @(Html.Kendo().TextBox()
+.Name("txtActivity_" + item_activity.PlayerWeeklyActivityID)
+.Value(item_activity.Activity)
+.HtmlAttributes(new { @class = "clstxtActivity clsActivity k-textbox inp-change-background form-control k-input", @style = "width:100%", @onblur = "SaveWData('txtActivity_" + item_activity.PlayerWeeklyActivityID + "_" + item.ActivityDate.ToString("dd MMM yyyy") + "');" })
+                                                )
+
+                                                <div class="gap5"></div>
+                                                <div class="col-lg-6 col-md-6 nomrgpad">
+                                                    @(Html.Kendo().DropDownList()
+                                                    .Name("ActivityTimeID_" + item_activity.PlayerWeeklyActivityID)
+                                                    .OptionLabel("Enter activity length")
+                                                    .HtmlAttributes(new { @id = "ActivityTimeID_" + item_activity.PlayerWeeklyActivityID, @placeholder = "Duration", @class = "k-textbox inp-change-background form-control k-input" })
+                                                    .DataValueField("Value")
+                                                    .DataTextField("Text")
+                                                    .SelectedIndex(ActivityTimeSelectedIndex)
+
+                                                    .Events(ev => ev.Change("ActivityTimeID_OnChange"))
+                                                    .DataSource(source =>
+                                                    {
+                                                        source.Read(read =>
+                                                        {
+                                                            read.Action("GetWeeklyActivityTime", "DropDownLists", new { ParamActivityTime = item_activity.ActivityTime });
+                                                        });
+                                                    })
+                                                    )
+                                                </div>
+
+
+
+                                                <div class="col-lg-6 col-md-6 nomrgpad pad_lefton">
+                                                    @(Html.Kendo().DropDownList()
+                                                    .Name("ddlCompleted_" + item_activity.PlayerWeeklyActivityID)
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .Events(ev => ev.Change("ActivityComplete_OnChange"))
+                                                    .HtmlAttributes(new { @id = "ddlCompleted_" + item.PlayerWeeklyActivityID, @class = "k-textbox inp-change-background form-control k-input" })
+                                                    .BindTo(new List<SelectListItem>()
+                                                                      {
+                                                                            new SelectListItem() {
+                                                                               Text = "Status", Value ="false"
+                                                                               },
+                                                                             new SelectListItem() {
+                                                                               Text = "Achieved", Value ="true",Selected=item_activity.Completed
+                                                                               },
+                                                                             new SelectListItem() {
+                                                                               Text = "Not Completed", Value ="false"
+                                                                               }
+                                                                      })
+
+                                                    )
+
+                                                    <input type="hidden" id="hdn_@SequenceNo" value="@chkbox_ControlID" class="chkSelection" />
+                                                </div>
+
+                                            </div>
+
+                                            <span id="saved_txtActivity_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+
+                                            <span id="saved_ActivityTimeID_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                                            <span id="saved_chkCompeleted_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+
+                                            <input type="hidden" id="hdntxtActivity_@item_activity.PlayerWeeklyActivityID" value="@item_activity.Activity" />
+                                            <input type="hidden" id="hdnActivityTimeID_@item_activity.PlayerWeeklyActivityID" value="@item_activity.ActivityTime" />
+                                            <input type="hidden" id="hdnchkCompleted_@item_activity.PlayerWeeklyActivityID" value="@item_activity.Completed.ToString()" />
+                                            @(Html.Kendo().TextBox()
+                                            .Name("txtActivity_" + item_activity.PlayerWeeklyActivityID)
+                                            .Value(item_activity.Activity)
+                                            .HtmlAttributes(new { @class = "clstxtActivity clsActivity k-textbox inp-change-background form-control k-input", @style = "width:100%", @onblur = "SaveWData('txtActivity_" + item_activity.PlayerWeeklyActivityID + "_" + item.ActivityDate.ToString("dd MMM yyyy") + "');" })
+                                            )
+
+                                            <div class="gap5"></div>
+                                            <div class="col-lg-6 col-md-6 nomrgpad">
+                                                @(Html.Kendo().DropDownList()
+.Name("ActivityTimeID_" + item_activity.PlayerWeeklyActivityID)
+.OptionLabel("Enter activity length")
+.HtmlAttributes(new { @id = "ActivityTimeID_" + item_activity.PlayerWeeklyActivityID, @placeholder = "Duration", @class = "k-textbox inp-change-background form-control k-input" })
+.DataValueField("Value")
+.DataTextField("Text")
+.SelectedIndex(ActivityTimeSelectedIndex)
+.Events(ev => ev.Change("ActivityTimeID_OnChange"))
+.DataSource(source =>
+{
+    source.Read(read =>
+    {
+        read.Action("GetWeeklyActivityTime", "DropDownLists", new { ParamActivityTime = item_activity.ActivityTime });
+    });
+})
+                                                )
+                                            </div>
+
+
+
+                                            <div class="col-lg-6 col-md-6 nomrgpad pad_lefton">
+                                                @(Html.Kendo().DropDownList()
+.Name("ddlCompleted_" + item_activity.PlayerWeeklyActivityID)
+.DataTextField("Text")
+.DataValueField("Value")
+.Events(ev => ev.Change("ActivityComplete_OnChange"))
+.HtmlAttributes(new { @id = "ddlCompleted_" + item.PlayerWeeklyActivityID, @class = "k-textbox inp-change-background form-control k-input ddl_target" })
+.BindTo(new List<SelectListItem>()
+                      {
+                                                  new SelectListItem() {
+                                                    Text = "Status", Value ="false"
+                                                  },
+                                                  new SelectListItem() {
+                                                    Text = "Archieved", Value ="true",Selected=item_activity.Completed
+                                                  },
+                                                  new SelectListItem() {
+                                                    Text = "Not Completed", Value ="false"
+                                                  }
+                      })
+
+                                                )
+
+                                                <input type="hidden" id="hdn_@SequenceNo" value="@chkbox_ControlID" class="chkSelection" />
+                                            </div>
+
+
+
+                                            <span id="saved_txtActivity_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                                            <input class="" id="chkCompleted_@item_activity.PlayerWeeklyActivityID" name="chkCompleted_item_activity.PlayerWeeklyActivityID" style="display:none" onchange="SaveWData('@chkbox_ControlID');" value="true" type="checkbox" @if (item_activity.Completed) { <text> checked="checked" </text>                                      }>
+                                            <label class="" for="chkCompleted_@item_activity.PlayerWeeklyActivityID"></label>
+                                            <span id="saved_ActivityTimeID_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                                            <span id="saved_chkCompeleted_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+
+                                            @{AlreadyDone = true;
+                                            }
+                                        </div>
+                                                    }
+
+                                                }
+
+                                <div class="gap5"></div>
+                                <div class="row" style="display:none;" id="NewRow_@item.ActivityDate.ToString("ddMMMyyyy")">
+
+                                </div>
+                                <a href="#" class="AddNewActivity" onclick="return AddNewActivity('@item.ActivityDate.ToString("dd MMM yyyy")');">  <i class="fas fa-plus-circle pull-right"></i></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

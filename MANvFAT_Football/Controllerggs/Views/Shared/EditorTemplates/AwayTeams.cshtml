@@ -1,0 +1,18 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("AwayTeamID")
+              .HtmlAttributes(new { style = "width:100%" })
+              .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("TeamName")
+              .DataValueField("TeamID")
+              .ValuePrimitive(true)
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetHome_AwayTeams", "DropDownLists", new { ParamLeagueID = (long)ViewBag.LeagueID });
+                  });
+
+              })
+)

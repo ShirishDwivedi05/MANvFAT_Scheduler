@@ -1,0 +1,198 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.vmWeeklyActivity>
+
+
+<script>
+      $(document).ready(function () {
+
+          ApplyAutoComplete(0);
+      });
+
+    function ApplyAutoComplete(id) {
+
+        if (id == 0) {
+            $(".clsActivity").kendoAutoComplete({
+                dataSource: {
+                    type: "jsonp",
+                    serverFiltering: false,
+                    minLength: 1,
+                    transport: {
+                        read: "/Member/GetWeeklyActivityAutoComplete/" + $("#hdnDashboardURL").val() + "?paramPlayerID=" + $("#hdnPlayerID").val()
+                    }
+                },
+                filter: "startswith",
+                placeholder: "",
+                separator: ", ",
+
+                filtering: function (e) {
+                   // alert(e.filter.value);
+                    if (e.filter.value=="") {
+                        e.preventDefault();
+                        //e.sender.dataSource.data([]);
+                    }
+                }
+
+            });
+        }
+        else
+        {
+            $(".clsActivity_"+id).kendoAutoComplete({
+                dataSource: {
+                    type: "jsonp",
+                    serverFiltering: false,
+                    minLength: 1,
+                    transport: {
+                        read: "/Member/GetWeeklyActivityAutoComplete/" + $("#hdnDashboardURL").val() + "?paramPlayerID=" + $("#hdnPlayerID").val()
+                    }
+                },
+                filter: "startswith",
+                placeholder: "",
+                separator: ", ",
+
+                filtering: function (e) {
+                    // alert(e.filter.value);
+                    if (e.filter.value == "") {
+                        e.preventDefault();
+                    }
+                }
+            });
+        }
+    }
+
+    function ActivityTimeID_OnChange() {
+
+        var myid = this.element.attr("id");
+       // alert("myid = "+myid);
+        SaveWData(myid);
+    }
+
+</script>
+
+
+
+@foreach (var item in Model)
+{
+
+    bool AlreadyDone = false;
+    <div class="weekday">
+        @foreach (var item_activity in item.ListOfWeeklyActivities)
+        {
+        string chkbox_ControlID = "chkCompleted_" + item_activity.PlayerWeeklyActivityID + "_" + item.ActivityDate.ToString("dd MMM yyyy");
+        int ActivityTimeSelectedIndex = item_activity.ActivityTime.HasValue ? item_activity.ActivityTime.Value / 15 : 0;
+        <text>
+
+
+            @if (AlreadyDone)
+            {
+                <text>
+                    <div  id="divWeeklyActivity_@item_activity.PlayerWeeklyActivityID" class="weekday-activity @if (item_activity.Completed) { <text> complete </text>  }">
+                        <input type="hidden" id="hdntxtActivity_@item_activity.PlayerWeeklyActivityID" value="@item_activity.Activity" />
+                        <input type="hidden" id="hdnActivityTimeID_@item_activity.PlayerWeeklyActivityID" value="@item_activity.ActivityTime" />
+                        <input type="hidden" id="hdnchkCompleted_@item_activity.PlayerWeeklyActivityID" value="@item_activity.Completed.ToString()" />
+                        <div class="date-and-time">
+                            <div class="date">
+                                <span class="date-weekday">&nbsp;</span>
+                                <span class="date-daymonth">&nbsp;</span>
+                            </div>
+
+                            <div class="time-spent">
+                                <label class="sr-only" for="">Time:</label>
+                                @(Html.Kendo().DropDownList()
+                            .Name("ActivityTimeID_" + item_activity.PlayerWeeklyActivityID)
+                            .OptionLabel("Enter activity length")
+                            .HtmlAttributes(new { @id = "ActivityTimeID_" + item_activity.PlayerWeeklyActivityID })
+                            .DataValueField("Value")
+                            .DataTextField("Text")
+                            .SelectedIndex(ActivityTimeSelectedIndex)
+                            .Events(ev => ev.Change("ActivityTimeID_OnChange"))
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetWeeklyActivityTime", "DropDownLists", new { ParamActivityTime = item_activity.ActivityTime });
+                                });
+                            })
+                                )
+
+                            </div>
+
+                        </div>
+                        <span id="remove_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-remove-sign text-danger clsRemoveActivity" title="Click to remove this activity" onclick="RemoveActivity('@item_activity.PlayerWeeklyActivityID')"></span>
+                        @(Html.Kendo().TextBox()
+                            .Name("txtActivity_" + item_activity.PlayerWeeklyActivityID)
+                            .Value(item_activity.Activity)
+                            .HtmlAttributes(new { @class = "clstxtActivity clsActivity", @style = "width:76%", @onblur = "SaveWData('txtActivity_" + item_activity.PlayerWeeklyActivityID + "_" + item.ActivityDate.ToString("dd MMM yyyy") + "');" })
+                        )
+                        <span id="saved_txtActivity_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                        <input class="" id="chkCompleted_@item_activity.PlayerWeeklyActivityID" name="chkCompleted_@item_activity.PlayerWeeklyActivityID" onchange="SaveWData('@chkbox_ControlID');" value="true" type="checkbox" @if (item_activity.Completed) { <text> checked="checked" </text>    }>
+
+                        <label class="" for="chkCompleted_@item_activity.PlayerWeeklyActivityID"></label>
+                        <span id="saved_ActivityTimeID_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                        <span id="saved_chkCompeleted_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                    </div>
+                </text>
+            }
+            else
+            { <text>
+                <div id="divWeeklyActivity_@item_activity.PlayerWeeklyActivityID" class="weekday-activity first @if (item_activity.Completed) { <text> complete </text>  }">
+                    <input type="hidden" id="hdntxtActivity_@item_activity.PlayerWeeklyActivityID" value="@item_activity.Activity" />
+                    <input type="hidden" id="hdnActivityTimeID_@item_activity.PlayerWeeklyActivityID" value="@item_activity.ActivityTime" />
+                    <input type="hidden" id="hdnchkCompleted_@item_activity.PlayerWeeklyActivityID" value="@item_activity.Completed.ToString()" />
+                    <div class="date-and-time">
+                        <div class="date">
+                            <span class="date-weekday">@item.ActivityDate.ToString("ddd")</span>
+                            <span class="date-daymonth">@item.ActivityDate.ToString("dd MMM")</span>
+                        </div>
+                        <div class="time-spent">
+                            <label class="sr-only" for="">Time:</label>
+                            @(Html.Kendo().DropDownList()
+                            .Name("ActivityTimeID_" + item_activity.PlayerWeeklyActivityID)
+                            .OptionLabel("Enter activity length")
+                            .HtmlAttributes(new { @id = "ActivityTimeID_" + item_activity.PlayerWeeklyActivityID })
+                            .DataValueField("Value")
+                            .DataTextField("Text")
+                            .SelectedIndex(ActivityTimeSelectedIndex)
+                            .Events(ev => ev.Change("ActivityTimeID_OnChange"))
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetWeeklyActivityTime", "DropDownLists", new { ParamActivityTime = item_activity.ActivityTime });
+                                });
+                            })
+                            )
+
+                        </div>
+
+                    </div>
+                    @(Html.Kendo().TextBox()
+                            .Name("txtActivity_" + item_activity.PlayerWeeklyActivityID)
+                            .Value(item_activity.Activity)
+                            .HtmlAttributes(new { @class = "clstxtActivity clsActivity", @style = "width:80%", @onblur = "SaveWData('txtActivity_" + item_activity.PlayerWeeklyActivityID + "_" + item.ActivityDate.ToString("dd MMM yyyy") + "');" })
+                    )
+                    <span id="saved_txtActivity_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                    <input class="" id="chkCompleted_@item_activity.PlayerWeeklyActivityID" name="chkCompleted_item_activity.PlayerWeeklyActivityID" onchange="SaveWData('@chkbox_ControlID');" value="true" type="checkbox" @if (item_activity.Completed) { <text> checked="checked" </text>     }>
+                    <label class="" for="chkCompleted_@item_activity.PlayerWeeklyActivityID"></label>
+                    <span id="saved_ActivityTimeID_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                    <span id="saved_chkCompeleted_@item_activity.PlayerWeeklyActivityID" class="glyphicon glyphicon-ok text-success" style="display:none;"> Saved</span>
+                </div>
+            </text>}
+
+
+
+
+
+
+        </text>
+        AlreadyDone = true;
+        }
+
+        <div class="row" style="display:none;" id="NewRow_@item.ActivityDate.ToString("ddMMMyyyy")">
+
+        </div>
+        <a href="#" class="AddNewActivity" onclick="return AddNewActivity('@item.ActivityDate.ToString("dd MMM yyyy")');">
+            Add new activity +
+        </a>
+    </div>
+
+   
+}

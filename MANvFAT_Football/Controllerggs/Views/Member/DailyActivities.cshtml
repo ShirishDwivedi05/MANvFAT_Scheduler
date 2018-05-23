@@ -1,0 +1,42 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+            <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Food &amp; Drink
+            </a>
+        </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body clsPanelDailyActivity">
+          
+           
+
+            <div class="date-picker">
+                <span class="sp_btnTodayDate" style="display: none;"><input id="btnTodayDate" class="btn btn-primary btn-sm" value="Today" onclick="SetTodayDate();" type="button"></span>
+                <button type="button" class="btn btn-primary btn-xs" onclick="return PreviousDate();">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </button>
+
+                @Html.Kendo().DatePicker().Name("dt_Activity").Events(ev => ev.Change("GetDailyActivityData")).Value(DateTime.Now.Date).Format("dd MMM yyyy")
+                <button type="button" class="btn btn-primary btn-xs" onclick="return NextDate();">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+
+                <span class="fa fa-share-alt clsShare" onclick="ShowShareDiv(1);"></span>
+                <span class="fa fa-eye clsData" onclick="ShowActivityDiv(1);"></span>
+
+            </div>
+
+            <div class="clsActivityData">
+            </div>
+            @{ Html.RenderPartial("FrontEnd/_ShareActivity", "Daily"); }
+        </div>
+      
+    </div>
+</div><!-- /panel -->
+
+
+
+

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d299886dd1b540828bd9d74ba041b69d" Name="Diagram1">
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.AchievementCategories" Width="1.5" PointX="3.75" PointY="3" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Achievements" Width="1.5" PointX="6" PointY="2.375" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Advertisements" Width="1.5" PointX="0.75" PointY="23.5" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.AlertEvents" Width="1.5" PointX="12.25" PointY="13.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.AuditLogs" Width="1.5" PointX="12.25" PointY="10.625" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Cities" Width="1.5" PointX="13.25" PointY="1" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Countries" Width="1.5" PointX="8.75" PointY="1" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.DashboardNotifications" Width="1.5" PointX="3" PointY="33.125" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.ELMAH_Error" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.ElmahErrorList" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.EmailDomainRestrictions" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Ethnicities" Width="1.5" PointX="0.75" PointY="26.875" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Heights" Width="1.5" PointX="0.75" PointY="30.125" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerAchievements" Width="1.5" PointX="8.25" PointY="26.625" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerDailyActivities" Width="1.5" PointX="5.25" PointY="42.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerDashboardNotifications" Width="1.5" PointX="5.25" PointY="30.5" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerMeasurements" Width="1.5" PointX="5.25" PointY="6.5" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerScoreBreakdowns" Width="1.5" PointX="5.25" PointY="10.625" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerWeeklyActivities" Width="1.5" PointX="5.25" PointY="36.5" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerWeightLogs" Width="1.5" PointX="5.25" PointY="46.625" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerWeights" Width="1.5" PointX="5.25" PointY="39.875" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Regions" Width="1.5" PointX="11" PointY="0.875" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Roles" Width="1.5" PointX="7.75" PointY="13.25" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.SystemMessages" Width="1.5" PointX="12.25" PointY="7.5" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.SystemSettings" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.TrainingVideos" Width="1.5" PointX="7.75" PointY="6.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Users" Width="1.5" PointX="10" PointY="11.5" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.UserSystemMessages" Width="1.5" PointX="14.5" PointY="10.875" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Weights" Width="1.5" PointX="8.75" PointY="3.75" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_Achievements_AchievementCategories" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerAchievements_Achievements" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_AlertEvents_AdminUsers" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_AlertEvents_AlertEvents" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_AlertEvents_CoachUsers" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_AuditLogs_Users" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_Cities_Regions" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_Regions_Countries" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerDashboardNotifications_DashboardNotifications" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_Users_Roles" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_SystemMessages_Users" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_UserSystemMessages_SystemMessages" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_UserSystemMessages_Users" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerDashboard" Width="1.5" PointX="5.25" PointY="18.375" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.Players" Width="1.5" PointX="3" PointY="24.125" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_Players_Advertisements" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_Players_Ethnicities" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_Players_Heights" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerAchievements_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerDailyActivities_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerDashboard_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerDashboardNotifications_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerMeasurements_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerScoreBreakdowns_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerWeeklyActivities_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerWeightLogs_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerWeights_Players" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.MemberToolsBenefits" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerReferrals" Width="1.5" PointX="5.25" PointY="56.625" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerReferrals_Players" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerReferrals_Players1" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.HeaderTexts" Width="1.5" PointX="13.375" PointY="3.75" />
+        <EntityTypeShape EntityType="MANvFATProgress_DevModel.PlayerImages" Width="1.5" PointX="5.25" PointY="14.375" />
+        <AssociationConnector Association="MANvFATProgress_DevModel.FK_PlayerImages_Players" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

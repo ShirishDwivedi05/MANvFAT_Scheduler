@@ -1,0 +1,95 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+@{
+    ViewBag.Title = "Player Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (string.IsNullOrEmpty(Model.Emergency_ContactName) || string.IsNullOrEmpty(Model.Emergency_ContactPhone))
+{<text>
+        <style>
+            #tab_PlayerEmergencyID {
+                background: orange !important;
+            }
+        </style>
+</text>}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IsApply)
+    @Html.HiddenFor(m => m.PlayerID)
+    @Html.HiddenFor(m => m.FullName)
+    @Html.HiddenFor(m => m.RegistrationDate)
+    @Html.HiddenFor(m => m.AdvertisementID)
+    @Html.HiddenFor(m => m.AdvertisementOther)
+    @Html.HiddenFor(m => m.AdvertisementOtherDetails)
+    @Html.HiddenFor(m => m.ReferralCode)
+    @Html.HiddenFor(m => m.IsFunded)
+    @Html.Hidden("hndPlayerPrevEmail", Model.EmailAddress)
+    <div class="row">
+        <div class="col-md-12">
+            @if (Model.PlayerID == 0)
+            {
+                <h2>Create New Player Record</h2>
+            }
+            else
+            {
+                <h2 style="cursor:pointer;">Player Details - @Model.FullName - @Html.Raw(Model.PaymentFlag)</h2>
+            }
+        </div>
+    </div>
+    <div class="row marbot10 martop10">
+        <div class="col-md-12">
+            <button class="btn btn-primary" onclick="return BackToList();"><span class="glyphicon glyphicon-arrow-left"></span> Back to Players List</button>
+            @{string btnText = (Model.PlayerID > 0 ? "Update" : "Create"); }
+            <button class="btn btn-primary" onclick="return SetIsSubmit();"><span class="glyphicon glyphicon-ok"></span> @btnText</button>
+            <button onclick="return SetIsApply();" class="btn btn-primary"><span class="glyphicon glyphicon-check"></span> Apply</button>
+
+            @if (Model.PlayerID > 0 && (bool)ViewBag.IsAdmin)
+            {
+                <button onclick="return cmdDeletePlayer('@Model.PlayerID');" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+            }
+            @if (Model.LinkedProfilePlayerID.HasValue == false)
+            {
+                <button type="button" class="btn btn-warning" onclick="return OpenLinkProfileWindow();"><span class="glyphicon glyphicon-plus"></span> Link Profile for League Double Discount</button>
+            }
+            <br />
+            <br />
+            @{Html.RenderPartial("_Messages", Model.ListOfMsgs);}
+        </div>
+    </div>
+
+    <div id="divInfo"></div>
+
+    @(Html.Kendo().TabStrip()
+                                            .Name("Players_tabstrip")
+                                                .Events(ev => ev.Show("PlayersTab_OnSelect"))
+                                                    .Items(tabstrip =>
+                                                    {
+                                                        tabstrip.Add().Selected(true).Text("Player Details").Content(@Html.Partial("tab_PlayerDetails").ToHtmlString());
+                                                        tabstrip.Add().Text("Player Address").Content(@Html.Partial("tab_PlayerAddress").ToHtmlString());
+                                                        tabstrip.Add().Text("Emergency Details").Content(@Html.Partial("tab_PlayerEmergency").ToHtmlString()).HtmlAttributes(new { @id = "tab_PlayerEmergencyID" });
+                                                        if (Model.PlayerID != 0) //Only Display if we are updating Player Record and PlayerID is Not Zero
+                                        {
+                                                            tabstrip.Add().Text("Player Weight Logs").Content(@Html.Partial("tab_PlayerWeightsLogs").ToHtmlString());
+                                                            tabstrip.Add().Text("Player Images").Content(@Html.Partial("tab_PlayerImages").ToHtmlString());
+                                                            if ((bool)ViewBag.IsAdmin)
+                                                            {
+                                                                tabstrip.Add().Text("Player Animated GIF").Content(@Html.Partial("tab_PlayerImageAnimation").ToHtmlString());
+                                                                tabstrip.Add().Text("Player Dashboard").Content(@Html.Partial("tab_PlayerDashboard").ToHtmlString());
+                                                            }
+                                                            tabstrip.Add().Text("Payments").Content(@Html.Partial("tab_PlayerPaymentInfo").ToHtmlString());
+                                                            tabstrip.Add().Text("Linked Players").Content(@Html.Partial("tab_LinkedPlayer").ToHtmlString());
+                                                        }
+                                                    }
+
+                                            ))
+
+}
+
+@Scripts.Render("~/bundles/Players_Details-js")
+
+@Scripts.Render("~/bundles/LinkedProfile-js")
+
+@{ Html.RenderPartial("_LinkProfileForDoubleLeague"); }

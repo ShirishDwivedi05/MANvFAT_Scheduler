@@ -1,0 +1,18 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.TeamsExt>
+
+
+
+@foreach (var item in Model)
+{
+    string FullTeamDefaultImagePath = MANvFAT_Football.Helpers.SecurityUtils.Teams_ImagePath + "/" + item.TeamID + "/" + item.TeamDefaultImageFileName;
+    <text>
+        <div class="col-md-4">
+            <div class="panel panel-default panel-featured">
+                <div class="panel-heading">@item.TeamName</div>
+                <div class="panel-body">
+                    <a href="/TeamPlayers/AllPlayers/@item.TeamID"><img src="@FullTeamDefaultImagePath" /></a>
+                </div>
+            </div>
+        </div>
+    </text>
+}

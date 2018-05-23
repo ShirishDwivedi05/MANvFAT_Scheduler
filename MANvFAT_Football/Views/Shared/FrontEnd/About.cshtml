@@ -1,0 +1,78 @@
+﻿
+<style>
+
+
+</style>
+
+
+@*Fake to stop an error*@
+<div id="home-slider" style="display:none;"></div>
+
+<div class="MainContent">
+    <div class="row">
+        <!--Main content-->
+        <div class="col-md-12">
+
+            <div class="row red">
+                <div class="col-md-12 banner text-center">
+                    <h1 class="clsLoveFootball">
+                        About MANvFAT Football
+                    </h1>
+                </div>
+            </div>
+            <!-- Start Preamble -->
+           
+
+            <div class="preamble text-center col-lg-10 col-lg-offset-1" style="margin-top: 60px;">
+                <h2 style="font-size: 40px;">Search for League</h2>
+                <a href="/Leagues/SearchForLeague/All" class="rest seeAllLink" style="font-size: 25px;"><span>See all leagues </span><i class="fa fa-arrow-circle-right"></i></a>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- <div class="col-md-8 col-md-offset-2">-->
+                        <div class="col-md-6 col-md-offset-3">
+                            <div class="input-group">
+
+                                @(Html.Kendo().AutoComplete()
+                .Name("txtLeagueName")
+                .DataTextField("LeagueName")
+                .Filter(FilterType.Contains)
+                .Placeholder("Search by Leagues name")
+                .Events(ev => ev.Change("SearchForLeague"))
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetLeagueNames", "DropDownLists");
+                    });
+                })
+                .HtmlAttributes(new { @class = "k-textbox form-control", @style = "width:100%; z-index:1; border:1px solid grey;" })
+
+                .Height(500)
+                                )
+                                
+                                <span style="cursor:pointer;" class="input-group-addon btnSearch" onclick="SearchForLeague();">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                        @*<div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search by Team Name" id="txtTeamName" class="form-control" />
+                                    <span class="input-group-addon btnSearch"  onclick="SearchForTeam();">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                </div>
+                            </div>*@
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- End Preamble -->
+        </div>
+        <!-- End Container -->
+        <!-- Start Nav-Tabs -->
+        <!-- End Tab-Content -->
+
+    </div>
+    </div>

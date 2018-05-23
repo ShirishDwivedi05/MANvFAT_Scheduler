@@ -1,0 +1,83 @@
+﻿.clsTipLabel {
+    font-weight: normal;
+    cursor: pointer;
+    font-size:10pt;
+}
+
+    .clsTipLabel:hover {
+        text-decoration: underline;
+    }
+
+.clsMapInfoMarkerWindow {
+    width: 365px;
+    height: 200px;
+}
+
+.clsListOfItems {
+    height: 705px;
+    overflow: auto;
+    margin-left: -50px;
+}
+
+.clsMAPCanvas {
+    height: 750px;
+    width: 100%;
+}
+
+.clsdivListOfItems 
+{
+    display:none;
+}
+
+.clsdivShowListOfItems {
+    cursor: pointer;
+}
+
+label:hover {
+    color: #000 !important;
+    background: #F7CA18;
+    transition: all 0.2s cubic-bezier(0.42, 0, 0.58, 1);
+    0s;
+}
+
+.glyphicon-eye-close:hover {
+    color: #000 !important;
+    background: #F7CA18;
+    transition: all 0.2s cubic-bezier(0.42, 0, 0.58, 1);
+    0s;
+}
+
+img.markerpic {
+    margin: 4px 10px 10px 0px;
+    float: left;
+    width: 45px;
+}
+
+.imgMapPin {
+    width: 16px;
+}
+
+.YellowPanel {
+    background-color: #eef02d !important;
+    border-color: #eef02d !important;
+    color: black !important;
+    font-weight: bold;
+}
+
+.GreenPanel {
+    background-color: #4bbb08 !important;
+    border-color: #4bbb08 !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.RedPanel {
+    background-color: #e74c3c !important;
+    border-color: #e74c3c !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+#ListOfItems a {
+    color: black !important;
+}

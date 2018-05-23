@@ -1,0 +1,79 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+@{ 
+    MANvFAT_Football.Models.Repositories.PlayerDashboardExt playerDashboard = (MANvFAT_Football.Models.Repositories.PlayerDashboardExt)ViewBag.PlayerPremiumDashboard;
+}
+
+<style type="text/css">
+    .table th {
+        width: 200px !important;
+    }
+
+    .txtBoxWidth {
+        width: 300px !important;
+        height: 20px !important;
+    }
+
+    
+    #PlayerTeamID-list {
+        /*set the Dropdown list width so it can display items in one line*/
+        width: 700px !important;
+    }
+
+</style>
+
+@if (playerDashboard == null)
+{
+    <div class="alert alert-warning">
+        <h2>Player didn't have Premium Dashboard</h2>
+    </div>
+}
+else
+{
+
+    <table class="table table-striped">
+        <tr>
+            <th style="width:200px;">Dashboard URL</th>
+            <td>
+                <a target="_blank" href="/Member/@playerDashboard.DashboardURL">/Member/@playerDashboard.DashboardURL</a>
+            </td>
+        </tr>
+        <tr>
+            <th style="width:200px;">Password</th>
+            <td>
+                @playerDashboard.DashboardPassword
+            </td>
+        </tr>
+        <tr>
+            <th style="width:200px;">Created Date</th>
+            <td>
+                @playerDashboard.DashboardCreatedDate.ToString("dd/MM/yyyy")
+            </td>
+        </tr>
+        <tr>
+            <th style="width:200px;">Expiry Date</th>
+            <td>
+                @playerDashboard.DashboardExpiryDate.ToString("dd/MM/yyyy")
+            </td>
+        </tr>
+        <tr>
+            <th style="width:200px;">Target Weight</th>
+            <td>
+                @if (playerDashboard.TargetWeight.HasValue)
+            {
+                <text>
+                    @playerDashboard.TargetWeight.Value.ToString("N2") kg
+                </text>
+        }
+        else
+        {
+            <text>
+                Didn't Set
+            </text>
+    }
+
+            </td>
+        </tr>
+
+    </table>
+}

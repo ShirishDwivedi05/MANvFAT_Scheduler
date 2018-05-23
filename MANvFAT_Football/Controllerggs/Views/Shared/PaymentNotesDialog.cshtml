@@ -1,0 +1,166 @@
+﻿<div >
+    <div class="col-md-12">
+        <div class="modal fade model_PaymentNotesDialogue" tabindex="-1" role="dialog" aria-labelledby="dlgHeading" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content"  style="margin-top:5% !important;">
+                    <div class="modal-header">
+                        <h2 class="text-primary" id="dlgHeading">Payment Notes</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.Hidden("hdnPlayerPaymentID")
+
+                                <table class="table table-striped tblPaymentNotes">
+                                    <tr>
+                                        <th>Reviewed</th>
+                                        <td><div id="divReviewed"></div></td>
+                                        <th>Reviewed Date/Time</th>
+                                        <td><div id="divReviewedDateTime"></div></td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <th>Reviewed By</th>
+                                        <td  colspan="3"><div id="divReviewedByUserFullname"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            @Html.TextArea("txtPaymentNotes", new { @style = "width:99%; height:300px;" })
+                                        </td>
+                                    </tr>
+                                </table>
+
+                               
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal" value="Close" />
+                        <input id="btnAction" type="button" class="btn btn-primary" value="Save" onclick="SavePaymentNotes();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function cmdNotes(e) {
+
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        OpenPaymentNotes(dataItem.PlayerPaymentID);
+
+    }
+
+    function cmdReviewYes(e) {
+
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var NAGID = dataItem.PlayerPaymentID;
+
+        MarkReviewYes_No(dataItem.PlayerPaymentID,true);
+
+    }
+
+    function cmdReviewNo(e) {
+
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var NAGID = dataItem.PlayerPaymentID;
+
+        MarkReviewYes_No(dataItem.PlayerPaymentID,false);
+
+    }
+
+    function OpenPaymentNotes(id) {
+
+        $.ajax({
+            url: "/PlayerPayments/GetPaymentNotes",
+            data: { PlayerPaymentID: id },
+            dataType: "json",
+            type: "POST",
+            beforeSend: function myfunction() {
+                if (id == undefined) {
+                    ProcessingWindow("Processing please wait...");
+                }
+            },
+            error: function (e) {
+                OpenErrorWindow("An unexpected error occurred.");// + e.responseText);
+            },
+
+            success: function (data) {
+
+               
+                if (data.PlayerPaymentResult.Reviewed)
+                    $('.model_PaymentNotesDialogue').find('#divReviewed').html("<span class='text-success glyphicon glyphicon-ok'></span>");
+                else
+                {
+                    $('.model_PaymentNotesDialogue').find('#divReviewed').html("<span class='text-danger glyphicon glyphicon-remove'></span>")
+                }
+                $('.model_PaymentNotesDialogue').find('#divReviewedDateTime').text(data.ReviewedDateTimeStr);
+                $('.model_PaymentNotesDialogue').find('#divReviewedByUserFullname').text(data.PlayerPaymentResult.ReviewedByUserFullname);
+                $('.model_PaymentNotesDialogue').find('#txtPaymentNotes').val(data.PlayerPaymentResult.Notes);
+                $('.model_PaymentNotesDialogue').find('#hdnPlayerPaymentID').val(id);
+
+                $('.model_PaymentNotesDialogue').modal('show');
+            }
+        });
+    }
+
+
+    function MarkReviewYes_No(id,YesNo) {
+
+        $.ajax({
+            url: "/PlayerPayments/MarkReviewYes_No",
+            data: { PlayerPaymentID: id, MarkYesNo: YesNo },
+            dataType: "json",
+            type: "POST",
+            error: function (e) {
+                OpenErrorWindow("An unexpected error occurred.");// + e.responseText);
+            },
+
+            success: function (data) {
+                $("#PlayersPerLeague_Grid").data("kendoGrid").dataSource.read();
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    function SavePaymentNotes() {
+
+        var _PlayerPaymentID = $("#hdnPlayerPaymentID").val();
+        var _Notes = $("#txtPaymentNotes").val();
+
+       
+        $.ajax({
+            url: "/PlayerPayments/SavePaymentNotes",
+            data: { PlayerPaymentID: _PlayerPaymentID, Notes: _Notes },
+            dataType: "json",
+            type: "POST",
+            beforeSend: function myfunction() {
+                waitingDialog.show('Processing Please wait...', { dialogSize: 'sm', progressType: 'info' });
+            },
+            error: function (e) {
+                OpenErrorWindow("An unexpected error occurred.");// + e.responseText);
+            },
+
+            success: function (data) {
+                
+                waitingDialog.hide();
+
+                if (data.status == true) {
+                    OpenAlertModal("Information", "Payment Notes saves successfully", "btn-primary", BootstrapDialog.TYPE_PRIMARY);
+                    $('.model_PaymentNotesDialogue').modal('hide');
+                }
+                else
+                {
+                    OpenAlertModal("Error", data.Msg, "btn-primary", BootstrapDialog.TYPE_DANGER);
+                }
+            }
+        });
+    }
+</script>

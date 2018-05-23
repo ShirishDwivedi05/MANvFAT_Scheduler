@@ -1,0 +1,35 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.MapGroupMenu>
+
+
+<div class="col-sm-12 col-md-12" style="padding-top: 10px;">
+    <div class="panel-group" id="accordion">
+
+        @foreach (var item in Model)
+        {
+            <text>
+                <div class="panel panel-default">
+                    <div class="panel-heading  @item.PanelType" style="padding:0;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#@item.PinColour">@item.LeagueType</a>
+                        </h4>
+                    </div>
+                    <div id="@item.PinColour" class="panel-collapse collapse in">
+                        <ul class="list-group">
+                            @foreach (var item_League in item.ListOfLeagues)
+                            {
+                               // string PinURL = "/Images/MapPins/pin_"+ item.PinColour + "_32x32.png'";
+                                <text>
+                                       <li class="list-group-item" style="padding: 5px;"><label class='clsTipLabel' onclick="ShowMarkerTip('@item_League.NEWSTag');">@item_League.LeagueName</label></li>
+                                </text>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </text>
+
+        }
+
+
+
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+<script type="text/javascript">
+
+    function RefreshPlayerWeightsGrid(e) {
+        this.read();
+    }
+   
+</script>
+
+<style>
+    .k-grid .k-hierarchy-col {
+        width: 10px;
+    }
+</style>
+
+@(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.PlayerWeightsExt>()
+    .Name("PlayerWeightsGrid")
+    .DataSource(dataSource => dataSource
+            .Ajax().Events(ev => ev.Sync("RefreshPlayerWeightsGrid"))
+    .PageSize(25)
+            .Events(ev => ev.Error("DisplayGridError"))
+    .Model(model => model.Id(p => p.PlayerWeightID))
+        .Create(update => update.Action("_Create", "PlayerWeights", new { ParamPlayerID = Model.PlayerID}))
+                        .Read(read => read.Action("_Read", "PlayerWeights", new { ParamPlayerID = Model.PlayerID }))
+                        .Update(update => update.Action("_Update", "PlayerWeights"))
+                        .Destroy(update => update.Action("_Destroy", "PlayerWeights"))
+    .ServerOperation(false)
+    )
+
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.RecordDate).Format("{0:dd/MM/yyyy}").EditorTemplateName("Date").Width(80);
+        columns.Bound(p => p.WeekNum).Width(100);
+        columns.Bound(p => p.Weight).EditorTemplateName("CurrencyNoSymbol").Width(100);
+        columns.Bound(p => p.PlayerID).Hidden(true);
+
+        if ((bool)ViewBag.IsAdmin)
+        {
+            columns.Command(command =>
+            {
+                command.Edit().UpdateText("Insert/Update").HtmlAttributes(new { @class = "btn btn-primary" });
+                command.Destroy().HtmlAttributes(new { @class = "btn btn-danger" });
+            }).Width(172);
+        }
+    })
+    .ToolBar(tool =>
+    {
+        if ((bool)ViewBag.IsAdmin)
+        {
+            tool.Custom().Name("cmdAddNewRecord")
+            .Text("+ Add New Record")
+            .HtmlAttributes(new { @id = "cmdAddNewRecord", @class = "btn btn-primary" });
+        }
+    })
+    .Scrollable()
+    .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+    .Sortable()
+    .Navigatable()
+        .Scrollable(scr => scr.Height(700))
+    .Filterable(filer => filer.Operators(o => o.ForString(s => s.Clear().Contains("Contains"))))
+
+)
+
+<script>
+    $("#cmdAddNewRecord").click(function (e) {
+
+        var table = $("#PlayerWeightsGrid").data("kendoGrid");
+        var sorting = table.dataSource.sort();
+
+        if (sorting) {
+            table.dataSource.sort(null);
+        }
+        table.addRow();
+        e.preventDefault();
+        //put custom logic here
+    });
+</script>
+

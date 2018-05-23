@@ -1,0 +1,12 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+
+@(Html.Kendo().TabStrip()
+    .Name("PlayerPayment_tabstrip")
+            .Items(tabstrip =>
+            {
+                tabstrip.Add().Selected(true).Text("Player Payments").Content(@Html.Partial("tab_PlayerPayments").ToHtmlString());
+                tabstrip.Add().Text("Player Mandates").Content(@Html.Partial("tab_PlayerMandates").ToHtmlString());
+            }
+
+    ))
+

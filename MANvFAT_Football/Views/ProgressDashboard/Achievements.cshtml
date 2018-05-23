@@ -1,0 +1,47 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+<style>
+    .cls_hidden_UnLockedAchivements, .cls_hidden_LockedAchivements {
+        display: none;
+    }
+    
+</style>
+<script>
+    $(document).ready(function () {
+
+        LoadAchievements();
+
+    });
+
+    function LoadAchievements() {
+        $(".clsAchievementData").load("/Member/GetAchievements_PercentCategory/" + $("#hdnDashboardURL").val(),
+            { PlayerID: $("#hdnPlayerID").val() }).show();
+    }
+
+    //id  = AchievementCategoryID
+    function ShowCategory_Locked_Unlocked_Achievements(id) {
+        $(".clsAchievementData").load("/Member/GetAchievement_Locked_UnLocked/" + $("#hdnDashboardURL").val(),
+            { PlayerID: $("#hdnPlayerID").val(), AchievementCategoryID: id }).show();
+    }
+
+    //id = AchivementCategoryID
+    function Show_HideAchievements(id) {
+        //alert("im here");
+        var current = $("#hdn_" + id).val();
+
+        //alert("current = " + current);
+
+        if (current == "viewall") {
+            $("." + id).slideDown();
+            $("#hdn_" + id).val("hideall");
+            $("#div_" + id).text("hide all...");
+        }
+        else if (current == "hideall") {
+            $("." + id).slideUp();
+            $("#hdn_" + id).val("viewall");
+            $("#div_" + id).text("view all...");
+        }
+    }
+
+</script>
+
+<div class="clsAchievementData"></div>

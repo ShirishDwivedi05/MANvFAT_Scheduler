@@ -1,0 +1,33 @@
+﻿
+
+@( Html.Kendo().Window()
+           .Name("Window")
+           .Visible(false)
+           .Draggable(true)
+           .Scrollable(false)
+           .Modal(true)
+           .Width(400)
+           .Actions(ac=>ac.Clear())
+           
+  )
+
+
+<script>
+    function OpenAlertModal(title, Msg, css, type) {
+
+        var alertDialog = BootstrapDialog.show({
+            title: title,
+            message: Msg,
+            type: type,
+            buttons: [{
+                label: 'OK (Enter)',
+                hotkey: 13, // Keycode of keyup event of key 'enter' is 13.
+                cssClass: css,
+                action: function () {
+                    alertDialog.close();
+                }
+            }]
+        });
+
+    }
+</script>

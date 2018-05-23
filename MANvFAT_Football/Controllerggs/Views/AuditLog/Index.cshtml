@@ -1,0 +1,194 @@
+﻿@model IEnumerable<MANvFAT_Football.Models.Repositories.AuditLogsExt>
+
+@{
+    ViewBag.Title = "Audit Logs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .tblAuditLog {
+    }
+
+        .tblAuditLog td {
+            padding-bottom: 10px;
+        }
+</style>
+
+<h2>Audit Log</h2>
+
+
+@using (Html.BeginForm("Index", "AuditLog", FormMethod.Post, new { id = "AuditLogForm" }))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Search</legend>
+        <table class="tblAuditLog NoBorderTables">
+            <tr>
+                <th>Date From</th>
+                <td>
+                    @if (ViewData["dateFrom"] != null)
+                    {
+                        if (ViewData["dateFrom"].ToString() != "")
+                        {
+                            @(Html.Kendo().DateTimePicker()
+                .Name("txtDateFrom")
+                .Interval(60)
+                .Value(Convert.ToDateTime(ViewData["dateFrom"].ToString()))
+                .Format("dd/MM/yyyy HH:mm")
+                .HtmlAttributes(new { @style = "width:200px;" })
+                            )
+
+                        }
+                        else
+                        {
+                            @(Html.Kendo().DateTimePicker()
+                .Name("txtDateFrom")
+                .Interval(60)
+                .Format("dd/MM/yyyy HH:mm")
+                .HtmlAttributes(new { @style = "width:200px;" })
+
+
+
+                            )
+                        }
+                    }
+                    else
+                    {
+                        @(Html.Kendo().DateTimePicker()
+                .Name("txtDateFrom")
+                .Interval(60)
+                .Format("dd/MM/yyyy HH:mm")
+                .HtmlAttributes(new { @style = "width:200px;" })
+                        )
+                    }
+                </td>
+                <th style="margin-left:15px;">Date To</th>
+                <td>
+
+                    @if (ViewData["dateTo"] != null)
+                    {
+                        if (ViewData["dateTo"].ToString() != "")
+                        {
+                            @(Html.Kendo().DateTimePicker()
+                .Name("txtDateTo")
+                .Interval(60)
+                .Value(Convert.ToDateTime(ViewData["dateTo"].ToString()))
+                .Format("dd/MM/yyyy HH:mm")
+                .HtmlAttributes(new { @style = "width:200px;" })
+                            )
+                        }
+                        else
+                        {
+                            @(Html.Kendo().DateTimePicker()
+                .Name("txtDateTo")
+                .Interval(60)
+                .Format("dd/MM/yyyy HH:mm")
+                .HtmlAttributes(new { @style = "width:200px;" })
+                            )
+                        }
+                    }
+                    else
+                    {
+                        @(Html.Kendo().DateTimePicker()
+                .Name("txtDateTo")
+                .Interval(60)
+                .Format("dd/MM/yyyy HH:mm")
+                .HtmlAttributes(new { @style = "width:200px;" })
+                        )
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th>User</th>
+                <td colspan="3">
+                    @(Html.Kendo().DropDownList()
+                .Name("UserID")
+                .OptionLabel("-- Select --")
+                .HtmlAttributes(new { @style = "width: 465px;" })
+                .BindTo((SelectList)ViewData["Users"])
+                    )
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Action
+                </th>
+                <td colspan="3">
+                    @if (ViewData["action"] != null)
+                {
+                        @Html.TextBox("txtAction", ViewData["action"].ToString(), new { @style = "width:465px;" })
+                    }
+                    else
+                    {
+                        @Html.TextBox("txtAction", "", new { @style = "width:480px;" })
+                    }
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="4">
+                    <input type="submit" value="Search" tabindex="1" class="k-button" />
+                    <a href="/AuditLog/ResetForm"><input type="button" value="Reset" tabindex="2" class="k-button" /></a>
+                </td>
+            </tr>
+        </table>
+
+    </fieldset>
+}
+
+<br />
+@(Html.Kendo().Grid(Model)
+        .Name("Grid")
+
+        .DataSource(conf =>
+        {
+            conf.Server().Model(c => c.Id(a => a.AuditLogID)).PageSize(100);
+        })
+
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.LogDate).Title("Date and Time").Width(80).Format("{0:dd/MM/yyyy hh:mm tt}");
+            columns.Bound(p => p.Username).Width(80);
+            columns.Bound(p => p.AuditLogShortDesc).Title("Audit Activity").Template(
+                @<text>
+                    <div onclick="cmdOpenAuditDetails_onClick('@item.AuditLogID')" style="cursor:pointer; text-decoration:underline;">@item.AuditLogShortDesc</div>
+                </text>
+            ).Width(500);
+
+        })
+
+
+        .Pageable()
+        .Scrollable(s => s.Height(500))
+            .Sortable(s => s.SortMode(GridSortMode.MultipleColumn))
+        .Selectable()
+    .Filterable()
+)
+
+<script type="text/javascript">
+
+    function cmdOpenAuditDetails_onClick(id) {
+
+      //  alert("AuditLogID = " + id);
+        //Function to Open PopUp
+        $.ajax({
+                url: "/AuditLog/GenerateAuditLogDetails",
+        data: { AuditLogID: id },
+        dataType: "json",
+        type: "POST",
+        error: function() {
+                alert("an Error Occurred");
+        },
+        success: function(data) {
+                $("#dlgBody").html(data);
+                $(".model_AuditLogDetails").modal("show");
+        }
+        });
+
+    }
+
+</script>
+
+@{ Html.RenderPartial("AuditLogDetails"); }
+

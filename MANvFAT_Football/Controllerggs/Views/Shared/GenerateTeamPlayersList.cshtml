@@ -1,0 +1,65 @@
+﻿@model List<MANvFAT_Football.Models.Repositories.TeamPlayersViewModel>
+
+@{
+    List<MANvFAT_Football.Models.Repositories.TeamsExt> ListOfTeams = (List<MANvFAT_Football.Models.Repositories.TeamsExt>)ViewBag.Teams;
+    string ActiveTab = "active";
+}
+
+<style>
+    .aTeamName:hover {
+        color: black !important;
+    }
+</style>
+
+<div class="teams-frame col-lg-12" style="min-height:500px;">
+    <!-- Start Nav-Tabs -->
+    <ul class="nav nav-tabs vertical-tab col-md-12" role="tablist">
+        @foreach (var item in ListOfTeams)
+        {
+
+            <text>
+                <li class="@ActiveTab">
+                    <a href="#@item.TeamID" class="aTeamName" role="tab" data-toggle="tab">@item.TeamName</a>
+                </li>
+            </text>
+            ActiveTab = "";
+        }
+    </ul>
+    <!-- End Nav-Tabs -->
+    <!-- Start Tab Seniors -->
+    @{
+        ActiveTab = "active";
+    }
+    @foreach (var item in Model)
+    {
+        <text>
+            <div class="tab-pane fade @ActiveTab in" id="@item.TeamID">
+
+                <!-- Start Team-Players -->
+
+                <div class="team-players">
+                    @foreach (var Player_item in item.vTeamPlayers)
+                    {
+                        <div class="player-profile">
+                            <a href="/TeamPlayers/AllPlayers/@item.TeamID">
+                                @if (string.IsNullOrEmpty(Player_item.PlayerDefaultImageFileName))
+                                {
+                                    <img src="~/Images/noimage.png" alt="" class="thumbnail">
+                                }
+                                else
+                                {
+                                    <img src="/Content/Data/PlayerImages/@Player_item.PlayerID/@Player_item.PlayerDefaultImageFileName" alt="" class="thumbnail">
+                                }
+                               
+                            </a>
+                            <span class="number">@Player_item.Weight kg</span>
+                            <span class="name">@Player_item.PlayerFullName</span>
+                        </div>
+                    }
+                </div>
+                <!-- End Team-Players -->
+            </div>
+        </text>
+        ActiveTab = "";
+    }
+</div>

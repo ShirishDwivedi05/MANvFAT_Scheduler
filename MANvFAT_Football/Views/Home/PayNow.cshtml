@@ -1,0 +1,218 @@
+﻿@model MANvFAT_Football.Models.Repositories.PayNowViewModel
+
+@{
+    ViewBag.Title = "Pay Now";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+<style>
+    .btn {
+        white-space: normal;
+        margin-bottom: 5px;
+    }
+
+    @@media (max-width: 768px) {
+        .btn-responsive {
+                padding: 2px 4px;
+                font-size: 80%;
+                line-height: 1;
+                border-radius: 3px;
+            }
+        }
+
+    @@media (min-width: 769px) and (max-width: 992px) {
+        .btn-responsive {
+                padding: 4px 9px;
+                font-size: 90%;
+                line-height: 1.2;
+            }
+        }
+        h1, h2 {
+        color:#fff;
+
+    }
+</style>
+
+@*Fake to stop an error*@
+<div id="home-slider" style="display:none;"></div>
+
+@Html.HiddenFor(m=>m.PayNow.SelectedLeagueID)
+
+<div class="MainContent">
+    <div class="row">
+        @if (Model.PayNow.IsPayLinkValid)
+    {
+        <!--Main content-->
+    if (Model.PayNow.IsNormalRegAmount)
+    {
+        if (Model.PayNow.IsPlannedLeagueAmount == false)
+        {
+            <div class="col-md-12">
+
+                <div class="row black pay-now">
+                    <div class="col-md-4 col-md-offset-4 banner">
+                        <h1 class="clsLoveFootball">
+                            Payment
+                        </h1>
+
+                        <img class="pull-right" src="/Content/FrontEnd/assets/img/LOGO-GO-CARDLESS-DIRECT-DEBIT.png" alt="Pay registration fees securely with Direct Debit via GoCardless" />
+
+                        <p class="lead">
+                            Pay registration fees securely with Direct Debit via GoCardless.
+                        </p>
+
+                        <p>
+                        <span style="margin-right:10px;">Referral Code:</span>
+                        <input type="text" id="txtReferralCode_1" class="k-textbox" style="width:60%; border-radius: 5px;" value="@Model.PayNow.ReferralCode" />
+
+                        </p>
+                      @if (Model.PayNow.IsLeagueFreePlaceAvailable && Model.PayNow.IsClaimFreePlace_Payment==false)
+                      {
+                            <button onclick="return ClaimMyFreePlace('@Model.PayNow.PayLinkID');" class="btn btn-primary btn-lg btn-mvf-green btn-block">
+                                Claim my Free Place <i class="fa fa-diamond" aria-hidden="true"></i>
+                            </button>
+                            <p>@Model.PayNow.LeagueFreePlaceDescription</p>
+                      }
+                            <p>
+                                This is a one-off payment for your registration fee. Your direct debit for league fees (£25 per game) will only commence when you start playing.
+                            </p>
+
+                            <p>
+                                If you do not complete payment you will not be added to the system and cannot be added to a team.
+                            </p>
+
+                            <button onclick="return GeneratePayNowURL('@Model.PayNow.PayLinkID','GoCardless_WithoutBook_@Model.PayNow.WithoutBook_GC','1');" class="btn btn-primary btn-lg btn-mvf-green btn-block">
+                                Pay £@Model.PayNow.WithoutBook_GC
+                            </button>
+                            <p>
+                                To register with a league.
+                            </p>
+
+                            <button onclick="return GeneratePayNowURL('@Model.PayNow.PayLinkID','GoCardless_WithBook_@Model.PayNow.WithBook_GC',1);" class="btn btn-primary btn-lg btn-mvf-green btn-block">
+                                Pay £@Model.PayNow.WithBook_GC
+                            </button>
+                            <p>
+                                To register with a league and receive a copy of MAN v FAT The weight loss Manual (worth £10.00).
+                            </p>
+
+
+</div>
+                </div>
+
+            </div>
+    }
+    else //if It is Planned League Amount then only Dipslay one Button to accept 1 Pence
+    {
+        <div class="col-md-12">
+
+            <div class="row black pay-now">
+                <div class="col-md-4 col-md-offset-4 banner">
+                    <h1 class="clsLoveFootball">
+                        Payment
+                    </h1>
+
+                    <img class="pull-right" src="/Content/FrontEnd/assets/img/LOGO-GO-CARDLESS-DIRECT-DEBIT.png" alt="Pay registration fees securely with Direct Debit via GoCardless" />
+
+                    <p class="lead">
+                        Pay registration fees securely with Direct Debit via GoCardless.
+                    </p>
+                    <p>Referral Code: <input type="text" id="txtReferralCode_2" class="k-textbox" style="width:60%; border-radius: 5px;"  value="@Model.PayNow.ReferralCode"/></p>
+                    <p>
+                        If you do not complete payment you will not be added to the system and cannot be added to a team.
+                    </p>
+
+                    <button onclick="return GeneratePayNowURL('@Model.PayNow.PayLinkID','GoCardless_WithoutBook_1.00','2');" class="btn btn-primary btn-lg btn-mvf-green btn-block">
+                        Pay £1.00
+                    </button>
+                    <p>
+                        Pay my £1 fee to reserve my place on this league. I understand that if I cancel the direct debit I will forfeit my place on the league. I understand that when the league launches and I confirm my place on it I will be contacted to pay £8.99 which is the remaining registration fee. I understand that league fees will apply only when the league begins.
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+}
+}
+else if (Model.PayNow.IsDepositAmount)
+{
+    <div class="col-md-12">
+
+        <div class="row black pay-now">
+            <div class="col-md-4 col-md-offset-4 banner">
+                <h1 class="clsLoveFootball">
+                    Payment
+                </h1>
+
+                <img class="pull-right" src="/Content/FrontEnd/assets/img/LOGO-GO-CARDLESS-DIRECT-DEBIT.png" alt="Pay registration fees securely with Direct Debit via GoCardless" />
+
+                <p class="lead">
+                    Pay your Deposit £@Model.PayNow.DepositAmount securely with Direct Debit via GoCardless.
+                </p>
+                <p>Referral Code: <input type="text" id="txtReferralCode_3" class="k-textbox" style="width:60%; border-radius: 5px;"  value="@Model.PayNow.ReferralCode"/></p>
+                <p>
+                    At this point you are only paying a Deposit payment. This is the only payment you will need to make for this league and it will be returned to you according to the terms and conditions.
+                </p>
+
+                <button onclick="return GeneratePayNowURL('@Model.PayNow.PayLinkID','GoCardless_WithoutBook_@Model.PayNow.DepositAmount','3');" class="btn btn-primary btn-lg btn-mvf-green btn-block">
+                    Pay £@Model.PayNow.DepositAmount
+                </button>
+
+                <p>
+                    <h2><span style="color:red;">WARNING:</span><br />* IF YOU DO NOT PAY THE DEPOSIT FEE YOU WILL NOT BE ADDED TO THE SYSTEM AND CANNOT BE ADDED TO A TEAM.</h2>
+                </p>
+            </div>
+        </div>
+
+    </div>
+}
+else if (Model.PayNow.IsPremiumDashboardAmount)
+{
+    <div class="col-md-12">
+
+        <div class="row black pay-now">
+            <div class="col-md-4 col-md-offset-4 banner">
+                <h1 class="clsLoveFootball">
+                    Payment
+                </h1>
+
+                <img class="pull-right" src="/Content/FrontEnd/assets/img/LOGO-GO-CARDLESS-DIRECT-DEBIT.png" alt="Pay registration fees securely with Direct Debit via GoCardless" />
+
+                <p class="lead">
+                    Pay your Premium Dashboard Fee £@Model.PayNow.PremiumDashboardAmount securely with Direct Debit via GoCardless.
+                </p>
+                <p>Referral Code: <input type="text" id="txtReferralCode_4" class="k-textbox" style="width:60%; border-radius: 5px;"  value="@Model.PayNow.ReferralCode" /></p>
+                <p>
+                    <h2><span style="color:red;">WARNING:</span><br />* SOME MESSAGE GOES HERE</h2>
+                </p>
+
+                <p>
+                    If you do not complete payment you will not be added to the system and cannot be added to a team.
+                </p>
+
+                <button onclick="return GeneratePayNowURL('@Model.PayNow.PayLinkID','GoCardless_WithoutBook_@Model.PayNow.PremiumDashboardAmount','4');" class="btn btn-primary btn-lg btn-mvf-green btn-block">
+                    Pay £@Model.PayNow.PremiumDashboardAmount
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+}
+    <!--End Main content-->
+}
+else
+{
+    <div class="col-md-12">
+
+        <div class="row black" style="margin-top:100px;">
+            <div class="col-md-12 banner">
+                <h1 class="clsLoveFootball">
+                    Sorry! Your Payment Link is not valid OR this payment is already Paid, please contact us at <a href="mailto:football@manvfat.com">football@manvfat.com</a>
+                </h1>
+            </div>
+        </div>
+    </div>
+}
+    </div>
+</div>

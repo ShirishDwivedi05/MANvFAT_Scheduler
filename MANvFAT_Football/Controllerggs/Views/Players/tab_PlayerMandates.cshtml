@@ -1,0 +1,88 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayersExt
+<div style="overflow:hidden" class="martop20">
+
+    <div class="list-group">
+
+        <script type="text/javascript">
+            function RefreshPlayerMandates_Grid() {
+                $("#PlayerMandates_Grid").data("kendoGrid").dataSource.read();
+            }
+
+            $("#cmdAddNewMandate").click(function (e) {
+
+                var table = $("#PlayerMandates_Grid").data("kendoGrid");
+                var sorting = table.dataSource.sort();
+
+                if (sorting) {
+                    table.dataSource.sort(null);
+                }
+                table.addRow();
+                e.preventDefault();
+                //put custom logic here
+            });
+
+
+        </script>
+
+        <div>
+            @(Html.Kendo().Grid<MANvFAT_Football.Models.Repositories.PlayerMandatesExt>()
+                    .Name("PlayerMandates_Grid")
+        .DataSource(dataSource => dataSource
+        .Ajax().Events(ev => ev.Sync("RefreshPlayerMandates_Grid").Error("DisplayGridError"))
+        //.Aggregates(aggrt =>
+        //{
+        //    aggrt.Add(p => p.Paid).Sum();
+        //})
+        .PageSize(25)
+        // .Sort(s => s.Add(ss => ss.PaymentDateTime).Descending())
+        .ServerOperation(false)
+        .Model(model =>
+        {
+            model.Id(p => p.PlayerMandateID);
+        })
+                .Read(read => read.Action("_Read", "PlayerMandates", new { ParamPlayerID = Model.PlayerID }))
+                .Create(update => update.Action("_Create", "PlayerMandates", new { ParamPlayerID = Model.PlayerID }))
+                .Update(update => update.Action("_Update", "PlayerMandates"))
+                .Destroy(update => update.Action("_Destroy", "PlayerMandates"))
+        )
+
+        .Columns(columns =>
+        {
+
+            columns.Command(
+
+                command =>
+                {
+
+                    command.Edit().UpdateText("Save").HtmlAttributes(new { @class = "btn btn-primary btn-MVF" });
+                    command.Destroy().HtmlAttributes(new { @class = "btn btn-danger btn-MVF" });
+                }).Width(80);
+
+            //columns.Bound(p => p.PlayerFullName).Title("Name").Width(100);
+            columns.Bound(p => p.MandateID).Title("Mandate ID").Width(100);
+            columns.Bound(p => p.MandateStatusID).EditorTemplateName("MandateStatuses").ClientTemplate("#=MandateStatus#").Title("Status").Width(100);
+            columns.Bound(p => p.IgnoreSync).ClientTemplate("#if(IgnoreSync){#Yes#}else{#No#}#").HeaderTemplate("Ignore<br />Sync").Width(100);
+            columns.Bound(p => p.PlayerID).Hidden(true);
+            columns.Bound(p => p.Cause).Hidden(true);
+            columns.Bound(p => p.Description).Hidden(true);
+            columns.Bound(p => p.Webhook_EventID).Hidden(true);
+
+
+        })
+           .ToolBar(tool =>
+           {
+               tool.Create().Text("Add New Mandate")
+                   .HtmlAttributes(new { @class = "btn btn-primary btn-MVF" });
+               //tool.Excel().HtmlAttributes(new { @class = "btn btn-warning btn-MVF" });
+           })
+
+            .Scrollable(scrollable => scrollable.Height(400))
+            .Pageable(p => p.Refresh(true).PageSizes(new int[] { 25, 50, 100 }))
+            .Sortable()
+            .Navigatable()
+           // .Excel(ex => ex.FileName("PlayerMandates.xlsx").AllPages(true).Filterable(true))
+            .Filterable()
+            )
+        </div>
+    </div>
+</div>

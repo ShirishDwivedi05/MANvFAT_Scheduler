@@ -1,0 +1,17 @@
+﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
+
+
+<script>
+    $(document).ready(function () {
+
+        LoadProgressCharts();
+
+    });
+
+    function LoadProgressCharts() {
+        $(".clsProgresssCharts").slideUp().load("/Member/GetProgressCharts/" + $("#hdnDashboardURL").val(),
+            { PlayerID: $("#hdnPlayerID").val() }).slideDown();
+    }
+</script>
+
+<div class="clsProgresssCharts"></div>

@@ -1,0 +1,82 @@
+﻿
+@model MANvFAT_Football.Models.Repositories.SystemSettingsExt
+
+<style>
+    .table {
+        width: 100%;
+    }
+
+        .table th {
+            width: 200px !important;
+        }
+</style>
+<table class="table">
+    <tr>
+        <th>@Html.LabelFor(m => m.EmailsEnabled, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().CheckBoxFor(m => m.EmailsEnabled).Label("")
+            @Html.ValidationMessageFor(m => m.EmailsEnabled, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+
+    <tr>
+        <th>@Html.LabelFor(m => m.AdminEmailAddress, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.TextBoxFor(m => m.AdminEmailAddress, new { @class = "k-textbox form-control" })
+            @Html.ValidationMessageFor(m => m.AdminEmailAddress, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+
+    <tr>
+        <th>@Html.LabelFor(m => m.SupportEmailAddress, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.TextBoxFor(m => m.SupportEmailAddress, new { @class = "k-textbox form-control" })
+            @Html.ValidationMessageFor(m => m.SupportEmailAddress, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(m => m.SendTempEmail, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().CheckBoxFor(m => m.SendTempEmail).Label("")
+            @Html.ValidationMessageFor(m => m.SendTempEmail, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(m => m.TempEmailAddress, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.TextBoxFor(m => m.TempEmailAddress, new { @class = "k-textbox form-control" })
+            @Html.ValidationMessageFor(m => m.TempEmailAddress, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(m => m.CurrentDomain, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.TextBoxFor(m => m.CurrentDomain, new { @class = "k-textbox form-control" })
+            @Html.ValidationMessageFor(m => m.CurrentDomain, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+
+    <tr>
+        <th>@Html.LabelFor(m => m.RegFeeWithBook, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+           @Html.Kendo().CurrencyTextBoxFor(m=>m.RegFeeWithBook).Spinners(false)
+            @Html.ValidationMessageFor(m => m.RegFeeWithBook, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(m => m.RegFeeWithoutBook, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().CurrencyTextBoxFor(m => m.RegFeeWithoutBook).Spinners(false)
+            @Html.ValidationMessageFor(m => m.RegFeeWithoutBook, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.LabelFor(m => m.PremiumDashboardFee, htmlAttributes: new { @class = "control-label" })</th>
+        <td>
+            @Html.Kendo().CurrencyTextBoxFor(m => m.PremiumDashboardFee).Spinners(false)
+            @Html.ValidationMessageFor(m => m.PremiumDashboardFee, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+
+   
+</table>

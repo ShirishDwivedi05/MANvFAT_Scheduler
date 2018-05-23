@@ -1,0 +1,17 @@
+﻿
+@(Html.Kendo().DropDownList()
+                  .Name("CityID")
+              .HtmlAttributes(new { style = "width:100%" })
+              .Filter(FilterType.Contains)
+              .OptionLabel("-- Select --")
+              .DataTextField("CityName")
+              .DataValueField("CityID")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                  read.Action("GetCities", "DropDownLists");
+              });
+
+})
+)

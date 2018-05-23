@@ -1,0 +1,22 @@
+﻿
+@using MANvFAT_Football.Helpers
+@using MANvFAT_Football.Models.Enumerations
+
+
+    @if (Session["UserID"] != null)
+    {
+            <text>Welcome <strong> @User.Identity.Name  </strong></text> 
+        if ((LoginTypes)Session["LoginType"] == LoginTypes.FormLogin)
+        { 
+            @*<text>[ @Html.Raw(PaceHelper.LogOnActionLink("Change Password", "ChangePassword", "Account")) ]</text>*@
+            <text>[ @Html.Raw(LuckyHelper.LogOnActionLink("Log Off", "LogOff", "Account")) ]</text>
+        }
+    }
+    else
+    {
+      <text>[ @Html.Raw(LuckyHelper.LogOnActionLink("Log On", "LogOn", "Account")) ]</text>
+    }
+    
+    
+
+

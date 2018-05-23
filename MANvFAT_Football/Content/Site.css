@@ -1,0 +1,78 @@
+﻿body {
+    /*padding-top: 50px;*/
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+.PopupDiv {
+    text-align: center;
+    color: black;
+}
+
+.PopupBtn {
+    margin-top: 5%;
+}
+
+/*------------------
+TextArea Styling
+--------------------*/
+
+/*.textArea {
+    font-family: Verdana, Tahoma, Arial, "Helvetica Neue", Helvetica, Sans-Serif;
+    color: black;
+    font-size: 1.1em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}*/
+
+.CurrencyBox {
+    font-family: Verdana, Tahoma, Arial, "Helvetica Neue", Helvetica, Sans-Serif;
+    text-align: right;
+    left: 0;
+    right: 0;
+}
+
+    .k-grid .k-hierarchy-col {
+width: 10px !important;
+}
+
+    .k-window-title{
+        color:black;
+    }
+
+    /*.martop5 {
+    margin-top: 5px;
+}
+
+.martop10 {
+    margin-top: 10px;
+}
+
+.martop20 {
+    margin-top: 20px;
+}
+
+label{
+    color: #337AB7;
+}*/
+
