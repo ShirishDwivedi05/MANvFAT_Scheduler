@@ -36,25 +36,7 @@
     }
     
 </script>
-<script type="text/javascript">
-    $('#inputClick').on('click', function () {
-        alert('');
-        $.ajax({
-            url: '/PlayerImages/GetPlayerImages',
-            type: 'GET',
-            data: { id: '@Model.PlayerID', Anim: false, All: false },
-            success: function (result) {
-                //var returnVal = result.playerId;
-                if (result != null) {
-                    alert(result.data);
-                }
-            },
-            error: function () {
-                //alert("error");
-            }
-        });
-    });
-</script>
+
 <style>
     .dropZoneElement {
         position: relative;
@@ -193,7 +175,7 @@
                                 <!--end help section-->
                                 <ul class="nav nav-pills">
                                     <li class="active nav-pills-act2"><a href="#1a" data-toggle="tab">UPLOAD</a></li>
-                                    <li><a href="#2a" data-toggle="tab">PHOTOS</a></li>
+                                    <li><a href="#2a" data-toggle="tab" id="photoTab">PHOTOS</a></li>
                                     <li><a href="#3a" data-toggle="tab">GIFS</a></li>
                                     <li><a href="#4a" class="remove_margin" data-toggle="tab">BEFORE + AFTER</a></li>
                                 </ul>
@@ -212,30 +194,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            @*<script type="text/x-kendo-template" id="template">
-                                                <div class="product">
-                                                    <img src="~/Content/Data/PlayerImages/#= name #" alt="#: name # image" />
-                                                </div>
-                                            </script>*@
-
-                                            @*@(Html.Kendo().Upload()
-                                            .Name("files")
-                                            .Async(a => a
-                                                .Save("SavePlayerImages", "PlayerImages")
-                                                .Remove("RemovePlayerImages", "PlayerImages")
-                                                .AutoUpload(true)
-                                            )
-                                            .Events(e => e.Success("onSuccess"))
-                                            .ShowFileList(false)
-                                            .DropZone(".dropZoneElement")
-                                            .Validation(validation =>
-                                            {
-                                                validation.AllowedExtensions(new string[] { ".jpg", ".jpeg", ".png", ".bmp", ".gif" });
-                                                validation.MinFileSize(500);
-                                            })
-                                            )*@
-
                                          @(Html.Kendo().Upload()
                                     .Name("files")
                                     .Async(a => a
@@ -262,7 +220,7 @@
 
                                             <div class="photo_libraryPic">
                                                 <div id="divPlayerPhotos">
-                                                    @foreach (var image in imagesModel.playerImages.OrderByDescending(i => i.PlayerImageID).Take(8).ToList())
+                                                    @*@foreach (var image in imagesModel.playerImages.OrderByDescending(i => i.PlayerImageID).Take(8).ToList())
                                                     {
                                                         <div class="col-lg-3  col-md-3 col-sm-3 col-xs-3 p1">
                                                             <div class="modal-toggle">
@@ -271,7 +229,7 @@
                                                             </div>
 
                                                         </div>
-                                                    }
+                                                    }*@
                                                 </div>
                                                 <!-- Modal -->
                                                 <div class="modal-bf-aft">
@@ -312,7 +270,6 @@
                                                                             }
 
                                                                         }
-
                                                                     </div>
                                                                     <!-- Controls -->
                                                                     <a class="left carousel-control carousel-popup-control" href="#carousel-example-generic2" role="button" data-slide="prev">
@@ -354,7 +311,7 @@
                                                 <div class="gap10"></div>
                                                 <div class="box">
                                                     @foreach (var image in animatedImagesModel)
-                                                {
+                                                    {
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
                                                                 <div class="gifs-box">
                                                                     <img src="@image.AbsoluteImageLink" style="height:100px!important; padding-bottom :10px !important;" class="img-responsive" alt="img">
@@ -362,7 +319,7 @@
                                                                 </div>
                                                             </div>
 
-                                        }
+                                                    }
 
                                                 </div>
                                             </div>
@@ -405,7 +362,7 @@
                                                 <div class="gap10"></div>
                                                 <div class="box">
                                                     @foreach (var image in imagesModel.playerImages)
-                                                {
+                                                    {
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
                                                                 <div class="gifs-box">
                                                                     <img src="@image.AbsoluteImageLink" onclick="PlayerImage_OnSelect(@image.PlayerImageID)" style="height:100px!important; padding-bottom :10px !important;" class="img-responsive" alt="img">
@@ -413,9 +370,7 @@
                                                                 </div>
                                                             </div>
 
-                                        }
-
-
+                                                    }
                                                 </div>
                                             </div>
                                             <!-- Fourth Step -->
@@ -1807,3 +1762,34 @@
 </div><!-- Row End-->
 <!-- Container End-->
 <!-- ================= COntent  ===================-->
+<script type="text/javascript">
+    $("#photoTab").on('click', function () {
+        //alert('');
+        var str = '';
+        var strInner = '';
+        $.ajax({
+            url: '/PlayerImages/GetPlayerImagesAsync',
+            type: 'GET',
+            data: { id: '@Model.PlayerID' },
+            success: function (result) {
+                //var returnVal = result.playerId;
+                if (result != null) {
+                    //alert(result[0].PlayerID);
+                    for (var i = 0; i < result.length-1; i++) {
+                        str = str + "<div class='col-lg-3  col-md-3 col-sm-3 col-xs-3 p1'><div class='modal-toggle'><img src='" + result[i].AbsoluteImageLink + "' style='height:100px!important; padding-bottom :10px !important;' class='img-responsive' alt='img'><input type='button' value='X' class='delete' /></div></div>";
+                    }
+                   $("#divPlayerPhotos").html(str);
+                    //$(".carousel-inner").html(strInner);
+                }
+            },
+            error: function () {
+                //alert("error");
+            }
+         });
+    });
+</script>
+
+@*<div class="modal-toggle">
+    <img src="http://localhost:33849/Content/Data/PlayerImages/4/a0e55d45-d863-4d28-af81-17f4dc127af9.png" style="height:100px!important; padding-bottom :10px !important;" class="img-responsive" alt="img">
+    <input type="button" value="X" class="delete">
+</div>*@

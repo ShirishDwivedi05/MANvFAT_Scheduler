@@ -23,6 +23,12 @@ namespace MANvFAT_Football.Controllers
 
         #region Player Image Get, Upload, Remove, Make Default, Make Display Image Functions
 
+        public ActionResult GetPlayerImagesAsync(long id)
+        {
+            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
+            return this.Json(modelRepo.ReadAll(id,false,true), JsonRequestBehavior.AllowGet);
+        }
+
         //id = PlayerID
         public ActionResult GetPlayerImages(long id, bool? Anim, bool All)
         {

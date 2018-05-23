@@ -80,7 +80,10 @@ namespace MANvFAT_Football.Models.Repositories
             return Map(model, CurrentDomain);
         }
 
-       
+        public List<PlayerImages> GetPlayerImagesById(long PlayerID)
+        {
+           return db.PlayerImages.Where(u=>u.PlayerID==PlayerID).OrderByDescending(p=>p.RowVersion).ToList();
+        }
         public long CreateOrUpdate(ref PlayerImagesExt model, ref string Msg, ref bool status, Controller ctrl)
         {
             long PlayerImageID = model.PlayerImageID;
