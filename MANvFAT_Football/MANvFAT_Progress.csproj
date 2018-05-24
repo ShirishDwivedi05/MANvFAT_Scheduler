@@ -398,6 +398,7 @@
     <Compile Include="Models\PlayerWeeklyActivities.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PlayerWeight.cs" />
     <Compile Include="Models\PlayerWeightLogs.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -1441,6 +1442,17 @@
     <Content Include="Images\slider03.png" />
     <Content Include="Images\slider04.png" />
     <Content Include="Images\verticle_mvff.png" />
+    <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\charts.js" />
+    <Content Include="js\index.js" />
+    <Content Include="js\jquery-3.3.1.min.js" />
+    <Content Include="js\plugin.js" />
+    <Content Include="js\plugins.min.js" />
+    <Content Include="js\script2.js" />
+    <Content Include="js\weight\hammer.min.js" />
+    <Content Include="js\weight\Rx.umd.js" />
+    <Content Include="js\weight\rxcss.min.js" />
+    <Content Include="js\weight\weight-calc.js" />
     <Content Include="manvfat_logo.jpg" />
     <Content Include="Models\DBModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -2300,6 +2312,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Member\WeightCalculator.cshtml" />
     <None Include="Web.Connections.config">
       <SubType>Designer</SubType>
     </None>
@@ -2354,7 +2367,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>33849</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

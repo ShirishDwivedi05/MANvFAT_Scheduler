@@ -1,7 +1,7 @@
 /*global $, jQuery, console, alert, prompt */
 
 $(document).ready(function () {
-
+        
     //imgs gifs Selector  
     $(".select-image-gif img").imgCheckbox({
         scaleSelected: false
@@ -11,27 +11,27 @@ $(document).ready(function () {
     // Date Picker 
 
     $('#datetimepicker1,#datetimepicker4,#datetimepicker2,#datetimepicker3').datetimepicker({
-        language: 'en',
-        pickTime: false
-    });
+      language: 'en',
+      pick12HourFormat: true
+    }); 
     //Img Upload
-   // $('.dropzone').html5imageupload();
-    $('.dropzone').html5imageupload({ url: 'PlayerImages/SavePlayerImages', data: { ParamPlayerID: '4' } });
+    $('.dropzone').html5imageupload(); 
+
 
     // custemscroll bar for news
-    $(window).on("load", function () {
+    $(window).on("load",function(){
         $("#scroll-1").mCustomScrollbar({
-            scrollButtons: { enable: true },
-            theme: "3d-thick"
+            scrollButtons:{enable:true},
+                theme:"3d-thick"
         });
         $(".news").mCustomScrollbar({
-            scrollButtons: { enable: true, scrollType: "stepped" },
-            keyboard: { scrollType: "stepped" },
-            mouseWheel: { scrollAmount: 662, normalizeDelta: true },
-            theme: "rounded-dark",
-            autoExpandScrollbar: true,
-            snapAmount: 662,
-            snapOffset: 65
+            scrollButtons:{enable:true,scrollType:"stepped"},
+            keyboard:{scrollType:"stepped"},
+            mouseWheel:{scrollAmount:662,normalizeDelta:true},
+            theme:"rounded-dark",
+            autoExpandScrollbar:true,
+            snapAmount:662,
+            snapOffset:65
         });
     });
 
@@ -45,105 +45,108 @@ $(document).ready(function () {
         progressBarColor: "#4cba11",//colour of circular progress bar
         progressBarWidth: 15,//progress bar width
         progressPercent: 80,//progress percentage out of 100
-        progressValue: 0,//diplay this value instead of percentage
+        progressValue:0,//diplay this value instead of percentage
         showText: false,//show progress text or not 
         title: "M",//show header title for the progress bar
     });
 
 
-    /*** Modal ***/
-    // Quick & dirty toggle to demonstrate modal toggle behavior
-    
-    $('.modale-close').on('click', function (e) {
-        $(this).parents('.photo_aft-bef,.photo_libraryPic').find('.modal-bf-aft').removeClass('is-visible');
-    });
-
-    
-    // Clear all input 
-    $('.clear-all').on('click', function () {
-        $('.input-fields').find('input:text').val('').removeClass('filled-background');
-    });
-
-
+		/*** Modal ***/
+		// Quick & dirty toggle to demonstrate modal toggle behavior
+		$('.modal-toggle').on('click', function(e) {
+		  	e.preventDefault();
+		  	$(this).parents('.photo_aft-bef,.photo_libraryPic').find('.modal-bf-aft').addClass('is-visible',function(){
+		  		$(this).parents('.before-after,.libry-photo').addClass('modal-opned');
+			});
+		});
+		$('.modale-close').on('click', function(e) {
+		  	e.preventDefault();
+		  	$(this).parents('.photo_aft-bef,.photo_libraryPic').find('.modal-bf-aft').removeClass('is-visible');
+		});
 
 
-    // Steps Gifs 
+		// Clear all input 
+		$('.clear-all').on('click', function() {
+			$('.input-fields').find('input:text').val('').removeClass('filled-background');
+		});
+		
+		
+		
 
-    $(".all-step .gif-step-nx:nth-of-type(1)").addClass("active");
-    $(".gif-step-nx").on("click", ".add-gifs", function (e) {
-        $(this).parents(".gif-step-nx").removeClass("active").next().addClass("active");
-        var hasLastStep = $(".all-step .step-four").hasClass("active");
-        var hasError = $(".all-step .step-four").hasClass("error");
-        if (hasError) {
-            $(".all-step .step-four").removeClass("error").removeClass("active");
-            $(".all-step .gif-step-nx:nth-of-type(3)").addClass("active");
-        }
+		// Steps Gifs 
 
-        else if (hasLastStep) {
-            //$(".all-step .step-four").removeClass("active");
-            //$(".all-step .gif-step-nx:nth-of-type(1)").addClass("active");
-        }
-
-    });
+		$(".all-step .gif-step-nx:nth-of-type(1)").addClass("active");
+		$(".gif-step-nx").on("click", ".add-gifs", function() {  
+		  $(this).parents(".gif-step-nx").removeClass("active").next().addClass("active");   
+		});
 
 
-    // Accept only number 
-    $(".numberTextOnly").on("keypress keyup blur", function (event) {
-        debugger;
-        //this.value = this.value.replace(/[^0-9\.]/g,'');
-        $(this).val($(this).val().replace(/[^0-9\.]/g, ''));
-        if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
-            event.preventDefault();
-        }
-    });
+		// Accept only number 
+		 $(".numberTextOnly").on("keypress keyup blur",function (event) {
+            //this.value = this.value.replace(/[^0-9\.]/g,'');
+		    $(this).val($(this).val().replace(/[^0-9\.]/g,''));
+		    if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+		        event.preventDefault();
+		    }
+        });
 
-    $(".btn-remove-gif").on('click', function () {
-        $(this).parent(".gifs-box").remove();
-    });
+        $(".btn-remove-gif").on('click', function(){
+            $(this).parent(".gifs-box").remove();
+        });
 
-    $('.arrow-links').click(function () {
-        var collapsed = $(this).find('i').hasClass('fa-angle-up');
-
-        $('.arrow-links').find('i').removeClass('fa-angle-down');
-
-        $('.arrow-links').find('i').addClass('fa-angle-up');
-        if (collapsed)
-            $(this).find('i').toggleClass('fa-angle-up fa-2x fa-angle-down fa-2x')
-    });
-
+        $('.arrow-links').click(function(){
+		    var collapsed=$(this).find('i').hasClass('fa-angle-up');
+		        
+		    $('.arrow-links').find('i').removeClass('fa-angle-down');
+		    
+		    $('.arrow-links').find('i').addClass('fa-angle-up');
+		    if(collapsed)
+		        $(this).find('i').toggleClass('fa-angle-up fa-2x fa-angle-down fa-2x')
+		});
 
 
+		$('.inp-change-background').on('change', function () {
+			var $this = $(this);
+			var value = $.trim($this.val());
 
-    $("#modelLink").click(function () {
-        debugger
-        var link=$(this).attr('href');
-        if(link!='#')
-        {
-            $(this).prop('href','#');
-            var height = 700;
-            var width = 900;
-            var top = window.innerHeight - height;
-            var left = window.innerHeight - width;
-            window.open(link, '_blank', 'location=yes, height=700,width=900, top=' + top + ', left=' + left + ', scrollbars=yes,status=yes');
-       
-        }
+		});
 
-    });
+		$("#modelLink").click(function () {
+			var height = 700;
+			var width = 900;
+			var top = window.innerHeight - height;
+			var left = window.innerHeight - width;
+			window.open('https://manvfat.com/recipe-guinness-beef-ribs-with-colcannon-mash/', '_blank', 'location=yes, height=700,width=900, top=' + top + ', left=' + left + ', scrollbars=yes,status=yes');
 
 
+		});
 
-    $('.fa-times').on('click', function () {
-        $(this).parents('.slider_bg_Head').hide();
-    });
+		$('input').on('click', function () {
+			$(this).addClass('form-control');
+			$(this).removeClass('filled-background');
+		});
 
-    $('.fa-question-circle2').on('click', function () {
-        $('.fa-question-circle2').hide();
-        $('.fa-question-circle2').hide();
-    });
+		$('.inp-change-background').on('change', function () {
+			var $this = $(this);
+			var value = $.trim($this.val());
 
-    $(".fa-times2").click(function () {
-        $(".fa-question-circle").show();
-    });
+
+			$this.toggleClass('filled-background', value.length !== 0);
+		}).change();
+
+
+		$('.fa-times').on('click', function () {
+			$(this).parents('.slider_bg_Head').hide(); 
+		});
+
+		$('.fa-question-circle2').on('click', function () {
+			$('.fa-question-circle2').hide();
+			$('.fa-question-circle2').hide();
+		});
+
+		$(".fa-times2").click(function () {
+			$(".fa-question-circle").show();
+		});
 
 });
 

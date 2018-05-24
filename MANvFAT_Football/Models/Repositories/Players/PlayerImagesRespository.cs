@@ -4,6 +4,7 @@ using MANvFAT_Football.Models.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -592,6 +593,28 @@ namespace MANvFAT_Football.Models.Repositories
             }
 
             SecurityUtils.AddAuditLog(AuditLogShortDesc, AuditLogLongDesc, ctrl);
+        }
+
+        public void AddPlayerWeight(decimal weight, string activityDate, long playerId)
+        {
+            PlayerWeights objPlayerWeights = new PlayerWeights();
+            objPlayerWeights.PlayerID = playerId;
+            objPlayerWeights.Weight = weight;
+            objPlayerWeights.ActivityDate = DateTime.ParseExact(activityDate, "MM/dd/yyyy hh:mm:ss tt", null); ;
+            db.PlayerWeights.Add(objPlayerWeights);
+            db.SaveChanges();
+        }
+
+        public PlayerWeights GetPlayerWeight(long playerId)
+        {
+            return db.PlayerWeights.AsQueryable().Where(p => p.PlayerID == playerId).OrderByDescending(p => p.RowVersion).FirstOrDefault();
+        }
+
+        public PlayerWeights GetPlayerWeightByDate(long playerId, string activityDate)
+        {
+            DateTime aDate = DateTime.ParseExact(activityDate, "MM/dd/yyyy hh:mm:ss tt", null);
+            DateTime acDate = Convert.ToDateTime(aDate.ToString("yyyy-MM-dd"));
+            return db.PlayerWeights.AsQueryable().Where(p => p.PlayerID == playerId && p.ActivityDate == acDate).OrderByDescending(p => p.RowVersion).FirstOrDefault();
         }
     }
 

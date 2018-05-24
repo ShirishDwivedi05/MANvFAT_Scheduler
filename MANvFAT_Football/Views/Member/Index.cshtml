@@ -86,29 +86,31 @@
     }
 
     div.modal-toggle:hover {
-        outline: 3px solid green;
+        outline: 3px solid #4cbb07;
     }
-    div.modal-toggle:hover input {
-        display: block;
-        width:10px;
-        height:10px;
-        border:1px solid red;
-    }
+        div.modal-toggle:hover input {
+            display: block;
+            width: 30px;
+            height: 30px;
+            background: url(../Images/btnDelete.png) no-repeat;
+        }
     div.modal-toggle input {
         display: block;
-        width: 10px;
-        height: 10px;
+        width: 30px;
+        height: 30px;
+        background: url(../Images/btnDelete.png) no-repeat;
     }
     div.modal-toggle input {
         position: absolute;
         display: none;
     }
-        div.modal-toggle input.delete {
-            top: 0;
-            left: 75%;
-            width: 10px;
-            height: 10px;
-        }
+    div.modal-toggle input.delete {
+        top: 0;
+        left: 61%;
+        width: 30px;
+        height: 30px;
+        background: url(../Images/btnDelete.png) no-repeat;
+    }
 </style>
 
 @*<input type="hidden" id="hdnSelectedDate" value="24/01/2018" />*@
@@ -217,7 +219,6 @@
                                             <h3 class="photo_libraryHeading">YOUR PHOTO LIBRARY</h3>
                                             <div class="gap60"></div>
 
-
                                             <div class="photo_libraryPic">
                                                 <div id="divPlayerPhotos">
                                                     @*@foreach (var image in imagesModel.playerImages.OrderByDescending(i => i.PlayerImageID).Take(8).ToList())
@@ -242,7 +243,7 @@
                                                                 <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel" data-interval="false">
                                                                     <!-- Wrapper for slides -->
                                                                     <div class="carousel-inner" role="listbox">
-                                                                        @foreach (var image in imagesModel.playerImages.OrderByDescending(i => i.PlayerImageID).ToList())
+                                                                        @*@foreach (var image in imagesModel.playerImages.OrderByDescending(i => i.PlayerImageID).ToList())
                                                                         {
                                                                             if (image.AbsoluteImageLink == image.AbsoluteImageLink)
                                                                             {
@@ -269,7 +270,7 @@
                                                                                 </div>
                                                                             }
 
-                                                                        }
+                                                                        }*@
                                                                     </div>
                                                                     <!-- Controls -->
                                                                     <a class="left carousel-control carousel-popup-control" href="#carousel-example-generic2" role="button" data-slide="prev">
@@ -412,42 +413,42 @@
                                                 <h2>Step 1: Choose Before Photo</h2>
                                                 <div class="demo-section k-content wide" style="margin-top: 10%;">
                                                     @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
-.Name("listView")
-.TagName("div")
+                                                        .Name("listView")
+                                                        .TagName("div")
 
-.ClientTemplateId("template")
-.DataSource(dataSource =>
-{
-    dataSource.Read(read => read.Action("_Read_FirstImages", "Member", new { id = Model.DashboardURL, ParamPlayerID = Model.PlayerID }));
-    dataSource.PageSize(15);
-})
-.Pageable()
-.Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
-.Events(events => events.Change("onChange_First"))
-                                                    )
-                                                </div>
-                                            </div>
+                                                        .ClientTemplateId("template")
+                                                        .DataSource(dataSource =>
+                                                        {
+                                                            dataSource.Read(read => read.Action("_Read_FirstImages", "Member", new { id = Model.DashboardURL, ParamPlayerID = Model.PlayerID }));
+                                                            dataSource.PageSize(15);
+                                                        })
+                                                        .Pageable()
+                                                        .Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
+                                                        .Events(events => events.Change("onChange_First"))
+                                                                                                            )
+                                                                                                        </div>
+                                                                                                    </div>
 
-                                            <div class="clsDivSecondImageSelection">
-                                                <h2>Step 2: Choose After Photo</h2>
+                                                                                                    <div class="clsDivSecondImageSelection">
+                                                                                                        <h2>Step 2: Choose After Photo</h2>
 
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="return ShowFirstImageSelector();"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                                                                                                        <button type="button" class="btn btn-primary btn-sm" onclick="return ShowFirstImageSelector();"><i class="glyphicon glyphicon-chevron-left"></i></button>
 
-                                                <div class="demo-section k-content wide" style="margin-top: 10%;">
-                                                    @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
-.Name("listView_second")
-.TagName("div")
+                                                                                                        <div class="demo-section k-content wide" style="margin-top: 10%;">
+                                                                                                            @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
+                                                        .Name("listView_second")
+                                                        .TagName("div")
 
-.ClientTemplateId("template")
-.DataSource(dataSource =>
-{
-    dataSource.Read(read => read.Action("_Read_SecondImages", "Member", new { id = Model.DashboardURL }).Data("AdditionalData"));
-    dataSource.PageSize(15);
-})
-.AutoBind(false)
-.Pageable()
-.Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
-.Events(events => events.Change("onChange_Second"))
+                                                        .ClientTemplateId("template")
+                                                        .DataSource(dataSource =>
+                                                        {
+                                                            dataSource.Read(read => read.Action("_Read_SecondImages", "Member", new { id = Model.DashboardURL }).Data("AdditionalData"));
+                                                            dataSource.PageSize(15);
+                                                        })
+                                                        .AutoBind(false)
+                                                        .Pageable()
+                                                        .Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
+                                                        .Events(events => events.Change("onChange_Second"))
                                                     )
                                                 </div>
                                                 <div>
@@ -553,33 +554,7 @@
                                         </div>
 
                                         <!-- Weight Calculate -->
-                                        <div class="weight-calc flex items-center ph2 mw5-5 center">
-                                            <div class="flex-auto bg-white br2 pa3 pt4 ba b--black-20 flex flex-column items-center items-stretch shadow-4">
-
-                                                <h3 class="f4 dark-gray tc mb0 mt4">How much do you weigh?</h3>
-                                                <p class="tc f5 moon-gray lh-copy mb4">This is used to set up and calculate your recommended daily consumption.<p>
-
-                                                    <div class="tc mb2 value-lbs">
-                                                        <span id="lbs-value" class="value">125</span>
-                                                        <span class="unite">lbs</span>
-                                                    </div>
-
-                                                <p class="ma0 tc mb4 moon-gray f6 value-kg">
-                                                    <span id="kg-value" class="value">56.7</span> kg
-                                                </p>
-
-                                                <div class="dial mb4"></div>
-
-                                                <div class="gap20"></div>
-
-                                                <div class="tc">
-                                                    <a href="#0"
-                                                       class="f6 db link dim br2 pa3 white bg-blue ttu tracked border-box btn-primary">
-                                                        Submit
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
+                                          @Html.Partial("WeightCalculator")
                                         <!-- Weight Calculate -->
                                     </div>
                                     <div class="tab-pane" id="Wa2">
@@ -1765,8 +1740,12 @@
 <script type="text/javascript">
     $("#photoTab").on('click', function () {
         //alert('');
+        LoadPlayerImages();
+    });
+    function LoadPlayerImages() {
         var str = '';
         var strInner = '';
+        var IsDefaultImage = true;
         $.ajax({
             url: '/PlayerImages/GetPlayerImagesAsync',
             type: 'GET',
@@ -1774,22 +1753,72 @@
             success: function (result) {
                 //var returnVal = result.playerId;
                 if (result != null) {
-                    //alert(result[0].PlayerID);
-                    for (var i = 0; i < result.length-1; i++) {
-                        str = str + "<div class='col-lg-3  col-md-3 col-sm-3 col-xs-3 p1'><div class='modal-toggle'><img src='" + result[i].AbsoluteImageLink + "' style='height:100px!important; padding-bottom :10px !important;' class='img-responsive' alt='img'><input type='button' value='X' class='delete' /></div></div>";
+                    for (var i = 0; i < result.length; i++) {
+                        if (i == 8) {
+                            break;
+                        }
+                        str = str + "<div class='col-lg-3  col-md-3 col-sm-3 col-xs-3 p1'><div class='modal-toggle' id='" + result[i].PlayerImageID + "' onclick='OepnPopup(" + result[i].PlayerImageID + ")'><img src='" + result[i].AbsoluteImageLink + "' style='height:100px!important; padding-bottom :10px !important;' class='img-responsive' alt='img'><input type='button' class='delete' onclick='removeImage(" + result[i].PlayerImageID + ")' /></div></div>";
                     }
-                   $("#divPlayerPhotos").html(str);
-                    //$(".carousel-inner").html(strInner);
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].AbsoluteImageLink == result[i].AbsoluteImageLink) {
+                            if (IsDefaultImage) {
+                                strInner = strInner + "<div class='item active'><img src='"+result[i].AbsoluteImageLink+"' style='height:230px;width:299px' class='img-responsive' alt='img'></div>";
+                                IsDefaultImage = false;
+                            }
+                            else {
+                                strInner = strInner + "<div class='item'><img style='height: 230px; width: 299px' src='"+ result[i].AbsoluteImageLink + "' class='img-responsive' alt='img'></div>";
+                            }
+
+                        }
+                        else {
+                            strInner = strInner + "<div class='item'><img src='" + result[i].AbsoluteImageLink + "' class='img-responsive' alt='img'></div>";
+                        }
+                    }
+                    $("#divPlayerPhotos").empty();
+                    $(".carousel-inner").empty();
+                    $("#divPlayerPhotos").html(str);
+                    $(".carousel-inner").html(strInner);
                 }
             },
             error: function () {
                 //alert("error");
             }
          });
-    });
-</script>
+    }
+    function removeImage(id) {
+        $.ajax({
+            url: '/PlayerImages/DeleteImage',
+            type: 'GET',
+            data: { PlayerImageID: id,PlayerId: '@Model.PlayerID' },
+            success: function (result) {
+                //var returnVal = result.playerId;
+                if (result != null) {
+                    LoadPlayerImages();
+                }
+            },
+            error: function () {
+                //alert("error");
+            }
+        });
+    }
 
-@*<div class="modal-toggle">
-    <img src="http://localhost:33849/Content/Data/PlayerImages/4/a0e55d45-d863-4d28-af81-17f4dc127af9.png" style="height:100px!important; padding-bottom :10px !important;" class="img-responsive" alt="img">
-    <input type="button" value="X" class="delete">
-</div>*@
+    function OepnPopup(id) {
+        $('#' + id).parents('.photo_aft-bef,.photo_libraryPic').find('.modal-bf-aft').addClass('is-visible', function () {
+            $(this).parents('.before-after,.libry-photo').addClass('modal-opned');
+        });
+
+    }
+   
+</script>
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/plugin.js"></script>
+<script src="~/js/plugins.min.js"></script>
+
+<script src="~/js/index.js"></script>
+<script src="~/js/script2.js"></script>
+<script src="~/js/charts.js"></script>
+
+<script src="~/js/weight/hammer.min.js"></script>
+<script src="~/js/weight/rxcss.min.js"></script>
+<script src="~/js/weight/Rx.umd.js"></script>
+<script src="~/js/weight/weight-calc.js"></script>

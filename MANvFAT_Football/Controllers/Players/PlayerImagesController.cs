@@ -1,4 +1,5 @@
 ﻿using MANvFAT_Football.Helpers;
+using MANvFAT_Football.Models;
 using MANvFAT_Football.Models.Enumerations;
 using MANvFAT_Football.Models.Repositories;
 using System;
@@ -28,7 +29,7 @@ namespace MANvFAT_Football.Controllers
             PlayerImagesRepository modelRepo = new PlayerImagesRepository();
             return this.Json(modelRepo.ReadAll(id,false,true), JsonRequestBehavior.AllowGet);
         }
-
+        
         //id = PlayerID
         public ActionResult GetPlayerImages(long id, bool? Anim, bool All)
         {
@@ -589,14 +590,13 @@ namespace MANvFAT_Football.Controllers
             return Content("");
         }
 
-        public ActionResult DeleteImage(long PlayerImageID)
+        public JsonResult DeleteImage(long PlayerImageID, long PlayerID)
         {
-            string Msg = "", FileName = "";
+            string Msg = "";
             bool status = true;
             PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            FileName = modelRepo.Delete(PlayerImageID, ref Msg, ref status, this);
-
-            return new JsonResult { Data = new { status = status, Msg = Msg } };
+            string fileName = modelRepo.Delete(PlayerImageID, ref Msg, ref status, this);
+            return this.Json(new { status = status, Msg = Msg }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MarkImageDelete(long PlayerImageID)
@@ -719,5 +719,40 @@ namespace MANvFAT_Football.Controllers
         }
 
         #endregion Player Animation "GIF" Image
+
+        [HttpPost]
+        public JsonResult CalculateWeight(decimal weight, string activityDate, long playerId)
+        {
+            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
+            modelRepo.AddPlayerWeight(weight, activityDate, playerId);
+            return this.Json(new { playerId = playerId, lbsValue = Math.Round(Decimal.Multiply(weight, 2.2m)), kgValue = weight }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetPlayerWeight(long playerId)
+        {
+            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
+            var result = modelRepo.GetPlayerWeight(playerId);
+            if (result != null)
+            {
+                return this.Json(new { playerId = result.PlayerID, lbsValue = Math.Round(Decimal.Multiply(result.Weight, 2.2m)), kgValue = result.Weight }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public JsonResult GetPlayerWeightByDate(long playerId, string activityDate)
+        {
+            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
+            var result = modelRepo.GetPlayerWeightByDate(playerId, activityDate);
+            if (result != null)
+            {
+                return this.Json(new { playerId = result.PlayerID, lbsValue = Math.Round(Decimal.Multiply(result.Weight, 2.2m)), kgValue = result.Weight }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

@@ -1,0 +1,98 @@
+﻿<div class="weight-calc flex items-center ph2 mw5-5 center">
+    <div class="flex-auto bg-white br2 pa3 pt4 ba b--black-20 flex flex-column items-center items-stretch shadow-4">
+
+        <h3 class="f4 dark-gray tc mb0 mt4">How much do you weigh?</h3>
+        <p class="tc f5 moon-gray lh-copy mb4">This is used to set up and calculate your recommended daily consumption.<p>
+
+            <div class="tc mb2 value-lbs">
+                <span id="lbs-value" class="value">125</span>
+                <span class="unite">lbs</span>
+            </div>
+
+        <p class="ma0 tc mb4 moon-gray f6 value-kg">
+            <span id="kg-value" class="value">56.7</span> kg
+        </p>
+
+        <div class="dial mb4"></div>
+
+        <div class="gap20"></div>
+
+        <div class="tc">
+            <a id="hplSubmit"
+               class="f6 db link dim br2 pa3 white bg-blue ttu tracked border-box btn-primary">
+                submit
+            </a>
+        </div>
+        <p id="errMsg" style="display:none"></p>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    //$(function () {
+    //    GetPlayerWeight();
+    //});
+    $(function () {
+        $('#hplSubmit').on('click', function () {
+            var weight = $("#kg-value").text();
+            var activityDate = $("#datetimepicker3").data('date');
+            var playerId ='@Model.PlayerID';
+             if (activityDate != undefined) {
+                 $.ajax({
+                     url: '/PlayerImages/CalculateWeight',
+                     type: 'POST',
+                     data: { weight: weight, activityDate: activityDate, playerId: playerId },
+                     success: function (result) {
+                         //var returnVal = result.playerId;
+                         if (result != null) {
+                             $("#lbs-value").text(result.lbsValue);
+                             $("#kg-value").text(result.kgValue);
+                         }
+                     },
+                     error: function () {
+                         //alert("error");
+                     }
+                 });
+             }
+             else {
+                 alert("Please select date !")
+             }
+        });
+    });
+    function GetPlayerWeight() {
+        $.ajax({
+            url: '/PlayerImages/GetPlayerWeight',
+            type: 'GET',
+            data: { playerId: '@Model.PlayerID' },
+            success: function (result) {
+                //var returnVal = result.playerId;
+                if (result != null) {
+                    $("#lbs-value").text(result.lbsValue);
+                    $("#kg-value").text(result.kgValue);
+                }
+            },
+            error: function () {
+                //alert("error");
+            }
+        });
+    }
+    $('#datetimepicker3').on('changeDate', function (e) {
+        var aDate = $("#datetimepicker3").data('date');
+         $.ajax({
+            url: '/PlayerImages/GetPlayerWeightByDate',
+            type: 'GET',
+            data: { playerId: '@Model.PlayerID', activityDate: aDate },
+            success: function (result) {
+                //var returnVal = result.playerId;
+                if (result != null) {
+                    $("#lbs-value").text(result.lbsValue);
+                    $("#kg-value").text(result.kgValue);
+                }
+            },
+            error: function () {
+                //alert("error");
+            }
+        });
+    });
+
+</script>
