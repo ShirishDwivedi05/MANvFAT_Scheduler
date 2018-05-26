@@ -7,8 +7,10 @@ using MANvFAT_Football.Models.Enumerations;
 using MANvFAT_Football.Models.Repositories;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Web;
 using System.Web.Mvc;
 
 namespace MANvFAT_Football.Controllers
@@ -65,13 +67,36 @@ namespace MANvFAT_Football.Controllers
 
                 ListOfPlayerImages = modelImagesRepo.ReadAll(model.PlayerID.Value, true, false);
                 ViewBag.PlayerAnimatedGallery = ListOfPlayerImages;
-               
+                PlayerDashboardNotificationsRepository paRepo = new PlayerDashboardNotificationsRepository();
+                var playerNotifications = paRepo.ReadAll_NonDismissed(model.PlayerID.Value);
+                ViewBag.Notifications = playerNotifications.ToList();
 
                 MemberToolsBenefitsRepository toolsRepo = new MemberToolsBenefitsRepository();
                 ViewBag.ToolsAndBenifits = toolsRepo.ReadAll();
               
                 
-               
+                HeaderTextsRepository headerTexts = new HeaderTextsRepository();
+                var headerTextList = headerTexts.ReadAll();
+
+                //Select if date specific header exists
+                if (headerTextList.Exists(x => x.DisplayDate.HasValue && x.DisplayDate.Value.Date.ToString("dd/MM/YYYY") == DateTime.Now.Date.ToString("dd/MM/yyyy")))
+                {
+                    playerDashboard.HeaderTexts = new HeaderTextsExt();
+                    playerDashboard.HeaderTexts = headerTextList.Where(x => x.DisplayDate.HasValue && x.DisplayDate.Value.Date.ToString("dd/MM/YYYY") == DateTime.Now.Date.ToString("dd/MM/yyyy")).SingleOrDefault();
+                }
+                else
+                {
+                    var headerListWithoutDateHeaders = headerTextList.Where(x => x.DisplayDate == null).ToList();
+                    if (headerListWithoutDateHeaders != null && headerListWithoutDateHeaders.Count > 0)
+                    {
+                        playerDashboard.HeaderTexts = new HeaderTextsExt();
+                        //Select general header
+                        int randomNumber = GeneralHelper.GetRandomNumber(1, headerListWithoutDateHeaders.Count);
+                        var listArray = headerListWithoutDateHeaders.ToArray();
+                        playerDashboard.HeaderTexts = listArray[randomNumber-1];
+                    }
+
+                }
                 return View(playerDashboard);
             }
             else
@@ -93,48 +118,6 @@ namespace MANvFAT_Football.Controllers
 
         #endregion Member Home Page
 
-        #region Dashboard layout
-
-
-
-        public ActionResult Header_Notifications(long playerID=4)
-        {
-            PlayerDashboardNotificationsRepository paRepo = new PlayerDashboardNotificationsRepository();
-            var playerNotifications = paRepo.ReadAll_NonDismissed(playerID);
-            ViewBag.Notifications = playerNotifications.ToList();
-            return PartialView();
-        }
-        public ActionResult Header_Stats()
-        {
-            PlayerDashboardExt playerDashboard = new PlayerDashboardExt();
-            HeaderTextsRepository headerTexts = new HeaderTextsRepository();
-            var headerTextList = headerTexts.ReadAll();
-
-            //Select if date specific header exists
-            if (headerTextList.Exists(x => x.DisplayDate.HasValue && x.DisplayDate.Value.Date.ToString("dd/MM/YYYY") == DateTime.Now.Date.ToString("dd/MM/yyyy")))
-            {
-                playerDashboard.HeaderTexts = new HeaderTextsExt();
-                playerDashboard.HeaderTexts = headerTextList.Where(x => x.DisplayDate.HasValue && x.DisplayDate.Value.Date.ToString("dd/MM/YYYY") == DateTime.Now.Date.ToString("dd/MM/yyyy")).SingleOrDefault();
-            }
-            else
-            {
-                var headerListWithoutDateHeaders = headerTextList.Where(x => x.DisplayDate == null).ToList();
-                if (headerListWithoutDateHeaders != null && headerListWithoutDateHeaders.Count > 0)
-                {
-                    playerDashboard.HeaderTexts = new HeaderTextsExt();
-                    //Select general header
-                    int randomNumber = GeneralHelper.GetRandomNumber(1, headerListWithoutDateHeaders.Count);
-                    var listArray = headerListWithoutDateHeaders.ToArray();
-                    playerDashboard.HeaderTexts = listArray[randomNumber - 1];
-                }
-
-            }
-
-
-            return PartialView(playerDashboard);
-        }
-        
-        #endregion
         #region Daily Activities
 
         public ActionResult DailyActivities(string id)
@@ -393,14 +376,14 @@ namespace MANvFAT_Football.Controllers
         public ActionResult _Read_FirstImages([DataSourceRequest]DataSourceRequest request, long ParamPlayerID)
         {
             PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            DataSourceResult result = modelRepo.ReadAll(ParamPlayerID, false, true).ToDataSourceResult(request);
+            DataSourceResult result = modelRepo.ReadAllBeforeAfter(ParamPlayerID, false, true).ToDataSourceResult(request);
             return Json(result);
         }
 
         public ActionResult _Read_SecondImages([DataSourceRequest]DataSourceRequest request, long ParamPlayerID, long ParamImageID)
         {
             PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            var data = modelRepo.ReadAll(ParamPlayerID, false, true).Where(m => m.PlayerImageID != ParamImageID).ToList();
+            var data = modelRepo.ReadAllBeforeAfter(ParamPlayerID, false, true).Where(m => m.PlayerImageID != ParamImageID).ToList();
             DataSourceResult result = data.ToDataSourceResult(request);
             return Json(result);
         }
@@ -608,12 +591,6 @@ namespace MANvFAT_Football.Controllers
             string Reason = "";
             if (modelRepo.ValidateLogin(playerDashboard, this, ref Reason))
             {
-                PlayerDashboardNotificationsRepository paRepo = new PlayerDashboardNotificationsRepository();
-                var playerNotifications = paRepo.ReadAll_NonDismissed(playerDashboard.PlayerID);
-                ViewBag.Notifications = playerNotifications.ToList();
-
-
-
                 //Descrypt password
                 return View(playerDashboard);
             }
@@ -965,6 +942,7 @@ namespace MANvFAT_Football.Controllers
         }
 
         #endregion Member Error Pages
+
         #region Weight measurements
         public ActionResult YourWeight(string id)
         {
@@ -1025,5 +1003,50 @@ namespace MANvFAT_Football.Controllers
             return PartialView(m);
         }
         #endregion
+        public ActionResult CustomDropZone_Save(IEnumerable<HttpPostedFileBase> files)
+        {
+            // The Name of the Upload component is "files"
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    // Some browsers send file names with full path.
+                    // We are only interested in the file name.
+                    var fileName = Path.GetFileName(file.FileName);
+                    var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+
+                    // The files are not actually saved in this demo
+                    // file.SaveAs(physicalPath);
+                }
+            }
+
+            // Return an empty string to signify success
+            return Content("");
+        }
+
+        public ActionResult CustomDropZone_Remove(string[] fileNames)
+        {
+            // The parameter of the Remove action must be called "fileNames"
+
+            if (fileNames != null)
+            {
+                foreach (var fullName in fileNames)
+                {
+                    var fileName = Path.GetFileName(fullName);
+                    var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+
+                    // TODO: Verify user permissions
+
+                    if (System.IO.File.Exists(physicalPath))
+                    {
+                        // The files are not actually removed in this demo
+                        // System.IO.File.Delete(physicalPath);
+                    }
+                }
+            }
+
+            // Return an empty string to signify success
+            return Content("");
+        }
     }
 }

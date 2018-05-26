@@ -38,7 +38,7 @@ var SecondImageId = 0;
 var SecondImageSrc = 0;
 var count = 0;
 function onChange_First(arg) {
-  count = count + 1;
+    count = count + 1;
     var ds = $("#listView").data("kendoListView");
     var index = ds.select().index(),
         dataItem = ds.dataSource.view()[index];
@@ -82,6 +82,7 @@ function onChange_Second(arg) {
 
 
 function onSelectImage(playerImageId, playerImageLink, e) {
+ 
     count = count + 1;
     if (count > 2) {
         $(e).parent(".imgCheckbox0").remove();
@@ -115,7 +116,7 @@ function onDeselectImage(playerImageId, playerImageLink) {
 
 
 function ProceedToCombine() {
-
+    debugger;
     // alert("First Image ID = " + FirstImageId + " src = " + FirstImageSrc + " Second Image = " + SecondImageId + " src = " + SecondImageSrc +" PlayerID = " + $("#hdnPlayerID").val());
 
     $.ajax({
@@ -179,12 +180,12 @@ function ProceedToCombineImages() {
             }
         }
     });
-
+    LoadPlayerImages();
 }
 
 // Default first step on first and after tab click
 function GotoFirstStep() {
-    $(".all-step .gif-step-nx:nth-of-type(4)").removeClass("active");
+    $(".all-step .gif-step-nx:nth-of-type(3)").removeClass("active");
     $(".all-step .gif-step-nx:nth-of-type(1)").addClass("active");
 }
 

@@ -1,29 +1,4 @@
-﻿@{
-    MANvFAT_Football.Models.Repositories.PlayerDashboardExt playerDashboard = new MANvFAT_Football.Models.Repositories.PlayerDashboardExt();
-    MANvFAT_Football.Models.Repositories.HeaderTextsRepository headerTexts = new MANvFAT_Football.Models.Repositories.HeaderTextsRepository();
-    var headerTextList = headerTexts.ReadAll();
-
-    //Select if date specific header exists
-    if (headerTextList.Exists(x => x.DisplayDate.HasValue && x.DisplayDate.Value.Date.ToString("dd/MM/YYYY") == DateTime.Now.Date.ToString("dd/MM/yyyy")))
-    {
-        playerDashboard.HeaderTexts = new MANvFAT_Football.Models.Repositories.HeaderTextsExt();
-        playerDashboard.HeaderTexts = headerTextList.Where(x => x.DisplayDate.HasValue && x.DisplayDate.Value.Date.ToString("dd/MM/YYYY") == DateTime.Now.Date.ToString("dd/MM/yyyy")).SingleOrDefault();
-    }
-    else
-    {
-        var headerListWithoutDateHeaders = headerTextList.Where(x => x.DisplayDate == null).ToList();
-        if (headerListWithoutDateHeaders != null && headerListWithoutDateHeaders.Count > 0)
-        {
-            playerDashboard.HeaderTexts = new MANvFAT_Football.Models.Repositories.HeaderTextsExt();
-            //Select general header
-            int randomNumber = MANvFAT_Football.Helpers.ExtensionMethods.GeneralHelper.GetRandomNumber(1, headerListWithoutDateHeaders.Count);
-            var listArray = headerListWithoutDateHeaders.ToArray();
-            playerDashboard.HeaderTexts = listArray[randomNumber - 1];
-        }
-
-    }
-}
-<div class="clsHeaderStats">
+﻿<div class="clsHeaderStats">
 
 
     <div class="container">
@@ -35,13 +10,9 @@
                         <img src="~/Content/ProgressDashbaord/images/profile-img.jpg" class="profile-img">
                         <span>
                             <strong>Hello Andy, </strong>
-                            @if (playerDashboard.HeaderTexts != null)
-                            {
-                                string link = !string.IsNullOrEmpty(playerDashboard.HeaderTexts.Link) ? playerDashboard.HeaderTexts.Link : "#";
-                                <a href="@link" id="modelLink">
-                                    <span>@playerDashboard.HeaderTexts.HeaderText</span>
-                                </a>
-                            }
+                            <a href="#" id="modelLink">
+                                <span> Happy St Patrick's Day!</span>
+                            </a>
                         </span>
                     </div>
                 </div>

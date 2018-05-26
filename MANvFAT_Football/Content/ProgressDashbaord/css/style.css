@@ -2087,7 +2087,14 @@ span.imgCheckbox0.imgChked img {
 
 #divProgress {
     position: relative;
-    display: inline-block
+    display: inline-block;
+    border: 15px solid #4cba11;
+    border-radius: 50%;
+    border-top: 15px solid #ffffff;
+    width: 150px;
+    height: 150px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
 }
 
 .titleCircularLoader {

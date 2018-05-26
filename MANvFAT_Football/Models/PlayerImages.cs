@@ -23,7 +23,7 @@ namespace MANvFAT_Football.Models
         public System.DateTime UploadDateTime { get; set; }
         public bool MarkForDeletion { get; set; }
         public byte[] RowVersion { get; set; }
-        public bool IsBaforeAfter { get; set; }
+        public bool IsBeforeAfter { get; set; }
     
         public virtual Players Players { get; set; }
     }

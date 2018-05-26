@@ -61,8 +61,42 @@ function ShareFrequency_OnChange_Weekly() {
         $(".divDateRangeSelection_Weekly").slideUp();
     }
 }
+function ShareFrequency_OnChange_StatsAtaGlance() {
+    var ShareFrequencyID = $("#ShareFrequencyID_StatsAtaGlance").val();
 
+    if (ShareFrequencyID == 4) //Selection Date Range
+    {
+        $(".divDateRangeSelection_StatsAtaGlance").slideDown();
+    }
+    else {
+        $(".divDateRangeSelection_StatsAtaGlance").slideUp();
+    }
+}
+function ShareFrequency_OnChange_Weight() {
+    var ShareFrequencyID = $("#ShareFrequencyID_StatsAtaGlance").val();
 
+    if (ShareFrequencyID == 4) //Selection Date Range
+    {
+        $(".divDateRangeSelection_StatsAtaGlance").slideDown();
+    }
+    else {
+        $(".divDateRangeSelection_StatsAtaGlance").slideUp();
+    }
+}
+function Activity_ShareDateFrom_OnChange_Weight() {
+    var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_StatsAtaGlance").data("kendoDatePicker");
+    var Activity_ShareDateTo = $("#Activity_ShareDateTo_StatsAtaGlance").data("kendoDatePicker");
+
+    Activity_ShareDateTo.min(Activity_ShareDateFrom.value());
+    Activity_ShareDateTo.value(Activity_ShareDateFrom.value());
+}
+function Activity_ShareDateFrom_OnChange_StatsAtaGlance() {
+    var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_StatsAtaGlance").data("kendoDatePicker");
+    var Activity_ShareDateTo = $("#Activity_ShareDateTo_StatsAtaGlance").data("kendoDatePicker");
+
+    Activity_ShareDateTo.min(Activity_ShareDateFrom.value());
+    Activity_ShareDateTo.value(Activity_ShareDateFrom.value());
+}
 
 function Activity_ShareDateFrom_OnChange_Daily() {
     var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_Daily").data("kendoDatePicker");
@@ -178,12 +212,16 @@ function ShareActivityData(id) {
     if (ValidateActivityShareForm(id)) {
         var _DateFrom = null;
         var _DateTo = null;
-        if (Date.parse($("#Activity_ShareDateFrom_" + id).val()) != null) {
-            _DateFrom = Date.parse($("#Activity_ShareDateFrom_" + id).val()).toString("dd-MM-yyyy");
-        }
+        var shareReq = $("#ShareFrequencyID_" + id).val();
+        if (shareReq == "4")
+        {
+            if (Date.parse($("#Activity_ShareDateFrom_" + id).val()) != null) {
+                _DateFrom = Date.parse($("#Activity_ShareDateFrom_" + id).val()).toString("dd-MM-yyyy");
+            }
 
-        if (Date.parse($("#Activity_ShareDateTo_" + id).val()) != null) {
-            _DateTo = Date.parse($("#Activity_ShareDateTo_" + id).val()).toString("dd-MM-yyyy");
+            if (Date.parse($("#Activity_ShareDateTo_" + id).val()) != null) {
+                _DateTo = Date.parse($("#Activity_ShareDateTo_" + id).val()).toString("dd-MM-yyyy");
+            }
         }
 
         var _ActivityTypeID = 0;
@@ -202,7 +240,8 @@ function ShareActivityData(id) {
             Activity_ShareDateTo: _DateTo,
             EmailAddress: $("#txtEmail_" + id).val(),
             MsgBody: $("#txtMsgBody_" + id).val(),
-            ActivityTypeId: _ActivityTypeID
+            ActivityTypeId: _ActivityTypeID,
+            ShareWith: $("#Team_" + id+"_").val()
         };
         // alert("From " + ShareActivity.Activity_ShareDateFrom + " To " + ShareActivity.Activity_ShareDateTo);
         $.ajax({
@@ -225,7 +264,9 @@ function ShareActivityData(id) {
     }
 }
 
-function ValidateActivityShareForm(id) {
+function ValidateActivityShareForm(id)
+{
+    debugger
     var ErrorMsg = "Please correct the following to continue <ul>";
     var status = true;
     var ShareFrequencyID = $("#ShareFrequencyID_"+id).val();
@@ -266,4 +307,14 @@ function additionalData(id) {
             ActivityTypeID: 2
         };
     }
-}
+    else if (id == "StatsAtaGlance") {
+        return {
+            ActivityTypeID: 3
+        };
+    }
+    else if (id == "Weight") {
+        return {
+            ActivityTypeID: 4
+        };
+    }
+ }

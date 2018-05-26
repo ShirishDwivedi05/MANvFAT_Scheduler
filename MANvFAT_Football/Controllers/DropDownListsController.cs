@@ -133,7 +133,48 @@ namespace MANvFAT_Football.Controllers
                     ListOfObejcts.Add(item);
                 }
             }
+            else 
+            {
+                {
+                    SelectListItem item = new SelectListItem()
+                    {
+                        Text = "Today",
+                        Value = "1"
+                    };
 
+                    ListOfObejcts.Add(item);
+                }
+
+                {
+                    SelectListItem item = new SelectListItem()
+                    {
+                        Text = "Last 7 Days",
+                        Value = "2"
+                    };
+
+                    ListOfObejcts.Add(item);
+                }
+
+                {
+                    SelectListItem item = new SelectListItem()
+                    {
+                        Text = "Last Month",
+                        Value = "3"
+                    };
+
+                    ListOfObejcts.Add(item);
+                }
+
+                {
+                    SelectListItem item = new SelectListItem()
+                    {
+                        Text = "Date Range",
+                        Value = "4"
+                    };
+
+                    ListOfObejcts.Add(item);
+                }
+            }
             SelectList result = new SelectList(ListOfObejcts, "Value", "Text");
 
             return Json(result, JsonRequestBehavior.AllowGet);

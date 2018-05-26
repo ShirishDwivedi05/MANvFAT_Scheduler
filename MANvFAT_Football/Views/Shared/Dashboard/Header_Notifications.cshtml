@@ -1,5 +1,4 @@
-﻿@{    MANvFAT_Football.Models.Repositories.PlayerDashboardNotificationsRepository paRepo = new MANvFAT_Football.Models.Repositories.PlayerDashboardNotificationsRepository();
-            var notifications = paRepo.ReadAll_NonDismissed(4); }
+﻿@{     var notifications = ViewBag.Notifications as List<MANvFAT_Football.Models.Repositories.PlayerDashboardNotificationExt>;}
 <div class="header-carousel">
     <div class="container">
         <div class="row">
@@ -14,8 +13,8 @@
                             <ol class="carousel-indicators">
                                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                                 @for (int count = 1; count < notifications.Count; count++)
-                                {
-                                    <li data-target="#myCarousel" data-slide-to="@count"></li>}
+            {
+                    <li data-target="#myCarousel" data-slide-to="@count"></li>}
                                 @*<li data-target="#myCarousel" data-slide-to="1"></li>*@
                             </ol>
                             <!-- Wrapper for slides -->
@@ -35,41 +34,41 @@
                                     </div>
                                 </div>
                                 @foreach (var achievement in notifications.Skip(1))
-                                {
-                                    <div class="item text-center">
-                                        <div class="col-xs-12 col-sm-3">
-                                            <img src="~/Content/ProgressDashbaord/images/banner_icon.png" class="banner_iconsize center-block img-responsive">
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6">
-                                            <h6>New Achievement</h6>
-                                            <p>
-                                                @if (achievement.Title.Length > 25)
-                                            {@achievement.Title.Substring(0, 25) }
-                                            else
-                                            { @achievement.Title}
-                                        </p>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3">
-                                        <div class="text-center">
-                                            <a href="#" class="btn-default ">SHARE</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                }
+            {
+                    <div class="item text-center">
+                        <div class="col-xs-12 col-sm-3">
+                            <img src="~/Content/ProgressDashbaord/images/banner_icon.png" class="banner_iconsize center-block img-responsive">
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <h6>New Achievement</h6>
+                            <p>
+                                @if (achievement.Title.Length > 25)
+            {@achievement.Title.Substring(0, 25) }
+else
+{ @achievement.Title}
+                        </p>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="text-center">
+                            <a href="#" class="btn-default ">SHARE</a>
+                        </div>
+                    </div>
+                    </div>
+}
                                 @*<div class="item text-center">
-                                        <div class="col-xs-12 col-sm-3">
-                                            <img src="~/Content/ProgressDashbaord/images/comment_banner.png" class="banner_iconsize center-block img-responsive">
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6">
-                                            <h6>New from community</h6>
-                                            <p>healthy swaps</p>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-3">
-                                            <div class="text-center">
-                                                <a href="#" class="btn-default ">discuss</a>
-                                            </div>
-                                        </div>
-                                    </div>*@
+                    <div class="col-xs-12 col-sm-3">
+                        <img src="~/Content/ProgressDashbaord/images/comment_banner.png" class="banner_iconsize center-block img-responsive">
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <h6>New from community</h6>
+                        <p>healthy swaps</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="text-center">
+                            <a href="#" class="btn-default ">discuss</a>
+                        </div>
+                    </div>
+                </div>*@
                             </div>
                             <!-- Left and right controls -->
                             <a class="carousel-control-prev bnr_prev" href="#myCarousel" role="button" data-slide="prev">

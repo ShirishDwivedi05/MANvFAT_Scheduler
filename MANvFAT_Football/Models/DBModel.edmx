@@ -282,7 +282,7 @@
           <Property Name="UploadDateTime" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="MarkForDeletion" Type="bit" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="IsBaforeAfter" Type="bit" Nullable="false" />
+          <Property Name="IsBeforeAfter" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PlayerMeasurements">
           <Key>
@@ -2332,8 +2332,8 @@
           <Property Name="UploadDateTime" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="MarkForDeletion" Type="Boolean" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="IsBaforeAfter" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Players" Relationship="MANvFATProgress_DevModel.FK_PlayerImages_Players" FromRole="PlayerImages" ToRole="Players" />
+          <Property Name="IsBeforeAfter" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_PlayerImages_Players">
           <End Type="MANvFATProgress_DevModel.Players" Role="Players" Multiplicity="1" />
@@ -3001,7 +3001,7 @@
           <EntitySetMapping Name="PlayerImages">
             <EntityTypeMapping TypeName="MANvFATProgress_DevModel.PlayerImages">
               <MappingFragment StoreEntitySet="PlayerImages">
-                <ScalarProperty Name="IsBaforeAfter" ColumnName="IsBaforeAfter" />
+                <ScalarProperty Name="IsBeforeAfter" ColumnName="IsBeforeAfter" />
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
                 <ScalarProperty Name="MarkForDeletion" ColumnName="MarkForDeletion" />
                 <ScalarProperty Name="UploadDateTime" ColumnName="UploadDateTime" />

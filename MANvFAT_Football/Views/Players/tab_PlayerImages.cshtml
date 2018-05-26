@@ -43,8 +43,8 @@
                     <div style="width:97%">
                         @if ((bool)ViewBag.IsAdmin)
                         {
-                            <div class="demo-section k-content">
-                                @*@(Html.Kendo().Upload()
+                            <div class="demo-section">
+                                @(Html.Kendo().Upload()
                                 .Name("PlayerImages")
                                 .Multiple(true)
                                 .ShowFileList(true)
@@ -55,29 +55,8 @@
                                     .AutoUpload(true)
 
                                 ).Events(ev => ev.Success("BGImages_OnSuccess").Error("onError"))
-                                )*@
-                                @*@(Html.Kendo().Upload()
-                                 .Name("PlayerImages")
-                                .Multiple(true)
-                                .ShowFileList(true)
-                                .Messages(m => m.Select("Select Image Files..."))
-                                    .Async(a => a
-                                                .Save("SavePlayerImages", "PlayerImages")
-                                                .Remove("RemovePlayerImages", "PlayerImages", new { ParamPlayerID = Model.PlayerID })
-                                        .AutoUpload(true)
-                                    ).Events(ev => ev.Success("BGImages_OnSuccess").Error("onError"))
-                                )*@
-
-                                @(Html.Kendo().Upload()
-                                    .Name("files")
-                                    .Async(a => a
-                                        .Save("Async_Save", "Upload")
-                                        .Remove("Async_Remove", "Upload")
-                                        .AutoUpload(true)
-                                    )
-                                                            )
+                                )
                             </div>
-                           
                         }
                     </div>
                 </div>

@@ -859,5 +859,7 @@ namespace MANvFAT_Football.Models.Repositories
         public string EmailAddress { get; set; }
         public string MsgBody { get; set; }
         public int ActivityTypeId { get; set; } //ActivityTypeId = 1 > Daily Activity & 2 > Weekly Activity
+
+        public bool ShareWith { get; set; }
     }
 }

@@ -36,19 +36,19 @@ $(document).ready(function () {
     });
 
     // Lead progresss for gif image creat
-    $("#divProgress").circularloader({
-        backgroundColor: "transparent",//background colour of inner circle
-        fontColor: "#000000",//font color of progress text
-        fontSize: "40px",//font size of progress text
-        radius: 60,//radius of circle
-        progressBarBackground: "#ffffff",//background colour of circular progress Bar
-        progressBarColor: "#4cba11",//colour of circular progress bar
-        progressBarWidth: 15,//progress bar width
-        progressPercent: 80,//progress percentage out of 100
-        progressValue: 0,//diplay this value instead of percentage
-        showText: false,//show progress text or not 
-        title: "M",//show header title for the progress bar
-    });
+    //$("#divProgress").circularloader({
+    //    backgroundColor: "transparent",//background colour of inner circle
+    //    fontColor: "#000000",//font color of progress text
+    //    fontSize: "40px",//font size of progress text
+    //    radius: 60,//radius of circle
+    //    progressBarBackground: "#ffffff",//background colour of circular progress Bar
+    //    progressBarColor: "#4cba11",//colour of circular progress bar
+    //    progressBarWidth: 15,//progress bar width
+    //    progressPercent: 0,//progress percentage out of 100
+    //    progressValue: 0,//diplay this value instead of percentage
+    //    showText: false,//show progress text or not 
+    //    title: "M",//show header title for the progress bar
+    //});
 
 
     /*** Modal ***/
@@ -71,7 +71,14 @@ $(document).ready(function () {
 
     $(".all-step .gif-step-nx:nth-of-type(1)").addClass("active");
     $(".gif-step-nx").on("click", ".add-gifs", function (e) {
-        $(this).parents(".gif-step-nx").removeClass("active").next().addClass("active");
+      
+        if ($(this).parents(".gif-step-nx").hasClass('step-one')) {
+            $(this).parents(".gif-step-nx").removeClass("active").next().next().addClass("active");
+        }
+        else {
+            $(this).parents(".gif-step-nx").removeClass("active").next().addClass("active");
+        }
+  
         var hasLastStep = $(".all-step .step-four").hasClass("active");
         var hasError = $(".all-step .step-four").hasClass("error");
         if (hasError) {
@@ -89,7 +96,7 @@ $(document).ready(function () {
 
     // Accept only number 
     $(".numberTextOnly").on("keypress keyup blur", function (event) {
-        debugger;
+ 
         //this.value = this.value.replace(/[^0-9\.]/g,'');
         $(this).val($(this).val().replace(/[^0-9\.]/g, ''));
         if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
@@ -115,7 +122,7 @@ $(document).ready(function () {
 
 
     $("#modelLink").click(function () {
-        debugger
+      
         var link=$(this).attr('href');
         if(link!='#')
         {

@@ -29,6 +29,22 @@ namespace MANvFAT_Football.Models.Repositories
             return Filtered_pImages.OrderByDescending(m => m.UploadDateTime).ToList();
         }
 
+        public List<PlayerImagesExt> ReadAllBeforeAfter(long PlayerID, bool? OnlyAnimated, bool All)
+        {
+            SystemSettingsRepository sysRepo = new SystemSettingsRepository();
+            var CurrentDomain = sysRepo.GetSystemSettings().CurrentDomain;
+
+            var pImages = db.PlayerImages.Include("Players").Where(m => m.PlayerID == PlayerID && m.IsBeforeAfter==true).ToList().Select(m => Map(m, CurrentDomain));
+
+            var Filtered_pImages = (from pimg in pImages
+                                    where pimg.PlayerID == PlayerID &&
+                           (OnlyAnimated.HasValue == false || pimg.IsAnimated == OnlyAnimated)
+                           && (All == true || pimg.MarkForDeletion == false) //if it is calling from backend then return all pics but if from Player Progress Image page then only which are not marked as Deletetion
+                                    select pimg);
+
+            return Filtered_pImages.OrderByDescending(m => m.UploadDateTime).ToList();
+        }
+
         public List<PlayerImagesExt> ReadAll_ProgressGallery(long PlayerID)
         {
             SystemSettingsRepository sysRepo = new SystemSettingsRepository();
@@ -96,6 +112,7 @@ namespace MANvFAT_Football.Models.Repositories
                     //Create New Record
                     //TODO: Map to DB Object
                     var dbmodel = Map(model);
+                    
                     //TODO: Save DB Changes and Set the Return Primary Key ID
                     db.PlayerImages.Add(dbmodel);
                     db.SaveChanges();
@@ -469,6 +486,7 @@ namespace MANvFAT_Football.Models.Repositories
                 Display = model.Display,
                 DefaultImage = model.DefaultImage,
                 UploadDateTime = model.UploadDateTime,
+                IsBeforeAfter = model.IsBeforeAfter,
             };
 
             return tblModel;
@@ -480,7 +498,6 @@ namespace MANvFAT_Football.Models.Repositories
             {
                 PlayerImageID = model.PlayerImageID,
                 PlayerID = model.PlayerID,
-
                 FileName = model.FileName,
                 IsAnimated = model.IsAnimated,
                 Display = model.Display,
@@ -498,7 +515,7 @@ namespace MANvFAT_Football.Models.Repositories
                // FrontSide_Text = model.IsFront ? "Mark Side Image" : "Mark Front Image",
                 //FrontSide_btnCss = model.IsFront ? "btn-info" : "btn-warning",
                 //FrontSide_Title = model.IsFront ? "Click here to Mark this picture as Side image" : "Click here to Mark this picture as Front image",
-
+                IsBeforeAfter = model.IsBeforeAfter,
                 UploadDateTime = model.UploadDateTime,
                 UploadDateTime_Str = model.UploadDateTime.ToString("dd/MM/yyyy HH:mm"),
                 UploadDate_Str = model.UploadDateTime.ToString("dd-MM-yyyy"),
@@ -518,7 +535,7 @@ namespace MANvFAT_Football.Models.Repositories
             dbmodel.Display = model.Display;
             dbmodel.DefaultImage = model.DefaultImage;
             dbmodel.UploadDateTime = model.UploadDateTime;
-            dbmodel.IsBaforeAfter = model.IsBeforeAfter;
+            dbmodel.IsBeforeAfter = model.IsBeforeAfter;
            
         }
 
