@@ -209,7 +209,7 @@ function PlayerImage_OnDeSelect(e) {
 
 
 function CreateGifImg() {
-    debugger
+
     var PlayerAnimImgs = arr;
     //alert("PlayerAnimImgs = " + PlayerAnimImgs);
     if (PlayerAnimImgs != null && PlayerAnimImgs.length > 1) {

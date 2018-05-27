@@ -1,194 +1,315 @@
-window.chartColors = {
-    red: 'rgb(255, 99, 132)',
-    orange: 'rgb(255, 159, 64)',
-    yellow: 'rgb(255, 205, 86)',
-    green: 'rgb(75, 192, 192)',
-    blue: 'rgb(54, 162, 235)',
-    purple: 'rgb(153, 102, 255)',
-    grey: 'rgb(201, 203, 207)'
-};
+    /*** Charts Vertical 1  ****/
+    
 
-/*** Charts Vertical ****/
+    var OptionBarchartl = { 
+            responsive: true, 
+    };
 
-var OptionBarchart = {
-    responsive: true,
-};
-
-
-function CreateWeeklyActivityChart(timePeriod, canvasId) {
-    var ctx = document.getElementById(canvasId).getContext('2d');
-    var labels = [];
-    var overs = [];
-    var unders = [];
-    var target150Mins = [];
-
-    $.get("/Charts/GetWeeklyActivityData?period=" + timePeriod, function (result, status) {
-
-        $(result.data).each(function (index, value) {
-            labels.push(value.Week);
-            overs.push(value.Over);
-            unders.push(value.Under);
-            target150Mins.push(value.Target150Mins);
-        });
-
-        var VBarData = {
-            labels: labels,
-            datasets: [{
-                label: 'Target 150 Mins',
-                data: target150Mins,
-                backgroundColor: "#d7d7d7"
-            }, {
-                label: 'Over',
-                data: overs,
-                backgroundColor: "#4bbb08"
-            }, {
-                label: 'Under',
-                data: unders,
-                backgroundColor: "#ff0000"
-            }],
-        };
-
-
-        var Barchart = new Chart(ctx, {
-            type: 'bar',
-            data: VBarData,
-            options: OptionBarchart,
-        });
-    })
-
-}
-
-
-/*** Charts Horizontal ****/
-
-var OptionHorizontzl = {
-    responsive: false,
-
-    scales: {
-        xAxes: [{
-            stacked: true,
+    /*** For All Time  ****/
+    var VBarData1 = {
+        labels: ["week 1", "week 2", "Week 3", "week4",],
+        datasets: [{ 
+            label: 'Target 150 Mins',
+            data: [70, 70, 70, 70],
+            backgroundColor: "#d7d7d7"
+        }, { 
+            label: 'Over',
+            data: [98, 0, 98, 0],
+            backgroundColor: "#4bbb08"
+        }, { 
+            label: 'Under',
+            data: [0, 50, 0, 0],
+            backgroundColor: "#ff0000"
         }],
-        yAxes: [{
-            stacked: true
-        }]
-    },
-};
+    };
 
+     
+    /*** For 7 days Time  ****/
+    var VBarData2 = {
+        labels: ["week 1", "week 2", "Week 3", "week4",],
+        datasets: [{ 
+            label: 'Target 150 Mins',
+            data: [73, 90, 80, 10],
+            backgroundColor: "#d7d7d7"
+        }, { 
+            label: 'Over',
+            data: [ 28, 45, 58, 20],
+            backgroundColor: "#4bbb08"
+        }, { 
+            label: 'Under',
+            data: [ 20, 60, 70, 50],
+            backgroundColor: "#ff0000"
+        }],
+    };
 
-function CreateChart(timePeriod, canvasId) {
-    var ctx = document.getElementById(canvasId).getContext('2d');
-    var labels = [];
-    var currentInches = [];
-    var inchesLost = [];
+    /*** For 1 moth Time  ****/
+    var VBarData3 = {
+        labels: ["week 1", "week 2", "Week 3", "week4",],
+        datasets: [{ 
+            label: 'Target 150 Mins',
+            data: [173, 40, 30, 60],
+            backgroundColor: "#d7d7d7"
+        }, { 
+            label: 'Over',
+            data: [ 28, 25, 48, 80],
+            backgroundColor: "#4bbb08"
+        }, { 
+            label: 'Under',
+            data: [ 75, 30, 67, 30],
+            backgroundColor: "#ff0000"
+        }],
+    };
 
-    $.get("/Charts/GetInchesData?period=" + timePeriod, function (result, status) {
+    /*** For 3 month Time  ****/
+    var VBarData4 = {
+        labels: ["week 1", "week 2", "Week 3", "week4",],
+        datasets: [{ 
+            label: 'Target 150 Mins',
+            data: [70, 70, 70, 70],
+            backgroundColor: "#d7d7d7"
+        }, { 
+            label: 'Over',
+            data: [98, 0, 98, 0],
+            backgroundColor: "#4bbb08"
+        }, { 
+            label: 'Under',
+            data: [0, 50, 0, 0],
+            backgroundColor: "#ff0000"
+        }],
+    };
 
-        $(result.data).each(function (index, value) {
-            labels.push(value.PartName);
-            currentInches.push(value.CurrentInch);
-            inchesLost.push(value.InchLost);
+    /*** For 6 month Time  ****/
+    var VBarData5 = {
+        labels: ["week 1", "week 2", "Week 3", "week4",],
+        datasets: [{ 
+            label: 'Target 150 Mins',
+            data: [89, 190, 120, 140],
+            backgroundColor: "#d7d7d7"
+        }, { 
+            label: 'Over',
+            data: [ 28, 145, 88, 97],
+            backgroundColor: "#4bbb08"
+        }, { 
+            label: 'Under',
+            data: [ 70, 54, 89, 110],
+            backgroundColor: "#ff0000"
+        }],
+    };
+
+    /*** For 1 year Time  ****/
+    var VBarData6 = {
+        labels: ["week 1", "week 2", "Week 3", "week4",],
+        datasets: [{ 
+            label: 'Target 150 Mins',
+            data: [173, 40, 30, 60],
+            backgroundColor: "#d7d7d7"
+        }, { 
+            label: 'Over',
+            data: [ 28, 25, 48, 80],
+            backgroundColor: "#4bbb08"
+        }, { 
+            label: 'Under',
+            data: [ 75, 30, 67, 30],
+            backgroundColor: "#ff0000"
+        }],
+    };
+
+    if (document.getElementById("barchart")) {
+        var ctx1 = document.getElementById("barchart").getContext('2d');
+        var barChart = new Chart(ctx1, {
+            type: 'bar',
+            data: VBarData1,
+            options: OptionBarchartl,
         });
+    }
+    if (document.getElementById("barchart2")) {
+    var ctxOne2 = document.getElementById("barchart2").getContext('2d');
+    var barChart = new Chart(ctxOne2, {
+        type: 'bar',
+        data:  VBarData2,
+        options: OptionBarchartl,
+    });}
+    if (document.getElementById("barchart3")) {
+        var ctxOne3 = document.getElementById("barchart3").getContext('2d');
+        var barChart = new Chart(ctxOne3, {
+            type: 'bar',
+            data: VBarData3,
+            options: OptionBarchartl,
+        });
+    }
+    if (document.getElementById("barchart4")) {
+    var ctxOne4 = document.getElementById("barchart4").getContext('2d');
+    var barChart = new Chart(ctxOne4, {
+        type: 'bar',
+        data:  VBarData4,
+        options: OptionBarchartl,
+    });
+    }
+    if (document.getElementById("barchart5")) {
+        var ctxOne5 = document.getElementById("barchart5").getContext('2d');
+        var barChart = new Chart(ctxOne5, {
+            type: 'bar',
+            data: VBarData5,
+            options: OptionBarchartl,
+        });
+    }
+    if (document.getElementById("barchart6")) {
+    var ctxOne6 = document.getElementById("barchart6").getContext('2d');
+    var barChart = new Chart(ctxOne6, {
+        type: 'bar',
+        data:  VBarData6,
+        options: OptionBarchartl,
+    });
+    }
 
-        var barChartData = {
-            labels: labels,
-            datasets: [{
-                label: 'Current Inches',
-                data: currentInches,
-                backgroundColor: "#ff0000"
-            }, {
-                label: 'Inches Lost',
-                data: inchesLost,
-                backgroundColor: "#4bbb08"
-            }],
-        };
-        var horizontalBarchart = new Chart(ctx, {
+    /*** Charts Horizontal 2 ****/
+    
+    var OptionHorizontzl = { 
+            responsive: true,
+
+            scales: {
+                xAxes: [{
+                    stacked: true,
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
+            }, 
+    };
+
+    /*** For All Time  ****/
+    var barChartData = {
+        labels: ["Neck", "Right Bicep", "Left bicep", "Waist", "Hips", "Right Thigh", "Left Thigh"],
+        datasets: [{
+            label: 'Current Inches',
+            data: [10, 67, 23, 36, 24, 78, 34],
+            backgroundColor: "#ff0000"
+        }, {
+            label: 'Inches Lost',
+            data: [78, 34, 56, 78, 34, 78, 89],
+            backgroundColor: "#4bbb08"
+        }],
+    };
+
+    /*** For 7 days Time  ****/
+    var barChartData2 = {
+        labels: ["Neck", "Right Bicep", "Left bicep", "Waist", "Hips", "Right Thigh", "Left Thigh"],
+        datasets: [{
+            label: 'Current Inches',
+            data: [40, 27, 23, 16, 64, 93, 45],
+            backgroundColor: "#ff0000"
+        }, {
+            label: 'Inches Lost',
+            data: [186, 128, 74, 125, 97, 43, 162],
+            backgroundColor: "#4bbb08"
+        }],
+    };
+
+    /*** For 1 month Time  ****/
+    var barChartData3 = {
+        labels: ["Neck", "Right Bicep", "Left bicep", "Waist", "Hips", "Right Thigh", "Left Thigh"],
+        datasets: [{
+            label: 'Current Inches',
+            data: [180, 127, 73, 16, 14, 93, 45],
+            backgroundColor: "#ff0000"
+        }, {
+            label: 'Inches Lost',
+            data: [186, 198, 74, 125, 97, 43, 162],
+            backgroundColor: "#4bbb08"
+        }],
+    };
+
+    /*** For 3 month Time  ****/
+    var barChartData4 = {
+        labels: ["Neck", "Right Bicep", "Left bicep", "Waist", "Hips", "Right Thigh", "Left Thigh"],
+        datasets: [{
+            label: 'Current Inches',
+            data: [120, 127, 173, 116, 124, 193, 95],
+            backgroundColor: "#ff0000"
+        }, {
+            label: 'Inches Lost',
+            data: [86, 98, 174, 95, 127, 143, 162],
+            backgroundColor: "#4bbb08"
+        }],
+    };
+
+    /*** For 6 month Time  ****/
+    var barChartData5 = {
+        labels: ["Neck", "Right Bicep", "Left bicep", "Waist", "Hips", "Right Thigh", "Left Thigh"],
+        datasets: [{
+            label: 'Current Inches',
+            data: [ 140, 187, 173, 16, 14, 93, 45],
+            backgroundColor: "#ff0000"
+        }, {
+            label: 'Inches Lost',
+            data: [ 286, 198, 74, 125, 97, 43, 162],
+            backgroundColor: "#4bbb08"
+        }],
+    };
+
+    /*** For Year Time  ****/
+    var barChartData6 = {
+        labels: ["Neck", "Right Bicep", "Left bicep", "Waist", "Hips", "Right Thigh", "Left Thigh"],
+        datasets: [{
+            label: 'Current Inches',
+            data: [ 80, 97, 173, 16, 14, 93, 425],
+            backgroundColor: "#ff0000"
+        }, {
+            label: 'Inches Lost',
+            data: [186, 198, 74, 125, 97, 43, 162],
+            backgroundColor: "#4bbb08"
+        }],
+    };
+    if (document.getElementById("Hrzntchart")) {
+    var ctx2 = document.getElementById("Hrzntchart").getContext('2d');
+    var horizontalBarchart = new Chart(ctx2, {
+        type: 'horizontalBar',
+        data: barChartData,
+        options: OptionHorizontzl,
+    });
+    }
+    if (document.getElementById("Hrzntchart2")) {
+    var ctx3 = document.getElementById("Hrzntchart2").getContext('2d');
+    var horizontalBarchart = new Chart(ctx3, {
+        type: 'horizontalBar',
+        data: barChartData2,
+        options: OptionHorizontzl,
+    });
+    }
+    if (document.getElementById("Hrzntchart3")) {
+    var ctx4 = document.getElementById("Hrzntchart3").getContext('2d');
+    var horizontalBarchart = new Chart(ctx4, {
+        type: 'horizontalBar',
+        data: barChartData3,
+        options: OptionHorizontzl,
+    });
+    }
+    if (document.getElementById("Hrzntchart4")) {
+        var ctx5 = document.getElementById("Hrzntchart4").getContext('2d');
+        var horizontalBarchart = new Chart(ctx5, {
             type: 'horizontalBar',
-            data: barChartData,
+            data: barChartData4,
             options: OptionHorizontzl,
         });
-    })
-
-}
-
-
-/*** Charts Horizontal ****/
-
-var optionLine = {
-    responsive: true,
-    legend: {
-        position: 'bottom',
-    },
-    hover: {
-        mode: 'index'
-    },
-    scales: {
-        xAxes: [{
-            display: true,
-            scaleLabel: {
-                display: true,
-                labelString: 'Actual Weight'
-            }
-        }],
-        yAxes: [{
-            display: true,
-            scaleLabel: {
-                display: true,
-                labelString: 'Target Weight'
-            }
-        }]
-    },
-    title: {
-        display: true,
-        text: ''
     }
-};
-
-
-function CreateWeightChart(timePeriod, canvasId) {
-    var ctx = document.getElementById(canvasId).getContext('2d');
-    var actualWeights = [];
-    var targetWeights = [];
-    var projectedWeights = [];
-
-    $.get("/Charts/GetWeightData?period=" + timePeriod, function (result, status) {
-
-        $(result.data).each(function (index, value) {
-            actualWeights.push(value.ActualWeight);
-            targetWeights.push(value.TargetWeight);
-            projectedWeights.push(value.ProjectedWeight);
+    if (document.getElementById("Hrzntchart5")) {
+        var ctx6 = document.getElementById("Hrzntchart5").getContext('2d');
+        var horizontalBarchart = new Chart(ctx6, {
+            type: 'horizontalBar',
+            data: barChartData5,
+            options: OptionHorizontzl,
         });
-        var healths = ["Healthy", "Overweight", "Obese", "Obese II", "Obese III"]
-        var lineChartData = {
-            labels: healths,
-            datasets: [
-                {
-                    label: 'Weight',
-                    data: actualWeights,
-                    backgroundColor: window.chartColors.red,
-                    borderColor: window.chartColors.red,
-                    fill: false,
-                    borderDash: [5, 5],
-                    pointRadius: 15,
-                    pointHoverRadius: 10,
-                    backgroundColor: "#ff0000"
-                },
-                {
-                    label: 'Target Weight',
-                    data: targetWeights,
-                    backgroundColor: window.chartColors.blue,
-                    borderColor: window.chartColors.blue,
-                    fill: false,
-                    borderDash: [5, 5],
-                    pointRadius: [2, 4, 6, 18, 0, 12, 20],
-                }
-
-            ],
-        };
-        var linechart = new Chart(ctx, {
-            type: 'line',
-            data: lineChartData,
-            options: optionLine,
+    }
+    if (document.getElementById("Hrzntchart6")) {
+        var ctx7 = document.getElementById("Hrzntchart6").getContext('2d');
+        var horizontalBarchart = new Chart(ctx7, {
+            type: 'horizontalBar',
+            data: barChartData6,
+            options: OptionHorizontzl,
         });
-    })
+    }
+    
+     
 
-}
+        
+

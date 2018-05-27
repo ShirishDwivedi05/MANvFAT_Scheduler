@@ -210,6 +210,7 @@ function ShareActivityData(id) {
     //ActivityTypeId = 1 >  Activity & 2 > Weekly Activity
 
     if (ValidateActivityShareForm(id)) {
+      
         var _DateFrom = null;
         var _DateTo = null;
         var shareReq = $("#ShareFrequencyID_" + id).val();
@@ -232,7 +233,7 @@ function ShareActivityData(id) {
         else if (id == "Weekly") {
             _ActivityTypeID = 2;
         }
-
+        debugger;
         var ShareActivity = {
             PlayerID: $("#hdnPlayerID").val(),
             ShareFrequencyID: $("#ShareFrequencyID_" + id).val(),
@@ -241,7 +242,7 @@ function ShareActivityData(id) {
             EmailAddress: $("#txtEmail_" + id).val(),
             MsgBody: $("#txtMsgBody_" + id).val(),
             ActivityTypeId: _ActivityTypeID,
-            ShareWith: $("#Team_" + id+"_").val()
+            ShareWith: $("#hdnFoodDrinkShare").val()//$("#Team_" + id+"_").val()
         };
         // alert("From " + ShareActivity.Activity_ShareDateFrom + " To " + ShareActivity.Activity_ShareDateTo);
         $.ajax({
@@ -264,9 +265,7 @@ function ShareActivityData(id) {
     }
 }
 
-function ValidateActivityShareForm(id)
-{
-    debugger
+function ValidateActivityShareForm(id) {
     var ErrorMsg = "Please correct the following to continue <ul>";
     var status = true;
     var ShareFrequencyID = $("#ShareFrequencyID_"+id).val();
@@ -317,4 +316,28 @@ function additionalData(id) {
             ActivityTypeID: 4
         };
     }
- }
+}
+
+function SetShareTarget(e,indicator)
+{
+    debugger;
+  
+    if (indicator==1)
+    {
+        $("#team_"+e).removeClass("cls_team")
+        $("#team_" + e).addClass("cls_team_selected")
+        $("#other_" + e).addClass("cls_other")
+        $("#other_" + e).removeClass("cls_other_selected")
+
+        $("#hdnFoodDrinkShare_"+e).val("team");
+    }
+   else
+    {
+        $("#team_" + e).removeClass("cls_team_selected")
+        $("#team_" + e).addClass("cls_team")
+        $("#other_"+e).removeClass("cls_other")
+        $("#other_"+e).addClass("cls_other_selected")
+        $("#hdnFoodDrinkShare_"+e).val("Other");
+    }
+    return false;
+}

@@ -3,14 +3,15 @@
 <style>
     .divDateRangeSelection_@Model, .clsShareActivityMsg_@Model {
         display: none;
+    }  .food_sec_in2{height:600px!important;
     }
 </style>
 <div class="fram-box clearfix clsShareData_@Model">
     <div class="share-head frame-head clearfix">
         <h2>How do you want to share?</h2>
-        <a href="#">
+     
             <i class="fas fa-times fa-times2 pull-right" data-toggle="collapse" data-target="#BMIWeightShareActivity"></i>
-        </a>
+   
     </div>
     <div class="fram-content" id="StatsAtaGlanceShare-1">
         <div class="col-lg-12 clearfix">
@@ -37,8 +38,9 @@
                 </div>
             </div>
             <h4>who do you want to share it with?</h4>
-            @(Html.Kendo().RadioButton().Name("Team_" + Model).HtmlAttributes(new { @name = "ShareWith" }).Label("Team"))
-            @(Html.Kendo().RadioButton().Name("Other_" + Model).HtmlAttributes(new { @name = "ShareWith" }).Label("Other"))
+            <input id="hdnFoodDrinkShare_@Model" class="hdnFoodDrinkShare" value="" type="hidden" />
+            <label class="cls_team" onclick="SetShareTarget('@Model',1)" id="team_@Model"><input name="Team" type="checkbox" value="" id="chkTeam" />Team</label>
+            <label class="cls_other" onclick="SetShareTarget('@Model',2)" id="other_@Model"><input name="Other" type="checkbox" value="" if="chkOther" />Other</label>
             <div class="form">
                 @Html.Kendo().TextBox().Name("txtEmail_" + Model).HtmlAttributes(new { @style = "width:90%", @placeholder = "enter email address" })
             </div>

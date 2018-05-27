@@ -1,13 +1,26 @@
 ﻿@model List<MANvFAT_Football.Helpers.LatestPostFeeds>
-<ul id="latest">
+<ul>
 @foreach (var item in Model)
 {
     var user = item.users.FirstOrDefault();
     string ImageLink = "";
-    if(user!=null)
+    if (user != null)
     {
         ImageLink = user.avatar_template;
     }
-    <li><a target="_blank" href="@item.Link"><span class="avatar"><img src="@ImageLink"></span><span class="topic-title">@Html.Raw(item.Title)</span></a></li>
+
+    <li>
+        <img src="@ImageLink" alt="img">
+        <a target="_blank" href="@item.Link">
+            <i class="fas fa-angle-right pull-right"></i>
+            <div class="chat_txt">
+                <h6>@Html.Raw(item.PublishDate)</h6>
+                <h5>@Html.Raw(item.Title)</h5>
+                <h4>@Html.Raw(item.ShortDescription)</h4>
+            </div>
+        </a>
+    </li>
+
+    @*<li><a target="_blank" href="@item.Link"><span class="avatar"><img src="@ImageLink"></span><span class="topic-title">@Html.Raw(item.Title)</span></a></li>*@
 }
 </ul>

@@ -373,7 +373,8 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="4a">
-                                    <div class="before-after">
+
+                                        <div class="before-after">
                                             <h3 class="photo_libraryHeading">your before + after</h3>
                                             <p class="btn-add pull-right"><i class="add-gifs fas fa-plus-circle circle-green" onclick="ShowAllImagesForBeforeAfter()"></i></p>
                                             <div class="gap50"></div>
@@ -421,95 +422,100 @@
                                                 }
                                             </div>
                                         </div>
-                                    <div class="divCreateBeforeAndAfterPhoto hide">
-                                                    <style>
-                                                        .clsDivSecondImageSelection, .clsDivFinalImageSelection { display: none; }
-                                                    </style>
+                                    
+                                        
 
-                                                    <script type="text/x-kendo-tmpl" id="template">
-                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
-                                                            <div class="gifs-box">
-                                                                @*<h3>#:ImageURL#</h3>*@
-                                                                <img src="#:ImageLink#" id="Img_#:PlayerImageID#" alt="#:PlayerImageID# image" style="height:100px!important; padding-bottom :10px !important;" class="img-responsive" />
-                                                                @*<h3>#:ProductID#</h3>*@
-                                                            </div>
-                                                        </div>
-                                                    </script>
+                <div class="divCreateBeforeAndAfterPhoto hide">
+                    <style>
+                        .clsDivSecondImageSelection, .clsDivFinalImageSelection { display: none; }
+                    </style>
+                    <script type="text/x-kendo-tmpl" id="template">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                            <div class="gifs-box">
+                                @*<h3>#:ImageURL#</h3>*@
+                                <img src="#:ImageLink#" id="Img_#:PlayerImageID#" alt="#:PlayerImageID# image" style="height:100px!important; padding-bottom :10px !important;" class="img-responsive" />
+                                @*<h3>#:ProductID#</h3>*@
+                            </div>
+                        </div>
+                    </script>
 
-                                                    <div class="clsDivFirstImageSelection">
-                                                        <h2>Step 1: Choose Before Photo</h2>
-                                                        <div class="demo-section k-content wide" style="margin-top: 10%;">
-                                                            @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
-                                                                                        .Name("listView")
-                                                                                        .TagName("div")
-                                                                                        .ClientTemplateId("template")
-                                                                                        .DataSource(dataSource =>
-                                                                                        {
-                                                                                            dataSource.Read(read => read.Action("_Read_FirstImages", "Member", new { id = Model.DashboardURL, ParamPlayerID = Model.PlayerID }));
-                                                                                            dataSource.PageSize(15);
-                                                                                        })
-                                                                                        .Pageable()
-                                                                                        .Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
-                                                                                        .Events(events => events.Change("onChange_First")))
-                                                        </div>
-                                                    </div>
+                    <div class="clsDivFirstImageSelection">
+                        <h2>Step 1: Choose Before Photo</h2>
+                        <div class="demo-section k-content wide" style="margin-top: 10%;">
+                            @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
+                                                        .Name("listView")
+                                                        .TagName("div")
+                                                        .ClientTemplateId("template")
+                                                        .DataSource(dataSource =>
+                                                        {
+                                                            dataSource.Read(read => read.Action("_Read_FirstImages", "Member", new { id = Model.DashboardURL, ParamPlayerID = Model.PlayerID }));
+                                                            dataSource.PageSize(15);
+                                                        })
+                                                        .Pageable()
+                                                        .Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
+                                                        .Events(events => events.Change("onChange_First")))
+                        </div>
+                    </div>
 
-                                                    <div class="clsDivSecondImageSelection">
-                                                        <h2>Step 2: Choose After Photo</h2>
+                    <div class="clsDivSecondImageSelection">
+                        <h2>Step 2: Choose After Photo</h2>
 
-                                                        <button type="button" class="btn btn-primary btn-sm" onclick="return ShowFirstImageSelector();"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="return ShowFirstImageSelector();"><i class="glyphicon glyphicon-chevron-left"></i></button>
 
-                                                        <div class="demo-section k-content wide" style="margin-top: 10%;">
-                                                            @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
-                                                                                        .Name("listView_second")
-                                                                                        .TagName("div")
+                        <div class="demo-section k-content wide" style="margin-top: 10%;">
+                            @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
+                                                        .Name("listView_second")
+                                                        .TagName("div")
 
-                                                                                        .ClientTemplateId("template")
-                                                                                        .DataSource(dataSource =>
-                                                                                        {
-                                                                                            dataSource.Read(read => read.Action("_Read_SecondImages", "Member", new { id = Model.DashboardURL }).Data("AdditionalData"));
-                                                                                            dataSource.PageSize(15);
-                                                                                        })
-                                                                                        .AutoBind(false)
-                                                                                        .Pageable()
-                                                                                        .Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
-                                                                                        .Events(events => events.Change("onChange_Second"))
-                                                            )
-                                                        </div>
-                                                        <div>
-                                                            <h2>Selected Before Photo</h2><img id="imgFirstImage_1" style="width:200px;" />
-                                                        </div>
-                                                    </div>
+                                                        .ClientTemplateId("template")
+                                                        .DataSource(dataSource =>
+                                                        {
+                                                            dataSource.Read(read => read.Action("_Read_SecondImages", "Member", new { id = Model.DashboardURL }).Data("AdditionalData"));
+                                                            dataSource.PageSize(15);
+                                                        })
+                                                        .AutoBind(false)
+                                                        .Pageable()
+                                                        .Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
+                                                        .Events(events => events.Change("onChange_Second"))
+                            )
+                        </div>
+                        <div>
+                            <h2>Selected Before Photo</h2><img id="imgFirstImage_1" style="width:200px;" />
+                        </div>
+                    </div>
 
-                                                    <div class="clsDivFinalImageSelection">
-                                                        <h2>Step 3: Preview and Save</h2>
-                                                        <button type="button" class="btn btn-primary btn-sm" onclick="return ShowSecondImageSelector();"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                                                        <div class="row">
-                                                            <div class="col-md-6 col-md-offset-3 col-sm-12">
-                                                                <table class="table table-responsive">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div style="font-weight:bold;" class="text-center">Before Photo</div>
-                                                                                <img id="imgFirstImage" style="width:100%;height:150px;padding-bottom:20px;padding-right: 10px;" />
-                                                                            </td>
-                                                                            <td>
-                                                                                <div style="font-weight:bold;" class="text-center">After Photo</div>
-                                                                                <img id="imgSecondImage" style="width:100%;height:150px;padding-bottom:20px;" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2" class="text-center">
-                                                                                <button type="button" class="btn btn-primary" onclick="return ProceedToCombineImages();"><span class="glyphicon glyphicon-ok"></span> Proceed to Combine Images</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                </div>
+                    <div class="clsDivFinalImageSelection">
+                        <h2>Step 3: Preview and Save</h2>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="return ShowSecondImageSelector();"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 col-sm-12">
+                                <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="font-weight:bold;" class="text-center">Before Photo</div>
+                                                <img id="imgFirstImage" style="width:100%;height:150px;padding-bottom:20px;padding-right: 10px;" />
+                                            </td>
+                                            <td>
+                                                <div style="font-weight:bold;" class="text-center">After Photo</div>
+                                                <img id="imgSecondImage" style="width:100%;height:150px;padding-bottom:20px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <button type="button" class="btn btn-primary" onclick="return ProceedToCombineImages();"><span class="glyphicon glyphicon-ok"></span> Proceed to Combine Images</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
                                 </div>
                             </div>
                         </div>
@@ -557,7 +563,25 @@
                                     </li>
                                 </ul>
                                 <div class="tab-content px-0 clearfix">
+
                                     <div class="tab-pane active" id="Wa1">
+                                        <div class="gap15"></div>
+                                        <div class="box">
+                                            <div class="gap10"></div>
+                                            <h3>TODAYS WEIGHT</h3>
+                                            <i class="fas fa-share-alt pull-right"></i>
+
+                                            <div id="datetimepicker3" class="input-append pull-right calandar-put">
+                                                <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
+                                                <span class="add-on">
+                                                    <i data-time-icon="far fa-clock" data-date-icon="far fa-calendar-alt" class="fas fa-calendar-alt pull-right far">
+                                                    </i>
+                                                </span>
+                                            </div>
+
+                                            <div class="gap10"></div>
+                                        </div>
+
                                         <!-- Weight Calculate -->
                                           @Html.Partial("WeightCalculator")
                                         <!-- Weight Calculate -->
@@ -565,6 +589,7 @@
                                     <div class="tab-pane" id="Wa2">
                                         @{ Html.RenderPartial("YourWeight", Model); }
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -681,7 +706,7 @@
                                     @{ Html.RenderPartial("StatsAtaGlanceShareActivity", "StatsAtaGlance"); }
                                 </div>
                                 <div class="share_food food_sec_in2 collapse_in11 collapse" id="BMIWeightShareActivity">
-                                    @{ Html.RenderPartial("BMIWeightShareActivity", "Weight"); }
+                                    @{ Html.RenderPartial("BMIWeightShareActivity", "BMIWeight"); }
                                 </div>
                                 <div class="tab-pane" id="2bbb">
                                    
@@ -842,8 +867,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="share_food food_sec_in2 collapse_in11 collapse" id="YourWeeklyShareActivity">
-                                    @{ Html.RenderPartial("BMIWeightShareActivity", "Weight"); }
+                                <div class="share_food food_sec_in2 collapse_in11 collapse" id="DataWeeklyShareActivity">
+                                    @{ Html.RenderPartial("Data_WeeklyActivitiesShare", "DataWeeklyShareActivity"); }
                                 </div>
                                 <div class="tab-pane" id="4bbb">
                                     <div id="carousel-example-generic-weight2" class="carousel-auto-false carousel slide mb-3" data-ride="carousel" data-interval="false">
@@ -1415,42 +1440,7 @@
                                     <div class="gap15"></div>
                                     <div class="chat_list">
                                         <h3>JOIN THE CONVERSATION</h3>
-                                        <ul>
-                                            <li>
-                                                <img src="~/Content/ProgressDashbaord/images/img1.jpg" alt="img">
-                                                <a href="#">
-                                                    <i class="fas fa-angle-right pull-right"></i>
-                                                    <div class="chat_txt">
-                                                        <h6>3HRS</h6>
-                                                        <h5>EMBARASSMENT</h5>
-                                                        <h4>Biffa94</h4>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <img src="~/Content/ProgressDashbaord/images/img2.jpg" alt="img">
-                                                <a href="#">
-                                                    <i class="fas fa-angle-right pull-right"></i>
-                                                    <div class="chat_txt">
-                                                        <h6>14DAYS</h6>
-                                                        <h5>The Big Questions on BBC1 Sunday</h5>
-                                                        <h4>Smithr82</h4>
-                                                    </div>
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <img src="~/Content/ProgressDashbaord/images/img3.jpg" alt="img">
-                                                <a href="#">
-                                                    <i class="fas fa-angle-right pull-right"></i>
-                                                    <div class="chat_txt">
-                                                        <h6>26 DAYS</h6>
-                                                        <h5>Healthy Swaps</h5>
-                                                        <h4>AndyJC</h4>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        @{ Html.RenderPartial("Community"); }
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="2aa">
@@ -1812,9 +1802,9 @@
                         }
                     }
                     $("#divPlayerPhotos").empty();
-                    $(".carousel-inner").empty();
+                    $("#divPlayerPhotos .carousel-inner").empty();
                     $("#divPlayerPhotos").html(str);
-                    $(".carousel-inner").html(strInner);
+                    $("#divPlayerPhotos .carousel-inner").html(strInner);
                 }
             },
             error: function () {
@@ -1847,15 +1837,15 @@
     }
    
 </script>
-<script src="~/js/bootstrap.min.js"></script>
-<script src="~/js/plugin.js"></script>
-<script src="~/js/plugins.min.js"></script>
+<script src="~/Content/ProgressDashbaord/js/bootstrap.min.js"></script>
+<script src="~/Content/ProgressDashbaord/js/plugin.js"></script>
+<script src="~/Content/ProgressDashbaord/js/plugins.min.js"></script>
 
-<script src="~/js/index.js"></script>
-<script src="~/js/script2.js"></script>
-<script src="~/js/charts.js"></script>
+<script src="~/Content/ProgressDashbaord/js/index.js"></script>
+<script src="~/Content/ProgressDashbaord/js/script2.js"></script>
+<script src="~/Content/ProgressDashbaord/js/charts.js"></script>
 
-<script src="~/js/weight/hammer.min.js"></script>
-<script src="~/js/weight/rxcss.min.js"></script>
-<script src="~/js/weight/Rx.umd.js"></script>
-<script src="~/js/weight/weight-calc.js"></script>
+<script src="~/Content/ProgressDashbaord/js/weight/hammer.min.js"></script>
+<script src="~/Content/ProgressDashbaord/js/weight/rxcss.min.js"></script>
+<script src="~/Content/ProgressDashbaord/js/weight/Rx.umd.js"></script>
+<script src="~/Content/ProgressDashbaord/js/weight/weight-calc.js"></script>

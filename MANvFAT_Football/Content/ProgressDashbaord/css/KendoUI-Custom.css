@@ -110,6 +110,18 @@ span[role=button].k-select { border-right:0 !important; left:auto !important; ri
 	margin-left:20px;
     font-size: 20px;
     font-weight: normal; } 
+.cls_team_selected { background: #4BBB08;
+    color: #fff;
+    padding: 3px 40px;
+    font-size: 20px;
+    font-weight: normal; }
+.cls_other_selected 	{ background: #4BBB08;
+    color: #fff;
+    padding: 3px 40px;
+	margin-left:20px;
+    font-size: 20px;
+    font-weight: normal; } 
+.cls_team_selected input, .cls_other_selected input  { display:none; }
 .cls_team input, .cls_other input  { display:none; }	
 .share_food h4 {     margin-top: 15px !important;
     margin-bottom: 10px !important; }	

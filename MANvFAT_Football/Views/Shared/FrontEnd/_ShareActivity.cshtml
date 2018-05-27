@@ -37,9 +37,10 @@
                 </div>
             </div>
             <h4>who do you want to share it with?</h4>
-			@(Html.Kendo().RadioButton().Name("Team_" + Model).HtmlAttributes(new { @name = "ShareWith" }).Label("Team"))
-			@(Html.Kendo().RadioButton().Name("Other_" + Model).HtmlAttributes(new { @name = "ShareWith" }).Label("Other"))
-            <div class="form">
+            <input id="hdnFoodDrinkShare_@Model" class="hdnFoodDrinkShare" value="" type="hidden" />
+            <label class="cls_team" onclick="SetShareTarget('@Model',1)" id="team_@Model"><input name="Team" type="checkbox" value="" id="chkTeam" />Team</label>
+            <label class="cls_other" onclick="SetShareTarget('@Model',2)" id="other_@Model"><input name="Other" type="checkbox" value="" if="chkOther" />Other</label>
+   <div class="form">
                 @Html.Kendo().TextBox().Name("txtEmail_" + Model).HtmlAttributes(new { @style = "width:90%", @placeholder = "enter email address" })
             </div>
             <p class="text-ex">

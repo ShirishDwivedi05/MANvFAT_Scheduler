@@ -2332,8 +2332,8 @@
           <Property Name="UploadDateTime" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="MarkForDeletion" Type="Boolean" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Players" Relationship="MANvFATProgress_DevModel.FK_PlayerImages_Players" FromRole="PlayerImages" ToRole="Players" />
           <Property Name="IsBeforeAfter" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Players" Relationship="MANvFATProgress_DevModel.FK_PlayerImages_Players" FromRole="PlayerImages" ToRole="Players" />
         </EntityType>
         <Association Name="FK_PlayerImages_Players">
           <End Type="MANvFATProgress_DevModel.Players" Role="Players" Multiplicity="1" />

@@ -46,14 +46,14 @@ namespace MANvFAT_Football.Controllers
 
             //If system found a Cookie and Login Cookie Session is similar then let the user Login to Player Dashboard without Displaying Login Screen
             string Reason = "";
-            if (modelRepo.ValidateLogin(playerDashboard, this, ref Reason))
-            {
-                if (playerDashboard.IsFirstLogin)
-                {
-                    System.Web.Routing.RouteValueDictionary rt = new System.Web.Routing.RouteValueDictionary();
-                    rt.Add("id", id);
-                    return RedirectToAction("Settings", rt);
-                }
+            //if (modelRepo.ValidateLogin(playerDashboard, this, ref Reason))
+            //{
+            //    if (playerDashboard.IsFirstLogin)
+            //    {
+            //        System.Web.Routing.RouteValueDictionary rt = new System.Web.Routing.RouteValueDictionary();
+            //        rt.Add("id", id);
+            //        return RedirectToAction("Settings", rt);
+            //    }
 
                 PlayerProgressGallery model = new PlayerProgressGallery();
 
@@ -98,15 +98,15 @@ namespace MANvFAT_Football.Controllers
 
                 }
                 return View(playerDashboard);
-            }
-            else
-            {
-                //Otherwise Redirect to Login Screen, if cookie didn't match then redirect to Login Page
-                System.Web.Routing.RouteValueDictionary rt = new System.Web.Routing.RouteValueDictionary();
-                rt.Add("id", id);
-                rt.Add("Reason", Reason);
-                return RedirectToAction("Login", rt);
-            }
+            //}
+            //else
+            //{
+            //    //Otherwise Redirect to Login Screen, if cookie didn't match then redirect to Login Page
+            //    System.Web.Routing.RouteValueDictionary rt = new System.Web.Routing.RouteValueDictionary();
+            //    rt.Add("id", id);
+            //    rt.Add("Reason", Reason);
+            //    return RedirectToAction("Login", rt);
+            //}
 
             //We need to Implement Cookies to store Login Session ID.
             //Member can be login for upto 1 week after that they must enter their Password to View their Dashboard
@@ -296,6 +296,8 @@ namespace MANvFAT_Football.Controllers
 
         public ActionResult ShareActivityData(string id, ShareActivity model)
         {
+            model.Activity_ShareDateFrom = DateTime.Now;
+            model.Activity_ShareDateTo = DateTime.Now;
             if (model.ActivityTypeId == 1) //Daily Activity
             {
                 PlayerDailyActivityRepository modelRepo = new PlayerDailyActivityRepository();
@@ -376,14 +378,14 @@ namespace MANvFAT_Football.Controllers
         public ActionResult _Read_FirstImages([DataSourceRequest]DataSourceRequest request, long ParamPlayerID)
         {
             PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            DataSourceResult result = modelRepo.ReadAllBeforeAfter(ParamPlayerID, false, true).ToDataSourceResult(request);
+            DataSourceResult result = modelRepo.ReadAll(ParamPlayerID, false, true).ToDataSourceResult(request);
             return Json(result);
         }
 
         public ActionResult _Read_SecondImages([DataSourceRequest]DataSourceRequest request, long ParamPlayerID, long ParamImageID)
         {
             PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            var data = modelRepo.ReadAllBeforeAfter(ParamPlayerID, false, true).Where(m => m.PlayerImageID != ParamImageID).ToList();
+            var data = modelRepo.ReadAll(ParamPlayerID, false, true).Where(m => m.PlayerImageID != ParamImageID).ToList();
             DataSourceResult result = data.ToDataSourceResult(request);
             return Json(result);
         }

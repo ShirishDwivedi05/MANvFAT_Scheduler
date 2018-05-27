@@ -515,6 +515,8 @@
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrapSwitch\css\bootstrap-switch.css" />
@@ -1758,6 +1760,10 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\Data\ActivityData\DailyActivity_UsmanIBS_25052018223527.csv" />
+    <Content Include="Content\Data\ActivityData\DailyActivity_UsmanIBS_26052018175103.csv" />
+    <Content Include="Content\Data\ActivityData\DailyActivity_UsmanIBS_26052018224328.csv" />
     <None Include="Properties\PublishProfiles\LiveSite_MANvFATFootball.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPC.pubxml" />
     <None Include="Properties\PublishProfiles\MANvFAT_Progress_TestSite.pubxml" />
@@ -2324,6 +2330,7 @@
     <Content Include="Views\Member\StatsAtaGlanceShareActivity.cshtml" />
     <Content Include="Views\Member\BMIWeightShareActivity.cshtml" />
     <Content Include="Views\Member\YourWeeklyShareActivity.cshtml" />
+    <Content Include="Views\Member\Data_WeeklyActivitiesShare.cshtml" />
     <None Include="Web.Connections.config">
       <SubType>Designer</SubType>
     </None>
@@ -2337,10 +2344,31 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Data\ActivityData\" />
+    <Folder Include="Content\Data\Documents\" />
+    <Folder Include="Content\Data\LeagueImages\" />
+    <Folder Include="Content\Data\LeagueImport\" />
     <Folder Include="Content\Data\LeagueSeasonExports\" />
-    <Folder Include="Content\Data\PlayerImages\" />
+    <Folder Include="Content\Data\NewsImages\" />
+    <Folder Include="Content\Data\PlayerImages\75321\" />
+    <Folder Include="Content\Data\PlayerProfileImages\" />
+    <Folder Include="Content\Data\PlayersExcelExport\" />
     <Folder Include="Content\Data\SystemMessageImages\" />
+    <Folder Include="Content\Data\TeamImages\" />
+    <Folder Include="Content\FrontEnd\assets\css\" />
+    <Folder Include="Content\FrontEnd\assets\fonts\" />
+    <Folder Include="Content\FrontEnd\assets\img\" />
+    <Folder Include="Content\FrontEnd\assets\js\" />
+    <Folder Include="Content\FrontEnd\img\calendaricons\" />
+    <Folder Include="Content\FrontEnd\img\favicons\" />
+    <Folder Include="Content\FrontEnd\img\member\" />
+    <Folder Include="Content\FrontEnd\img\other\" />
+    <Folder Include="Content\FrontEnd\img\slider\" />
+    <Folder Include="Content\FrontEnd\img\Smilies\" />
+    <Folder Include="Content\FrontEnd\img\sponsors2\" />
+    <Folder Include="Content\FrontEnd\img\sponsors\" />
+    <Folder Include="Content\FrontEnd\img\testimonials\" />
+    <Folder Include="Content\FrontEnd\js\min\" />
+    <Folder Include="Content\FrontEnd\video\" />
     <Folder Include="Controllers\Payments\" />
     <Folder Include="Models\Repositories\Payments\" />
     <Folder Include="Views\HeaderText\" />

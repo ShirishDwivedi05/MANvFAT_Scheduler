@@ -617,7 +617,7 @@ namespace MANvFAT_Football.Models.Repositories
             PlayerWeights objPlayerWeights = new PlayerWeights();
             objPlayerWeights.PlayerID = playerId;
             objPlayerWeights.Weight = weight;
-            objPlayerWeights.ActivityDate = DateTime.ParseExact(activityDate, "dd MMMM yyyy", null); ;
+            objPlayerWeights.ActivityDate = DateTime.ParseExact(activityDate, "MM/dd/yyyy hh:mm:ss tt", null); ;
             db.PlayerWeights.Add(objPlayerWeights);
             db.SaveChanges();
         }
@@ -629,7 +629,7 @@ namespace MANvFAT_Football.Models.Repositories
 
         public PlayerWeights GetPlayerWeightByDate(long playerId, string activityDate)
         {
-            DateTime aDate = DateTime.ParseExact(activityDate, "dd MMM yyyy", null);
+            DateTime aDate = DateTime.ParseExact(activityDate, "MM/dd/yyyy hh:mm:ss tt", null);
             DateTime acDate = Convert.ToDateTime(aDate.ToString("yyyy-MM-dd"));
             return db.PlayerWeights.AsQueryable().Where(p => p.PlayerID == playerId && p.ActivityDate == acDate).OrderByDescending(p => p.RowVersion).FirstOrDefault();
         }

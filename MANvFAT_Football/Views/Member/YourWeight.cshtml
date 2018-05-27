@@ -1,77 +1,80 @@
 ﻿@model MANvFAT_Football.Models.Repositories.PlayerDashboardExt
 <script src="~/Scripts/views_js/Dashboard/YourWeight.js"></script>
 @*<div class="food_hdr">
-    <h3>FOOD AND DRINK</h3>
-    <div class="arrow-links">
-        <i class="fas fa-angle-up pull-right" data-toggle="collapse" href="#collp1" aria-expanded="false" aria-controls="collapseExample"></i>
+        <h3>FOOD AND DRINK</h3>
+        <div class="arrow-links">
+            <i class="fas fa-angle-up pull-right" data-toggle="collapse" href="#collp1" aria-expanded="false" aria-controls="collapseExample"></i>
+        </div>
+        <!--<a href="#" rel="tooltip" data-placement="bottom" title="Hooray!"><i class="fas fa-question-circle pull-right"></i></a>-->
+        <a href="#">
+            <i class="fas fa-question-circle fa-question-circle2 pull-right" id="hide" data-toggle="collapse" data-target="#collp11"></i>
+        </a>
     </div>
-    <!--<a href="#" rel="tooltip" data-placement="bottom" title="Hooray!"><i class="fas fa-question-circle pull-right"></i></a>-->
-    <a href="#">
-        <i class="fas fa-question-circle fa-question-circle2 pull-right" id="hide" data-toggle="collapse" data-target="#collp11"></i>
-    </a>
-</div>
 
-<div class="food_sec_in collapse_in1 collapse in" id="collp1">
-    <div class="food-content">
-        <div class="food_sec_in2 collapse_in11 collapse" id="collp11">
-            <div class="fram-box clearfix">
-                <div class="frame-head clearfix">
-                    <h2>HOW TO TRACK YOUR DAILY <br>FOOD AND DRINK INTAKE</h2>
-                    <a href="#">
-                        <i class="fas fa-times fa-times2 pull-right" data-toggle="collapse" data-target="#collp11"></i>
-                    </a>
-                </div>
-                <div class="fram-content" id="scroll-1">
-                    <div class="col-lg-12 clearfix">
-                        <iframe width="100%" height="315" src="https://www.youtube.com/embed/Rsi0Uqla5cE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                        <div class="gap10"></div>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
-                        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-                        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley. </p>
+    <div class="food_sec_in collapse_in1 collapse in" id="collp1">
+        <div class="food-content">
+            <div class="food_sec_in2 collapse_in11 collapse" id="collp11">
+                <div class="fram-box clearfix">
+                    <div class="frame-head clearfix">
+                        <h2>HOW TO TRACK YOUR DAILY <br>FOOD AND DRINK INTAKE</h2>
+                        <a href="#">
+                            <i class="fas fa-times fa-times2 pull-right" data-toggle="collapse" data-target="#collp11"></i>
+                        </a>
+                    </div>
+                    <div class="fram-content" id="scroll-1">
+                        <div class="col-lg-12 clearfix">
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/Rsi0Uqla5cE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            <div class="gap10"></div>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+                            <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley. </p>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
+            <div class="box">
+                <a href="#" onclick="return PreviousDate();">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+
+                <h3>
+                    <a href="#" onclick="SetTodayDate();"><span class="spCurrentDate">Today</span></a>
+                </h3>
+                <a href="#" onclick="return NextDate();">
+                    <i class="fas fa-angle-right "></i>
+                </a>
+
+                <i class="fas fa-share-alt pull-right clsCursorPointer clsShare" data-toggle="collapse" data-target="#collpShare"></i>
+
+                <div class="input-append pull-right calandar-put" style="margin-right:20px;">
+
+                    @Html.Kendo().DatePicker().Name("dt_Activity").HtmlAttributes(new { style = "width:0px;margin-top:10px!important; padding:0px!important" }).Events(ev => ev.Change("GetDailyActivityData")).Value(DateTime.Now.Date).Format("dd MMM yyyy")
+                </div>
+                <div>
+                </div>
+                  <div class="col-lg-12 nomrgpad">
+
+                    <div class="clsWeightData food_list">
+                    </div>
+                    </div>
+
+
+            </div><!-- /panel -->
         </div>
-       
-
-        <div class="box">
-            <a href="#" onclick="return PreviousDate();">
-                <i class="fas fa-angle-left"></i>
-            </a>
-
-            <h3>
-                <a href="#" onclick="SetTodayDate();"><span class="spCurrentDate">Today</span></a>
-            </h3>
-            <a href="#" onclick="return NextDate();">
-                <i class="fas fa-angle-right "></i>
-            </a>
-
-            <i class="fas fa-share-alt pull-right clsCursorPointer clsShare" data-toggle="collapse" data-target="#collpShare"></i>
-
-            <div class="input-append pull-right calandar-put" style="margin-right:20px;">
-
-                @Html.Kendo().DatePicker().Name("dt_Activity").HtmlAttributes(new { style = "width:0px;margin-top:10px!important; padding:0px!important" }).Events(ev => ev.Change("GetDailyActivityData")).Value(DateTime.Now.Date).Format("dd MMM yyyy")
-            </div>
-            <div>
-            </div>
-              <div class="col-lg-12 nomrgpad">
-
-                <div class="clsWeightData food_list">
-                </div>
-                </div>
-
-         
-        </div><!-- /panel -->
-    </div>
-</div>*@
+    </div>*@
 <div>
     <div class="gap15"></div>
     <div>
         <div class="gap10"></div>
-        <h3 class="photo_libraryHeading" id="wtheader">YOUR MEASUREMENTS </h3>
+        <h3 class="photo_libraryHeading">
+            YOUR MEASUREMENTS  &nbsp;<i class="fas fa-angle-left" style="float:none!important"></i> <span id="wtheader"> </span>
+           
+        </h3>
 
-        <i class="fas fa-share-alt pull-right"></i>
+        <i class="fas fa-angle-right" style="float:none!important"></i>
 
         <div class="input-append pull-right calandar-put" style="margin-right:20px;">
 
