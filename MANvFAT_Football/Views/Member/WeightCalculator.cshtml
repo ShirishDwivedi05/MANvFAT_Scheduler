@@ -1,4 +1,26 @@
-﻿<div class="weight-calc flex items-center ph2 mw5-5 center">
+﻿<div class="gap15"></div>
+<div class="box">
+    <div class="gap10"></div>
+    <h3>TODAYS WEIGHT</h3>
+    <i class="fas fa-share-alt pull-right"></i>
+    <div class="box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a id="hplPrev">
+            <i class="fas fa-angle-left" style="margin-top:1px!important"></i>
+        </a>
+        <h3>
+            <a id="hplCurrentWeightDate"><span class="spCurrentWeek" id="spCurrentWeightDate">Today</span></a>
+        </h3>
+        <a id="hplNext">
+            <i class="fas fa-angle-right"  style="margin-top:1px!important"></i>
+        </a>
+        <div class="input-append pull-right calandar-put" style="margin-right:20px;">
+            @Html.Kendo().DatePicker().Name("dt_WeightCalculate").HtmlAttributes(new { style = "width:0px;margin-top:10px!important; padding:0px!important" }).Events(ev => ev.Change("GetPlayerWeightByDate")).Value(DateTime.Now.Date).Format("dd MMM yyyy")
+        </div>
+    </div>
+
+    <div class="gap10"></div>
+</div>
+<div class="weight-calc flex items-center ph2 mw5-5 center">
     <div class="flex-auto bg-white br2 pa3 pt4 ba b--black-20 flex flex-column items-center items-stretch shadow-4">
 
         <h3 class="f4 dark-gray tc mb0 mt4">How much do you weigh?</h3>
@@ -35,7 +57,7 @@
     $(function () {
         $('#hplSubmit').on('click', function () {
             var weight = $("#kg-value").text();
-            var activityDate = $("#datetimepicker3").data('date');
+            var activityDate = $("#dt_WeightCalculate").val();
             var playerId ='@Model.PlayerID';
              if (activityDate != undefined) {
                  $.ajax({
@@ -76,8 +98,8 @@
             }
         });
     }
-    $('#datetimepicker3').on('changeDate', function (e) {
-        var aDate = $("#datetimepicker3").data('date');
+    $('#dt_WeightCalculate').on('changeDate', function (e) {
+        var aDate = $("#dt_WeightCalculate").val();
          $.ajax({
             url: '/PlayerImages/GetPlayerWeightByDate',
             type: 'GET',
@@ -94,5 +116,76 @@
             }
         });
     });
+    function GetPlayerWeightByDate() {
+        var newDate1 = moment($("#dt_WeightCalculate").val(), "DD MMM YYYY");
+        var prevDate1 = moment($("#hdnActivityDate").val());
+        //Default Effect of Transition
+        //var hide_Effect = "left";
+        //var show_Effect = "right";
 
+        ////Change the transision depends on Date Selection
+        //if (newDate1 > prevDate1) {
+        //    hide_Effect = "left";
+        //    show_Effect = "right";
+        //}
+        //else {
+        //    hide_Effect = "right";
+        //    show_Effect = "left";
+        //}
+        if (newDate1.format("DD MMM YYYY") == moment().format("DD MMM YYYY")) {
+            $("#spCurrentWeightDate").text("Today");
+        }
+        else {
+            //Display Current Selected Date as Text in Middle
+            $("#spCurrentWeightDate").text(newDate1.format("DD MMM YYYY"));
+        }
+        var aDate = $("#dt_WeightCalculate").val();
+         $.ajax({
+            url: '/PlayerImages/GetPlayerWeightByDate',
+            type: 'GET',
+            data: { playerId: '@Model.PlayerID', activityDate: aDate },
+            success: function (result) {
+                //var returnVal = result.playerId;
+                if (result != null) {
+                    $("#lbs-value").text(result.lbsValue);
+                    $("#kg-value").text(result.kgValue);
+                }
+            },
+            error: function () {
+                //alert("error");
+            }
+        });
+    }
+    $("#hplCurrentWeightDate").on('click', function () {
+        //Get Today's Date
+        var TodayDate1 = moment().format("DD MMM YYYY");
+
+        //Set value to Date Picker
+        $("#dt_WeightCalculate").data("kendoDatePicker").value(TodayDate1);
+
+        //Load and Refresh the data
+        GetPlayerWeightByDate();
+    });
+    $('#hplNext').on('click', function () {
+        //  alert("dt_activity = " + $("#dt_Activity").val());
+
+        var currentDate1 = moment($("#dt_WeightCalculate").val());
+
+        var NewDate1 = currentDate1.add(1, "days").format("DD MMM YYYY");
+
+        //Set value to Date Picker
+        $("#dt_WeightCalculate").data("kendoDatePicker").value(NewDate1)
+        //Load and Refresh the data
+        GetPlayerWeightByDate();
+    });
+
+    $('#hplPrev').on('click', function () {
+        var currentDate1 = moment($("#dt_WeightCalculate").val(), "DD MMM YYYY");
+
+        var NewDate1 = currentDate1.add(-1, "days").format("DD MMM YYYY");
+        //Set value to Date Picker
+        $("#dt_WeightCalculate").data("kendoDatePicker").value(NewDate1)
+        //Load and Refresh the data
+        GetPlayerWeightByDate();
+    });
 </script>
