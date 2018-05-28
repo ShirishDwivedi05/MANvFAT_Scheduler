@@ -375,6 +375,20 @@ namespace MANvFAT_Football.Controllers
             }
         }
 
+        public ActionResult ReadFirstImages(long ParamPlayerID)
+        {
+            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
+            var result = modelRepo.ReadAll(ParamPlayerID, false, true).ToList();
+            return this.Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ReadSecondImages(long ParamPlayerID, long ParamImageID)
+        {
+            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
+            var data = modelRepo.ReadAll(ParamPlayerID, false, true).Where(m => m.PlayerImageID != ParamImageID).ToList();
+            return this.Json(data, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult _Read_FirstImages([DataSourceRequest]DataSourceRequest request, long ParamPlayerID)
         {
             PlayerImagesRepository modelRepo = new PlayerImagesRepository();

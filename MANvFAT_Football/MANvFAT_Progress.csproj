@@ -2332,6 +2332,7 @@
     <Content Include="Views\Member\YourWeeklyShareActivity.cshtml" />
     <Content Include="Views\Member\Data_WeeklyActivitiesShare.cshtml" />
     <Content Include="Views\Member\WeightMeasurementShareActivity.cshtml" />
+    <Content Include="Views\Member\BeforeAfterView.cshtml" />
     <None Include="Web.Connections.config">
       <SubType>Designer</SubType>
     </None>
