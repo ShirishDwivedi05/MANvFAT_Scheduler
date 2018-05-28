@@ -16,20 +16,6 @@ namespace MANvFAT_Football.Controllers
     {
         private Thread AchievementThread;
 
-        public ActionResult ReadFirstImages(long ParamPlayerID)
-        {
-            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            var result = modelRepo.ReadAll(ParamPlayerID, false, true).ToList();
-            return this.Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult ReadSecondImages(long ParamPlayerID, long ParamImageID)
-        {
-            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            var data = modelRepo.ReadAll(ParamPlayerID, false, true).Where(m => m.PlayerImageID != ParamImageID).ToList();
-            return this.Json(data, JsonRequestBehavior.AllowGet);
-        }
-
         // GET: PlayerImages
         public ActionResult Index()
         {
@@ -555,8 +541,8 @@ namespace MANvFAT_Football.Controllers
                 IsAnimated = false,
                 Display = true,
                 DefaultImage = false,
-                UploadDateTime = DateTime.Now,
-                IsBeforeAfter = true
+                IsBeforeAfter=true,
+                UploadDateTime = DateTime.Now
             };
 
             modelRepo.CreateOrUpdate(ref PlayerImg, ref Msg, ref status, this);
@@ -768,13 +754,6 @@ namespace MANvFAT_Football.Controllers
             {
                 return null;
             }
-        }
-
-        public JsonResult GetAllBeforeAfter(long PlayerId)
-        {
-            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            var result = modelRepo.ReadAll(PlayerId, false, true).Where(i=>i.PlayerID==PlayerId && i.IsBeforeAfter==true).ToList();
-            return this.Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

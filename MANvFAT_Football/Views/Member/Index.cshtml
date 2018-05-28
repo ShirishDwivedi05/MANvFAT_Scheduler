@@ -21,6 +21,7 @@
                     };
 
                     reader.readAsDataURL(file);
+                    $("#photoTab").trigger('click');
                 }
             }
         }
@@ -164,7 +165,7 @@
                                     <li class="active nav-pills-act2"><a href="#1a" data-toggle="tab">UPLOAD</a></li>
                                     <li><a href="#2a" data-toggle="tab" id="photoTab">PHOTOS</a></li>
                                     <li><a href="#3a" data-toggle="tab">GIFS</a></li>
-                                    <li id="liBeforeAfter"><a href="#4a" class="remove_margin" data-toggle="tab" >BEFORE + AFTER</a></li>
+                                    <li><a href="#4a" class="remove_margin" data-toggle="tab" id="liBeforeAfter">BEFORE + AFTER</a></li>
                                 </ul>
                                 <div class="tab-content px-0 clearfix">
                                     <div class="tab-pane active" id="1a">
@@ -226,8 +227,8 @@
                                                             <div class="col-xs-12 col-sm-9">
                                                                 <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel" data-interval="false">
                                                                     <!-- Wrapper for slides -->
-                                                                    <div class="carousel-inner" role="listbox" id="divPhotoSlider">
-                                                                        @*@foreach (var image in imagesModel.playerImages.OrderByDescending(i => i.PlayerImageID).ToList())
+                                                                    <div class="carousel-inner" role="listbox">
+                                                                        @foreach (var image in imagesModel.playerImages.OrderByDescending(i => i.PlayerImageID).ToList())
                                                                     {
                                                                         if (image.AbsoluteImageLink == image.AbsoluteImageLink)
                                                                         {
@@ -254,7 +255,7 @@
                                                                             </div>
                                                                         }
 
-                                                                    }*@
+                                                                    }
                                                                     </div>
                                                                     <!-- Controls -->
                                                                     <a class="left carousel-control carousel-popup-control" href="#carousel-example-generic2" role="button" data-slide="prev">
@@ -291,10 +292,10 @@
                                             <div class="gif-step-nx step-one">
                                                 <h3 class="photo_libraryHeading">your gifs</h3>
                                                 <p class="btn-add pull-right">
-                                                    <i class="add-gifs fas fa-plus-circle circle-green" id="iYourGifsLoadPlayerImages"></i>
+                                                    <i class="add-gifs fas fa-plus-circle circle-green"></i>
                                                 </p>
                                                 <div class="gap10"></div>
-                                                <div class="box" id="divYourGifs">
+                                                <div class="box">
                                                     @foreach (var image in animatedImagesModel)
                                                     {
                                                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
@@ -342,7 +343,7 @@
                                                 <h3 class="photo_libraryHeading">select your images for gif</h3>
                                                 <p class="btn-add pull-right"><i onclick="return CreateGifImg();" class="add-gifs fas fa-arrow-alt-circle-right circle-green"></i></p>
                                                 <div class="gap10"></div>
-                                                <div class="box" id="divSelectGifImages">
+                                                <div class="box">
                                                     @foreach (var image in imagesModel.playerImages)
                                                     {
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
@@ -373,56 +374,171 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="4a">
+
                                         <div class="before-after">
                                             <h3 class="photo_libraryHeading">your before + after</h3>
-                                            <p class="btn-add pull-right"><i class="add-gifs fas fa-plus-circle circle-green" onclick="return ShowAllImagesForBeforeAfter();"></i></p>
+                                            <p class="btn-add pull-right"><i class="add-gifs fas fa-plus-circle circle-green" onclick="ShowAllImagesForBeforeAfter()"></i></p>
                                             <div class="gap50"></div>
-                                            <div class="box clearfix" id="divBeforeAfterImages">
-                                                @foreach (var image in imagesModel.playerImages.Where(i => i.IsBeforeAfter == true).ToList())
-                                                {
-                                                    <div class="col-md-6 col-xs-10 photo_aft-bef clearfix">
-                                                        <div class="aft-bef-box modal-toggle">
-                                                            <div class="box-img">
-                                                                <img src="@image.AbsoluteImageLink" class="img-responsive" alt="img">
-                                                                @*<img src="images/after-1.png" class="img-responsive" alt="img">*@
-                                                            </div>
+                                            <div class="photo_libraryPic">
+                                                <div>
+                                                    @foreach (var image in imagesModel.playerImages.Where(x=>x.IsBeforeAfter==true).Take(8).ToList())
+                {
+                    <div class="col-lg-3  col-md-3 col-sm-3 col-xs-3 p1">
+                        <div class="modal-toggle">
+                            <img src="@image.AbsoluteImageLink" style="height:100px!important; padding-bottom :10px !important;" class="img-responsive" alt="img">
+                            <input type="button" value="X" class="delete" />
+                        </div>
 
-                                                        </div>
-                                                        <!-- modal-->
-                                                        <div class="modal-bf-aft">
-                                                            <div class="modal-content">
-                                                                <button type="button" class="close modale-close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                                <div class="row">
-                                                                    <div class="col-xs-12 col-sm-9">
-                                                                        <div class="aft-bef-box">
-                                                                            <div class="box-img">
-                                                                                <img src="@image.AbsoluteImageLink" class="img-responsive" alt="img">
-                                                                                @*<img src="images/after-1.png" class="img-responsive" alt="img">*@
-                                                                            </div>
+                    </div>
+                }
+                                                </div>
+                                                <!-- Modal -->
+                                                <div class="modal-bf-aft">
+                                                    <div class="modal-content">
+                                                        <button type="button" class="close modale-close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <div class="row">
+                                                            <div class="col-xs-12 col-sm-9">
+                                                                <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel" data-interval="false">
+                                                                    <!-- Wrapper for slides -->
+                                                                    <div class="carousel-inner" role="listbox">
+                                                                        @foreach (var image in imagesModel.playerImages.Where(x=>x.IsBeforeAfter==true).OrderByDescending(i => i.PlayerImageID).ToList())
+                                                                        {
+                                                                            if (image.AbsoluteImageLink == image.AbsoluteImageLink)
+                                                                            {
+                                                                              
+                                                                                    <div class="item ">
+                                                                                        <img style="height:230px;width:299px" src="@image.AbsoluteImageLink" class="img-responsive" alt="img" onclick="OepnPopup(@image.PlayerImageID)">
+                                                                                    </div>
+                                                                                
 
-                                                                        </div>
+                                                                            }
+                                                                           
+
+                                                                        }
                                                                     </div>
-                                                                    <div class="col-xs-12 col-sm-2 modal-caption">
-                                                                        <div class="clearfix">
-                                                                            <!-- text -->
-                                                                            <div class="text-caption-side text-left">
-                                                                                <h4>Monday 12 feb 2018</h4>
-                                                                                <p>Add caption.</p>
-                                                                                <i class="fas fa-share-alt icon-round-green"></i>
-                                                                            </div>
-                                                                        </div>
+                                                                    <!-- Controls -->
+                                                                    <a class="left carousel-control carousel-popup-control" href="#carousel-example-generic2" role="button" data-slide="prev">
+                                                                        <span class="fas fa-chevron-left" aria-hidden="true"></span>
+                                                                        <span class="sr-only">Previous</span>
+                                                                    </a>
+                                                                    <a class="right carousel-control carousel-popup-control" href="#carousel-example-generic2" role="button" data-slide="next">
+                                                                        <span class="fas fa-chevron-right" aria-hidden="true"></span>
+                                                                        <span class="sr-only">Next</span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xs-12 col-sm-2 modal-caption">
+                                                                <div class="clearfix">
+                                                                    <!-- text -->
+                                                                    <div class="text-caption-side text-left">
+                                                                        <h4>Monday 12 feb 2018</h4>
+                                                                        <p>Add caption.</p>
+                                                                        <i class="fas fa-share-alt icon-round-green"></i>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                }
+                                                </div>
+
                                             </div>
                                         </div>
-                                        @{ Html.RenderPartial("BeforeAfterView"); }
-                                    </div>
+                                    
+                                        
+
+                <div class="divCreateBeforeAndAfterPhoto hide">
+                    <style>
+                        .clsDivSecondImageSelection, .clsDivFinalImageSelection { display: none; }
+                    </style>
+                    <script type="text/x-kendo-tmpl" id="template">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
+                            <div class="gifs-box">
+                                @*<h3>#:ImageURL#</h3>*@
+                                <img src="#:ImageLink#" id="Img_#:PlayerImageID#" alt="#:PlayerImageID# image" style="height:100px!important; padding-bottom :10px !important;" class="img-responsive" />
+                                @*<h3>#:ProductID#</h3>*@
+                            </div>
+                        </div>
+                    </script>
+
+                    <div class="clsDivFirstImageSelection">
+                        <h2>Step 1: Choose Before Photo</h2>
+                        <div class="demo-section k-content wide" style="margin-top: 10%;">
+                            @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
+                                                        .Name("listView")
+                                                        .TagName("div")
+                                                        .ClientTemplateId("template")
+                                                        .DataSource(dataSource =>
+                                                        {
+                                                            dataSource.Read(read => read.Action("_Read_FirstImages", "Member", new { id = Model.DashboardURL, ParamPlayerID = Model.PlayerID }));
+                                                            dataSource.PageSize(15);
+                                                        })
+                                                        .Pageable()
+                                                        .Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
+                                                        .Events(events => events.Change("onChange_First")))
+                        </div>
+                    </div>
+
+                    <div class="clsDivSecondImageSelection">
+                        <h2>Step 2: Choose After Photo</h2>
+
+                        <button type="button" class="btn btn-primary btn-sm" onclick="return ShowFirstImageSelector();"><i class="glyphicon glyphicon-chevron-left"></i></button>
+
+                        <div class="demo-section k-content wide" style="margin-top: 10%;">
+                            @(Html.Kendo().ListView<MANvFAT_Football.Models.Repositories.PlayerImagesExt>()
+                                                        .Name("listView_second")
+                                                        .TagName("div")
+
+                                                        .ClientTemplateId("template")
+                                                        .DataSource(dataSource =>
+                                                        {
+                                                            dataSource.Read(read => read.Action("_Read_SecondImages", "Member", new { id = Model.DashboardURL }).Data("AdditionalData"));
+                                                            dataSource.PageSize(15);
+                                                        })
+                                                        .AutoBind(false)
+                                                        .Pageable()
+                                                        .Selectable(selectable => selectable.Mode(ListViewSelectionMode.Single))
+                                                        .Events(events => events.Change("onChange_Second"))
+                            )
+                        </div>
+                        <div>
+                            <h2>Selected Before Photo</h2><img id="imgFirstImage_1" style="width:200px;" />
+                        </div>
+                    </div>
+
+                    <div class="clsDivFinalImageSelection">
+                        <h2>Step 3: Preview and Save</h2>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="return ShowSecondImageSelector();"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 col-sm-12">
+                                <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="font-weight:bold;" class="text-center">Before Photo</div>
+                                                <img id="imgFirstImage" style="width:100%;height:150px;padding-bottom:20px;padding-right: 10px;" />
+                                            </td>
+                                            <td>
+                                                <div style="font-weight:bold;" class="text-center">After Photo</div>
+                                                <img id="imgSecondImage" style="width:100%;height:150px;padding-bottom:20px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <button type="button" class="btn btn-primary" onclick="return ProceedToCombineImages();"><span class="glyphicon glyphicon-ok"></span> Proceed to Combine Images</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
                                 </div>
                             </div>
                         </div>
@@ -1642,116 +1758,18 @@
     function ShowAllImagesForBeforeAfter() {
         $(".divCreateBeforeAndAfterPhoto").removeClass('hide');
         $(".before-after").hide();
-        LoadBeforeAfterFirstImage();
     }
     function HideAllImagesForBeforeAfter() {
         $(".divCreateBeforeAndAfterPhoto").addClass('hide');
         $(".before-after").show();
-        var str = '';
-       
-        $.ajax({
-             url: '/PlayerImages/GetAllBeforeAfter',
-            type: 'GET',
-            data: { PlayerId: '@Model.PlayerID' },
-            success: function (result) {
-                for (var i = 0; i < result.length; i++) {
-                    str = str + "<div class='col-md-6 col-xs-10 photo_aft-bef clearfix'><div class='aft-bef-box modal-toggle'><div class='box-img'><img src='" + result[i].AbsoluteImageLink + "' class='img-responsive' alt='img'></div>"
-                        + "</div><div class='modal-bf-aft'><div class='modal-content'><button type='button' class='close modale-close' data-dismiss='modal' aria-label='Close'>"
-                        + "<span aria-hidden='true'>&times;</span></button><div class='row'><div class='col-xs-12 col-sm-9'><div class='aft-bef-box'><div class='box-img'><img src=''" + result[i].AbsoluteImageLink + "' class='img-responsive' alt='img'>"
-                        + "</div></div></div><div class='col-xs-12 col-sm-2 modal-caption'><div class='clearfix'><div class='text-caption-side text-left'><h4>Monday 12 feb 2018</h4><p>Add caption.</p><i class='fas fa-share-alt icon-round-green'>"
-                        + "</i></div></div></div></div></div></div></div>";
-                }
-                $("#divBeforeAfterImages").empty();
-                $("#divBeforeAfterImages").html(str);
-            },
-            error: function () {
-                //alert("error");
-            }
-         });
     }
     $("#liBeforeAfter").on('click', function () {
+        //alert('');
         HideAllImagesForBeforeAfter();
     });
-    function LoadBeforeAfterFirstImage()
-    {
-         $.ajax({
-             url: '/PlayerImages/ReadFirstImages',
-            type: 'GET',
-            data: { ParamPlayerID: '@Model.PlayerID' },
-            success: function (result) {
-                var dataSource = new kendo.data.DataSource({
-                    data: result,
-                    pageSize: 15
-                });
+</script>
 
-                $("#listView_pager").kendoPager({
-                    dataSource: dataSource
-                });
-
-                $("#listView").kendoListView({
-                    dataSource: dataSource,
-                    change: onChange_First,
-                    template: kendo.template($("#template").html())
-                });
-            },
-            error: function () {
-                //alert("error");
-            }
-         });
-    }
-
-    function LoadBeforeAfterSecondImage()
-    {
-         $.ajax({
-             url: '/PlayerImages/ReadSecondImages',
-            type: 'GET',
-            data: { id:'@Model.DashboardURL', ParamPlayerID: '@Model.PlayerID' },
-            success: function (result) {
-                var dataSource = new kendo.data.DataSource({
-                    data: result,
-                    pageSize: 15
-                });
-
-                $("#pager").kendoPager({
-                    dataSource: dataSource
-                });
-
-                $("#listView_second").kendoListView({
-                    dataSource: dataSource,
-                    change: onChange_Second,
-                    template: kendo.template($("#template").html())
-                });
-            },
-            error: function () {
-                //alert("error");
-            }
-         });
-    }
-
-    $("#iYourGifsLoadPlayerImages").on('click', function () {
-         var str = '';
-        var strInner = '';
-        var IsDefaultImage = true;
-        $.ajax({
-            url: '/PlayerImages/GetPlayerImagesAsync',
-            type: 'GET',
-            data: { id: '@Model.PlayerID' },
-            success: function (result) {
-                //var returnVal = result.playerId;
-                if (result != null) {
-                    for (var i = 0; i < result.length; i++)
-                    {
-                        str = str + " <div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic'><div class='gifs-box'><img src='"+result[i].AbsoluteImageLink+"' onclick='PlayerImage_OnSelect("+result[i].PlayerImageID+")' style='height:100px!important; padding-bottom :10px !important;' class='img-responsive' alt='img'><i onclick='PlayerImage_OnDeSelect("+result[i].PlayerImageID+")' class='fas fa-times btn-remove-gif'></i></div> </div>";
-                    }
-                    $("#divSelectGifImages").empty();
-                    $("#divSelectGifImages").html(str);
-                }
-            },
-            error: function () {
-                //alert("error");
-            }
-         });
-    });
+<script type="text/javascript">
 
     $("#photoTab").on('click', function () {
         //alert('');
@@ -1790,9 +1808,9 @@
                         }
                     }
                     $("#divPlayerPhotos").empty();
-                    $("#divPhotoSlider").empty();
+                    $("#divPlayerPhotos .carousel-inner").empty();
                     $("#divPlayerPhotos").html(str);
-                    $("#divPhotoSlider").html(strInner);
+                    $("#divPlayerPhotos .carousel-inner").html(strInner);
                 }
             },
             error: function () {
@@ -1823,30 +1841,7 @@
         });
 
     }
-   function LoadYourGifs() {
-    var str = '';
-    $.ajax({
-        url: '/PlayerImages/GetPlayerGIFImages',
-        type: 'GET',
-        data: { id: '@Model.PlayerID', All: true },
-        success: function (result) {
-            //var returnVal = result.playerId;
-            if (result != null) {
-                for (var i = 0; i < result.length; i++) {
-                    if (i == 8) {
-                        break;
-                    }
-                    str = str + "<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic'><div class='gifs-box'><img src='" + result[i].AbsoluteImageLink + "' style='height:100px!important; padding-bottom :10px !important;' class='img-responsive' alt='img'></div></div>";
-                }
-                $("#divYourGifs").empty();
-                $("#divYourGifs").html(str);
-            }
-        },
-        error: function () {
-            //alert("error");
-        }
-    });
-}
+   
 </script>
 <script src="~/Content/ProgressDashbaord/js/bootstrap.min.js"></script>
 <script src="~/Content/ProgressDashbaord/js/plugin.js"></script>

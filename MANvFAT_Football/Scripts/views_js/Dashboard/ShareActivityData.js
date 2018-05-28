@@ -83,24 +83,6 @@ function ShareFrequency_OnChange_Weight() {
         $(".divDateRangeSelection_StatsAtaGlance").slideUp();
     }
 }
-function ShareFrequency_OnChange_BMIWeight() {
-    var ShareFrequencyID = $("#ShareFrequencyID_Daily").val();
-
-    if (ShareFrequencyID == 4) //Selection Date Range
-    {
-        $(".divDateRangeSelection_Daily").slideDown();
-    }
-    else {
-        $(".divDateRangeSelection_Daily").slideUp();
-    }
-}
-function Activity_ShareDateFrom_OnChange_BMIWeight() {
-    var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_StatsAtaGlance").data("kendoDatePicker");
-    var Activity_ShareDateTo = $("#Activity_ShareDateTo_StatsAtaGlance").data("kendoDatePicker");
-
-    Activity_ShareDateTo.min(Activity_ShareDateFrom.value());
-    Activity_ShareDateTo.value(Activity_ShareDateFrom.value());
-}
 function Activity_ShareDateFrom_OnChange_Weight() {
     var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_StatsAtaGlance").data("kendoDatePicker");
     var Activity_ShareDateTo = $("#Activity_ShareDateTo_StatsAtaGlance").data("kendoDatePicker");
@@ -131,24 +113,8 @@ function Activity_ShareDateFrom_OnChange_Weekly() {
     Activity_ShareDateTo.min(Activity_ShareDateFrom.value());
     Activity_ShareDateTo.value(Activity_ShareDateFrom.value());
 }
-function Activity_ShareDateFrom_OnChange_DataWeeklyShareActivity() {
-    var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_DataWeeklyShareActivity").data("kendoDatePicker");
-    var Activity_ShareDateTo = $("#Activity_ShareDateTo_DataWeeklyShareActivity").data("kendoDatePicker");
 
-    Activity_ShareDateTo.min(Activity_ShareDateFrom.value());
-    Activity_ShareDateTo.value(Activity_ShareDateFrom.value());
-}
-function ShareFrequency_OnChange_DataWeeklyShareActivity() {
-    var ShareFrequencyID = $("#ShareFrequencyID_DataWeeklyShareActivity").val();
 
-    if (ShareFrequencyID == 4) //Selection Date Range
-    {
-        $(".divDateRangeSelection_DataWeeklyShareActivity").slideDown();
-    }
-    else {
-        $(".divDateRangeSelection_DataWeeklyShareActivity").slideUp();
-    }
-}
 
 function chkSendToCoach_OnSelect(id) {
     if ($("#chkSendToCoach_" + id+"_").is(":checked")) {
@@ -267,7 +233,25 @@ function ShareActivityData(id) {
         else if (id == "Weekly") {
             _ActivityTypeID = 2;
         }
-        debugger;
+        else if (id == "YourWeight") {
+            _ActivityTypeID = 3;
+        }
+        else if (id == "StatsAtaGlance") {
+            _ActivityTypeID = 4;
+        }
+        else if (id == "BMIWeight") {
+            _ActivityTypeID = 5;
+        }
+        else if (id == "TotalInches") {
+            _ActivityTypeID = 6;
+        }
+        else if (id == "DataWeeklyShareActivity") {
+            _ActivityTypeID = 7;
+        }
+        else{
+            _ActivityTypeID = 0;
+        }
+        
         var ShareActivity = {
             PlayerID: $("#hdnPlayerID").val(),
             ShareFrequencyID: $("#ShareFrequencyID_" + id).val(),
@@ -276,7 +260,7 @@ function ShareActivityData(id) {
             EmailAddress: $("#txtEmail_" + id).val(),
             MsgBody: $("#txtMsgBody_" + id).val(),
             ActivityTypeId: _ActivityTypeID,
-            ShareWith: $("#hdnFoodDrinkShare").val()//$("#Team_" + id+"_").val()
+            ShareWith: $("#hdnFoodDrinkShare_"+id).val()//$("#Team_" + id+"_").val()
         };
         // alert("From " + ShareActivity.Activity_ShareDateFrom + " To " + ShareActivity.Activity_ShareDateTo);
         $.ajax({
@@ -309,7 +293,7 @@ function ValidateActivityShareForm(id) {
         status = false;
     }
 
-    if ($("#txtEmail_" + id).val() == "") {
+    if ($("#txtEmail_" + id).val() == "" && $("#hdnFoodDrinkShare_" + id).val()=="other") {
         ErrorMsg = ErrorMsg + "<li>Please enter Email Address to share activity data</li>";
         status = false;
     }
@@ -371,6 +355,7 @@ function SetShareTarget(e,indicator)
         $("#team_" + e).addClass("cls_team")
         $("#other_"+e).removeClass("cls_other")
         $("#other_"+e).addClass("cls_other_selected")
-        $("#hdnFoodDrinkShare_"+e).val("Other");
+        $("#hdnFoodDrinkShare_"+e).val("other");
     }
+    return false;
 }

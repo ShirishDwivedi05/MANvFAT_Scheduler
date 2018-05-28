@@ -39,7 +39,7 @@ function GetYourWeightData() {
     //using Date.js to Convert date from a string
    // alert("Before " + $("#dt_Activity").val());
 
-    var newDate = moment($("#dt_Activity").val(),"DD MMM YYYY");
+    var newDate = moment($("#dt_measurement").val(),"DD MMM YYYY");
     var prevDate = moment($("#hdnActivityDate").val());
 
    // alert("act = " + (newDate > prevDate) + " prevDate = " + prevDate.format("DD/MM/YYYY") + " newDate = " + newDate.format("DD/MM/YYYY") + " hdn Date = " + $("#hdnActivityDate").val());
@@ -61,18 +61,20 @@ function GetYourWeightData() {
    
 
     //Load Content from Partial View
-    $(".clsWeightData").hide("slide", { direction: hide_Effect }, 500).load("/ProgressDashboard/_GetPlayerYourWeight/" + $("#hdnDashboardURL").val(),
+    $(".clsWeightData").hide("slide", { direction: hide_Effect }, 500).load("/Member/_GetPlayerYourWeight/" + $("#hdnDashboardURL").val(),
         { PlayerID: $("#hdnPlayerID").val(), ActivityDate: $("#dt_measurement").val() }).show("slide", { direction: show_Effect }, 500);
 
     //Set the Current Selected date in Hidden Control so we can compare to decide the transition for div
-    $("#hdnActivityDate").val(newDate.format("DD MMM YYYY"));
+    $("#hdnWeightDate").val(newDate.format("DD MMM YYYY"));
 
     if (newDate.format("DD MMM YYYY") == moment().format("DD MMM YYYY")) {
-        $(".spCurrentDate").text("Today");
+  $("#wtheader").text('Today');
+       // $(".spCurrentDate").text("Today");
     }
     else {
         //Display Current Selected Date as Text in Middle
-        $(".spCurrentDate").text(newDate.format("DD MMM YYYY"));
+        $("#wtheader").text(newDate.format("DD MMM YYYY"));
+        //$(".spCurrentDate").text(newDate.format("DD MMM YYYY"));
     }
     //If Today's date is selected then hide the Today Date Button
     Hide_Show_TodayDateButton();
@@ -81,7 +83,7 @@ function GetYourWeightData() {
 }
 
 function Hide_Show_TodayDateButton() {
-    var newDate = moment($("#dt_Activity").val()).format("DD-MM-YYYY");
+    var newDate = moment($("#hdnWeightDate").val()).format("DD-MM-YYYY");
     var TodayDate = moment().format("DD-MM-YYYY");
 
 
@@ -111,7 +113,7 @@ function SaveData(id) {
         }
         debugger;
         $.ajax({
-            url: "/ProgressDashboard/SaveWeightMeasurementData/" + $("#hdnDashboardURL").val(),
+            url: "/Member/SaveWeightMeasurementData/" + $("#hdnDashboardURL").val(),
             data: PlayerDailyActivityExt,
             dataType: "json",
             type: "POST",
@@ -136,31 +138,31 @@ function SetTodayDate() {
     var TodayDate = moment().format("DD MMM YYYY");
 
     //Set value to Date Picker
-    $("#dt_Activity").data("kendoDatePicker").value(TodayDate);
+    $("#dt_measurement").data("kendoDatePicker").value(TodayDate);
    
     //Load and Refresh the data
     GetYourWeightData();
 }
 
-function NextDate() {
+function NextWeightDate() {
   //  alert("dt_activity = " + $("#dt_Activity").val());
 
-    var currentDate = moment($("#dt_Activity").val());
+    var currentDate = moment($("#dt_measurement").val());
 
     var NewDate = currentDate.add(1, "days").format("DD MMM YYYY");
 
     //Set value to Date Picker
-    $("#dt_Activity").data("kendoDatePicker").value(NewDate)
+    $("#dt_measurement").data("kendoDatePicker").value(NewDate)
     //Load and Refresh the data
     GetYourWeightData();
 }
 
-function PreviousDate() {
-    var currentDate = moment($("#dt_Activity").val(), "DD MMM YYYY");
+function PreviousWeightDate() {
+    var currentDate = moment($("#dt_measurement").val(), "DD MMM YYYY");
 
     var NewDate = currentDate.add(-1, "days").format("DD MMM YYYY");
     //Set value to Date Picker
-    $("#dt_Activity").data("kendoDatePicker").value(NewDate)
+    $("#dt_measurement").data("kendoDatePicker").value(NewDate)
     //Load and Refresh the data
     GetYourWeightData();
 }

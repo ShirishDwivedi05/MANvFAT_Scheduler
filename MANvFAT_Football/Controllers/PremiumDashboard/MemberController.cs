@@ -308,7 +308,36 @@ namespace MANvFAT_Football.Controllers
                 PlayerWeeklyActivityRepository modelRepo = new PlayerWeeklyActivityRepository();
                 modelRepo.ShareActivity(model, this);
             }
+            else if (model.ActivityTypeId == 3) //Your weight
+            {
+                PlayerYourWeightRepository modelRepo = new PlayerYourWeightRepository();
+                modelRepo.ShareActivity(model, this);
+            }
+            else if (model.ActivityTypeId == 4) //Data overview
+            {
+                PlayersStatsAtaGlanceShareRepository modelRepo = new PlayersStatsAtaGlanceShareRepository();
+                modelRepo.ShareActivity(model, this);
+                
+            }
+            else if (model.ActivityTypeId == 5) //Data BMIWeight
+            {
+                PlayerBMIWeightRepository modelRepo = new PlayerBMIWeightRepository();
+                modelRepo.ShareActivity(model, this);
 
+            }
+            else if (model.ActivityTypeId == 6) //Data total inches
+            {
+                PlayerDataTotalInchesRepository modelRepo = new PlayerDataTotalInchesRepository();
+                modelRepo.ShareActivity(model, this);
+
+            }
+            else if (model.ActivityTypeId == 7) //Data weekly share
+            {
+                PlayerDataWeeklyShareActivity modelRepo = new PlayerDataWeeklyShareActivity();
+                modelRepo.ShareActivity(model, this);
+
+            }
+          
             return new JsonResult { Data = true };
         }
 
@@ -373,20 +402,6 @@ namespace MANvFAT_Football.Controllers
                 rt.Add("Reason", Reason);
                 return RedirectToAction("Login", rt);
             }
-        }
-
-        public ActionResult ReadFirstImages(long ParamPlayerID)
-        {
-            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            var result = modelRepo.ReadAll(ParamPlayerID, false, true).ToList();
-            return this.Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult ReadSecondImages(long ParamPlayerID, long ParamImageID)
-        {
-            PlayerImagesRepository modelRepo = new PlayerImagesRepository();
-            var data = modelRepo.ReadAll(ParamPlayerID, false, true).Where(m => m.PlayerImageID != ParamImageID).ToList();
-            return this.Json(data, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult _Read_FirstImages([DataSourceRequest]DataSourceRequest request, long ParamPlayerID)

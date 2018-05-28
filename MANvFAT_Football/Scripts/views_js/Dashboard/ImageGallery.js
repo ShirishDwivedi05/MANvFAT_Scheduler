@@ -37,17 +37,13 @@ var FirstImageSrc = "";
 var SecondImageId = 0;
 var SecondImageSrc = 0;
 var count = 0;
-function onChangeFirst(arg) {
-    debugger
+function onChange_First(arg) {
     count = count + 1;
     var ds = $("#listView").data("kendoListView");
-    //var index = ds.select().index(),
-    //    dataItem = ds.dataSource.view()[index];
-    var data = ds.dataSource.view(),
-        selected = $.map(this.select(), function (item) {
-            return data[$(item).index()].PlayerImageID;
-        });
-    console.log(selected);
+    var index = ds.select().index(),
+        dataItem = ds.dataSource.view()[index];
+
+
     //  alert("id = " + dataItem.PlayerImageID);
     FirstImageId = dataItem.PlayerImageID;
     FirstImageSrc = dataItem.ImageLink;
@@ -62,27 +58,7 @@ function onChangeFirst(arg) {
     //$("#listView_second").data("KendoListView").dataSource.read();
     // Console.log("Selected: " + selected.length + " item(s), [" + selected.join(", ") + "]");
 }
-function onChange_First(arg) {
-    count = count + 1;
-    var ds = $("#listView").data("kendoListView");
-    var data = ds.dataSource.view(),
-        selected = $.map(this.select(), function (item) {
-            return data[$(item).index()].PlayerImageID;
-        });
-    //  alert("id = " + dataItem.PlayerImageID);
-    FirstImageId = data[0].PlayerImageID;
-    FirstImageSrc = data[0].ImageLink;
-    $(".clsDivFirstImageSelection").slideUp();
-    $(".clsDivSecondImageSelection").slideDown();
 
-    $("#imgFirstImage_1").attr("src", data[0].ImageLink);
-
-    var listView = $("#listView_second").data("kendoListView");
-    listView.dataSource.read();
-
-    //$("#listView_second").data("KendoListView").dataSource.read();
-    // Console.log("Selected: " + selected.length + " item(s), [" + selected.join(", ") + "]");
-}
 function onChange_Second(arg) {
     count = count + 1;
     var ds = $("#listView_second").data("kendoListView");

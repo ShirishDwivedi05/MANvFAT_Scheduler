@@ -3184,7 +3184,7 @@ span.imgCheckbox0.imgChked img {
 }
 
 .dial {
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='75' height='100' stroke='#EEEEEE' stroke-width='1'><path d='M 0,25 V 100' stroke='#CCCCCC' stroke-width='2' /><path d='M 15,50 V 100' /><path d='M 30,50 V 100' /> <path d='M 45,50 V 100' /><path d='M 60,50 V 100' /></svg>");
+    background: url("/images/weight-bar.png");
     background-position: 50% 50%;
     background-position-x: var(--x);
     background-repeat: repeat-x;
@@ -3615,4 +3615,263 @@ form #smileys input[type="radio"] {
         filter: grayscale(0);
     }
 
-    /*Usman Styling*/
+/*Usman Styling*/
+.clsHeaderStats {
+    padding-top: 44px;
+}
+
+
+/*********************        Login Page              ********************/
+.login_logo img {
+    margin-bottom: 30px;
+}
+
+.login_logo {
+    width: 100%;
+    text-align: center;
+    font-family: 'bebas_neueregular';
+    font-size: 48px;
+    color: #000;
+    font-weight: normal;
+    line-height: 30px;
+    text-transform: uppercase;
+}
+
+    .login_logo span {
+        color: #ff0000;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 18px;
+        line-height: 22px;
+        font-weight: bold;
+        text-transform: none;
+    }
+
+.formlogin {
+    text-align: left;
+    margin: 0 auto;
+    float: none !important;
+    max-width: 460px;
+}
+
+.password_input {
+    font-size: 19px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 28px;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+    .password_input input {
+        border-bottom: 1px #333 solid;
+        width: 100%;
+        height: 60px;
+        margin-top: 10px;
+        letter-spacing: 2px;
+        font-weight: normal;
+        font-size: 15px;
+    }
+
+.loginbtn {
+    text-align: center;
+    line-height: 60px;
+    max-width: 301px;
+    margin: 20px auto;
+}
+
+    .loginbtn a {
+        color: #5497ff;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+.btn_green {
+    background: #1fc563;
+    font-size: 22px;
+    color: #fff;
+    padding: 0px 90px;
+    height: 37px;
+    border: 0;
+    line-height: 39px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+
+
+
+/*******************************           Settings page              ********************************/
+.header-carousel-settings {
+    background: #c1bfc2;
+}
+
+.f_right {
+    float: right !important;
+    text-align: right;
+}
+
+    .f_right img {
+        text-align: right !important;
+        display: inline-block;
+    }
+
+.settings_title h1 {
+    color: #fff;
+    font-weight: normal;
+    letter-spacing: 1px;
+    font-size: 42px;
+    padding: 0;
+    margin-top: 30px;
+}
+
+.your_account {
+    float: none !important;
+    margin: 0 auto !important;
+}
+
+.setting_header {
+    float: none !important;
+    margin: 0 auto;
+}
+
+.user_image {
+    text-align: center;
+    margin-top: 10px;
+    float: left;
+    width: 100%;
+}
+
+.user_detail {
+    font-size: 19px;
+    padding: 0 0 !important;
+    margin-top: 20px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+}
+
+    .user_detail a {
+        color: #4a90e2;
+    }
+
+.grayc input {
+    background: #ccc;
+    color: #000;
+    border-radius: 0;
+    border: 0;
+    width: 100%;
+    padding: 5px 10px;
+}
+
+.grayc textarea {
+    background: #ccc;
+    color: #000;
+    border-radius: 0;
+    border: 0;
+    height: 100px;
+    width: 100%;
+    padding: 5px 10px;
+}
+
+.grayc {
+    color: #7d7e80;
+}
+
+    .grayc label {
+        padding-top: 6px;
+    }
+
+        .grayc label span {
+            font-weight: normal;
+        }
+
+.blackc {
+    color: #000000;
+    padding-top: 6px;
+    padding-left: 0 !important;
+    padding-right: 0
+}
+
+.linkbluetext {
+    padding-top: 6px;
+    color: #4a90e2;
+}
+
+.account_container h3 {
+    width: auto;
+    float: left;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    line-height: 19px;
+}
+
+.account_container h3 {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: bebas_neuebold;
+}
+
+.account_container .fa-angle-up {
+    color: #fff;
+    margin: 0px 0px 0px 15px;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.billing_container h3 {
+    width: auto;
+    float: left;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    line-height: 19px;
+}
+
+.billing_container h3 {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: bebas_neuebold;
+}
+
+.billing_container .fa-angle-up {
+    color: #fff;
+    margin: 0px 0px 0px 15px;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.account_hdr {
+    background: #313944;
+    padding: 5px 12px 4px;
+}
+
+.account_hdr {
+    width: 100%;
+    float: left;
+}
+
+.status_info {
+    padding-top: 5px;
+    text-align: right;
+}
+
+.billing_container {
+    margin-top: 65px;
+    float: left;
+    width: 100%;
+}
+
+.teamimg {
+    padding-right: 0 !important;
+}
+
+    .teamimg img {
+        padding-right: 17px;
+    }
+
+        .teamimg img:last-child {
+            padding-right: 0px;
+        }

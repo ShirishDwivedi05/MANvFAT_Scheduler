@@ -161,7 +161,7 @@ function SetTodayDate() {
 
 function NextDate() {
   //  alert("dt_activity = " + $("#dt_Activity").val());
-
+   
     var currentDate = moment($("#dt_Activity").val());
 
     var NewDate = currentDate.add(1, "days").format("DD MMM YYYY");
