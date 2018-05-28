@@ -226,7 +226,7 @@
                                                             <div class="col-xs-12 col-sm-9">
                                                                 <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel" data-interval="false">
                                                                     <!-- Wrapper for slides -->
-                                                                    <div class="carousel-inner" role="listbox">
+                                                                    <div class="carousel-inner" role="listbox" id="divPhotoSlider">
                                                                         @*@foreach (var image in imagesModel.playerImages.OrderByDescending(i => i.PlayerImageID).ToList())
                                                                     {
                                                                         if (image.AbsoluteImageLink == image.AbsoluteImageLink)
@@ -291,10 +291,10 @@
                                             <div class="gif-step-nx step-one">
                                                 <h3 class="photo_libraryHeading">your gifs</h3>
                                                 <p class="btn-add pull-right">
-                                                    <i class="add-gifs fas fa-plus-circle circle-green"></i>
+                                                    <i class="add-gifs fas fa-plus-circle circle-green" id="iYourGifsLoadPlayerImages"></i>
                                                 </p>
                                                 <div class="gap10"></div>
-                                                <div class="box">
+                                                <div class="box" id="divYourGifs">
                                                     @foreach (var image in animatedImagesModel)
                                                     {
                                                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
@@ -342,7 +342,7 @@
                                                 <h3 class="photo_libraryHeading">select your images for gif</h3>
                                                 <p class="btn-add pull-right"><i onclick="return CreateGifImg();" class="add-gifs fas fa-arrow-alt-circle-right circle-green"></i></p>
                                                 <div class="gap10"></div>
-                                                <div class="box">
+                                                <div class="box" id="divSelectGifImages">
                                                     @foreach (var image in imagesModel.playerImages)
                                                     {
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic">
@@ -373,7 +373,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="4a">
-
+                                     
                                         <div class="before-after">
                                             <h3 class="photo_libraryHeading">your before + after</h3>
                                             <p class="btn-add pull-right"><i class="add-gifs fas fa-plus-circle circle-green" onclick="ShowAllImagesForBeforeAfter()"></i></p>
@@ -515,7 +515,6 @@
 
                 </div>
             </div>
-
                                 </div>
                             </div>
                         </div>
@@ -1747,6 +1746,30 @@
 </script>
 
 <script type="text/javascript">
+    $("#iYourGifsLoadPlayerImages").on('click', function () {
+         var str = '';
+        var strInner = '';
+        var IsDefaultImage = true;
+        $.ajax({
+            url: '/PlayerImages/GetPlayerImagesAsync',
+            type: 'GET',
+            data: { id: '@Model.PlayerID' },
+            success: function (result) {
+                //var returnVal = result.playerId;
+                if (result != null) {
+                    for (var i = 0; i < result.length; i++)
+                    {
+                        str = str + " <div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic'><div class='gifs-box'><img src='"+result[i].AbsoluteImageLink+"' onclick='PlayerImage_OnSelect("+result[i].PlayerImageID+")' style='height:100px!important; padding-bottom :10px !important;' class='img-responsive' alt='img'><i onclick='PlayerImage_OnDeSelect("+result[i].PlayerImageID+")' class='fas fa-times btn-remove-gif'></i></div> </div>";
+                    }
+                    $("#divSelectGifImages").empty();
+                    $("#divSelectGifImages").html(str);
+                }
+            },
+            error: function () {
+                //alert("error");
+            }
+         });
+    });
 
     $("#photoTab").on('click', function () {
         //alert('');
@@ -1785,9 +1808,9 @@
                         }
                     }
                     $("#divPlayerPhotos").empty();
-                    $("#divPlayerPhotos .carousel-inner").empty();
+                    $("#divPhotoSlider").empty();
                     $("#divPlayerPhotos").html(str);
-                    $("#divPlayerPhotos .carousel-inner").html(strInner);
+                    $("#divPhotoSlider").html(strInner);
                 }
             },
             error: function () {
@@ -1818,7 +1841,30 @@
         });
 
     }
-   
+   function LoadYourGifs() {
+    var str = '';
+    $.ajax({
+        url: '/PlayerImages/GetPlayerGIFImages',
+        type: 'GET',
+        data: { id: '@Model.PlayerID', All: true },
+        success: function (result) {
+            //var returnVal = result.playerId;
+            if (result != null) {
+                for (var i = 0; i < result.length; i++) {
+                    if (i == 8) {
+                        break;
+                    }
+                    str = str + "<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 photo_libraryPic'><div class='gifs-box'><img src='" + result[i].AbsoluteImageLink + "' style='height:100px!important; padding-bottom :10px !important;' class='img-responsive' alt='img'></div></div>";
+                }
+                $("#divYourGifs").empty();
+                $("#divYourGifs").html(str);
+            }
+        },
+        error: function () {
+            //alert("error");
+        }
+    });
+}
 </script>
 <script src="~/Content/ProgressDashbaord/js/bootstrap.min.js"></script>
 <script src="~/Content/ProgressDashbaord/js/plugin.js"></script>

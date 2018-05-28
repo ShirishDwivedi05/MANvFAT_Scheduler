@@ -136,45 +136,43 @@ namespace MANvFAT_Football.Controllers
             else
             {
                 {
+                    SelectListItem item = new SelectListItem()
                     {
-                        SelectListItem item = new SelectListItem()
-                        {
-                            Text = "Today",
-                            Value = "1"
-                        };
+                        Text = "Today",
+                        Value = "1"
+                    };
 
-                        ListOfObejcts.Add(item);
-                    }
+                    ListOfObejcts.Add(item);
+                }
 
+                {
+                    SelectListItem item = new SelectListItem()
                     {
-                        SelectListItem item = new SelectListItem()
-                        {
-                            Text = "Last 7 Days",
-                            Value = "2"
-                        };
+                        Text = "Last 7 Days",
+                        Value = "2"
+                    };
 
-                        ListOfObejcts.Add(item);
-                    }
+                    ListOfObejcts.Add(item);
+                }
 
+                {
+                    SelectListItem item = new SelectListItem()
                     {
-                        SelectListItem item = new SelectListItem()
-                        {
-                            Text = "Last Month",
-                            Value = "3"
-                        };
+                        Text = "Last Month",
+                        Value = "3"
+                    };
 
-                        ListOfObejcts.Add(item);
-                    }
+                    ListOfObejcts.Add(item);
+                }
 
+                {
+                    SelectListItem item = new SelectListItem()
                     {
-                        SelectListItem item = new SelectListItem()
-                        {
-                            Text = "Date Range",
-                            Value = "4"
-                        };
+                        Text = "Date Range",
+                        Value = "4"
+                    };
 
-                        ListOfObejcts.Add(item);
-                    }
+                    ListOfObejcts.Add(item);
                 }
             }
 

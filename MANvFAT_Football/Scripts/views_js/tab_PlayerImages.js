@@ -1,4 +1,5 @@
-﻿function BGImages_OnSuccess(e) {
+﻿
+function BGImages_OnSuccess(e) {
     Refresh_BgImagesList();
 }
 
@@ -229,6 +230,7 @@ function CreateGifImg() {
                     $(".all-step .step-four").removeClass("error");
                     $(".all-step .step-four").removeClass("active");
                     $(".all-step .gif-step-nx:nth-of-type(1)").addClass("active");
+                    LoadYourGifs();
                 }
                 else {
                     $(".all-step .step-four").removeClass("error").removeClass("active");

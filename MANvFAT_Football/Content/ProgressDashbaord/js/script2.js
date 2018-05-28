@@ -53,7 +53,12 @@ $(document).ready(function () {
 
     /*** Modal ***/
     // Quick & dirty toggle to demonstrate modal toggle behavior
-    
+    $('.modal-toggle').on('click', function (e) {
+        e.preventDefault();
+        $(this).parents('.photo_aft-bef,.photo_libraryPic').find('.modal-bf-aft').addClass('is-visible', function () {
+            $(this).parents('.before-after,.libry-photo').addClass('modal-opned');
+        });
+    });
     $('.modale-close').on('click', function (e) {
         $(this).parents('.photo_aft-bef,.photo_libraryPic').find('.modal-bf-aft').removeClass('is-visible');
     });

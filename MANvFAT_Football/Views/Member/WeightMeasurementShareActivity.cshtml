@@ -1,0 +1,63 @@
+﻿
+@model string
+<script src="/Scripts/views_js/Dashboard/ShareActivityData.js"></script>
+<style>
+    .divDateRangeSelection_@Model, .clsShareActivityMsg_@Model {
+        display: none;
+    } .food_sec_in2
+    {height:600px!important;
+    }
+</style>
+<div class="fram-box clearfix clsShareData_@Model">
+    <div class="share-head frame-head clearfix">
+        <h2>How do you want to share?</h2>
+
+        <i class="fas fa-times fa-times2 pull-right" data-toggle="collapse" data-target="#weightcalculator"></i>
+
+    </div>
+    <div class="fram-content" id="weightscroll-1">
+        <div class="col-lg-12 clearfix">
+            <div class="clearfix">
+                @(Html.Kendo().DropDownList()
+            .Name("ShareFrequencyID_" + Model)
+            .HtmlAttributes(new { data_value_primitive = "true" })
+            .DataValueField("Value")
+            .DataTextField("Text")
+            .Events(ev => ev.Close("ShareFrequency_OnChange_" + Model))
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                {
+                    read.Action("GetActivityShareFrequency", "DropDownLists").Data("additionalData('" + Model + "')");
+                });
+            })
+                )
+            </div>
+            <div class="form-group divDateRangeSelection_@Model">
+                <div>
+                    @Html.Kendo().DatePicker().Name("Activity_ShareDateFrom_" + Model).Events(ev => ev.Change("Activity_ShareDateFrom_OnChange_" + Model)).Format("dd MMM yyyy")
+                    @Html.Kendo().DatePicker().Name("Activity_ShareDateTo_" + Model).Format("dd MMM yyyy")
+                </div>
+            </div>
+            <h4>who do you want to share it with?</h4>
+            <input id="hdnFoodDrinkShare_@Model" class="hdnFoodDrinkShare" value="" type="hidden" />
+            <label class="cls_team" onclick="SetShareTarget('@Model',1)" id="team_@Model"><input name="Team" type="checkbox" value="" id="chkTeam" />Team</label>
+            <label class="cls_other" onclick="SetShareTarget('@Model',2)" id="other_@Model"><input name="Other" type="checkbox" value="" if="chkOther" />Other</label>
+            <div class="form">
+                @Html.Kendo().TextBox().Name("txtEmail_" + Model).HtmlAttributes(new { @style = "width:90%", @placeholder = "enter email address" })
+            </div>
+            <p class="text-ex">
+                Use a comma, to seperate multiple emails eg.<br>
+                bob@manvfat.com,dave@manvfat.com
+            </p>
+            <br>
+            <h4>include apersonal message?</h4>
+            <textarea id="txtMsgBody_@Model" placeholder="check out my healthy eating, no more pizza!"></textarea>
+            <button class="send-button" onclick="ShareActivityData('@Model');">send <i class="fas fa-arrow-circle-right"></i> </button>
+        </div>
+        <div class="clear"></div>
+        <h4 class="clsShareActivityMsg_Weight" style="display: block; border: 1px solid red; height: auto; float: left; width: auto; background: #666;"></h4>
+    </div>
+</div>
+
+

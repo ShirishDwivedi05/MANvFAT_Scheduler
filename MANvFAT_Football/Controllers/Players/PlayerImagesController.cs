@@ -541,7 +541,8 @@ namespace MANvFAT_Football.Controllers
                 IsAnimated = false,
                 Display = true,
                 DefaultImage = false,
-                UploadDateTime = DateTime.Now
+                UploadDateTime = DateTime.Now,
+                IsBeforeAfter = true
             };
 
             modelRepo.CreateOrUpdate(ref PlayerImg, ref Msg, ref status, this);

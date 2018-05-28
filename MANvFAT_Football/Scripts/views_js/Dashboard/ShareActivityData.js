@@ -131,8 +131,24 @@ function Activity_ShareDateFrom_OnChange_Weekly() {
     Activity_ShareDateTo.min(Activity_ShareDateFrom.value());
     Activity_ShareDateTo.value(Activity_ShareDateFrom.value());
 }
+function Activity_ShareDateFrom_OnChange_DataWeeklyShareActivity() {
+    var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_DataWeeklyShareActivity").data("kendoDatePicker");
+    var Activity_ShareDateTo = $("#Activity_ShareDateTo_DataWeeklyShareActivity").data("kendoDatePicker");
 
+    Activity_ShareDateTo.min(Activity_ShareDateFrom.value());
+    Activity_ShareDateTo.value(Activity_ShareDateFrom.value());
+}
+function ShareFrequency_OnChange_DataWeeklyShareActivity() {
+    var ShareFrequencyID = $("#ShareFrequencyID_DataWeeklyShareActivity").val();
 
+    if (ShareFrequencyID == 4) //Selection Date Range
+    {
+        $(".divDateRangeSelection_DataWeeklyShareActivity").slideDown();
+    }
+    else {
+        $(".divDateRangeSelection_DataWeeklyShareActivity").slideUp();
+    }
+}
 
 function chkSendToCoach_OnSelect(id) {
     if ($("#chkSendToCoach_" + id+"_").is(":checked")) {

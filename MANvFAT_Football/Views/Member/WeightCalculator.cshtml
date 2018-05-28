@@ -1,8 +1,11 @@
 ﻿<div class="gap15"></div>
+<div class="share_food food_sec_in2 collapse_in11 collapse" id="weightcalculator">
+    @{ Html.RenderPartial("WeightMeasurementShareActivity", "Weekly"); }
+</div>
 <div class="box">
     <div class="gap10"></div>
     <h3>TODAYS WEIGHT</h3>
-    <i class="fas fa-share-alt pull-right"></i>
+    <i class="fas fa-share-alt pull-right clsCursorPointer clsShare" data-toggle="collapse" data-target="#weightcalculator"></i>
     <div class="box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a id="hplPrev">
             <i class="fas fa-angle-left" style="margin-top:1px!important"></i>
