@@ -171,16 +171,17 @@ function ProceedToCombineImages() {
         success: function (data) {
             if (data == true) {
                 //location.href = '/Member/ImageGallery/' + $("#hdnDashboardURL").val();
-                $('a[href="#2a"]').tab('show');
-                $("#2a").parent("li").addClass("active");
-                $("#2a").click();
+                $('a[href="#4a"]').tab('show');
+                $("#4a").parent("li").addClass("active");
+                $("#4a").click();
                 $("#3a").parent("li").removeClass("active");
-                $("#4a").parent("li").removeClass("active");
-                ShowFirstImageSelector();
+                $("#2a").parent("li").removeClass("active");
+                //ShowFirstImageSelector();
+                HideAllImagesForBeforeAfter();
             }
         }
     });
-    LoadPlayerImages();
+    
 }
 
 // Default first step on first and after tab click

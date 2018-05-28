@@ -83,6 +83,24 @@ function ShareFrequency_OnChange_Weight() {
         $(".divDateRangeSelection_StatsAtaGlance").slideUp();
     }
 }
+function ShareFrequency_OnChange_BMIWeight() {
+    var ShareFrequencyID = $("#ShareFrequencyID_Daily").val();
+
+    if (ShareFrequencyID == 4) //Selection Date Range
+    {
+        $(".divDateRangeSelection_Daily").slideDown();
+    }
+    else {
+        $(".divDateRangeSelection_Daily").slideUp();
+    }
+}
+function Activity_ShareDateFrom_OnChange_BMIWeight() {
+    var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_StatsAtaGlance").data("kendoDatePicker");
+    var Activity_ShareDateTo = $("#Activity_ShareDateTo_StatsAtaGlance").data("kendoDatePicker");
+
+    Activity_ShareDateTo.min(Activity_ShareDateFrom.value());
+    Activity_ShareDateTo.value(Activity_ShareDateFrom.value());
+}
 function Activity_ShareDateFrom_OnChange_Weight() {
     var Activity_ShareDateFrom = $("#Activity_ShareDateFrom_StatsAtaGlance").data("kendoDatePicker");
     var Activity_ShareDateTo = $("#Activity_ShareDateTo_StatsAtaGlance").data("kendoDatePicker");
@@ -339,5 +357,4 @@ function SetShareTarget(e,indicator)
         $("#other_"+e).addClass("cls_other_selected")
         $("#hdnFoodDrinkShare_"+e).val("Other");
     }
-    return false;
 }
