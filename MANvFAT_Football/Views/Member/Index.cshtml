@@ -1801,6 +1801,11 @@
          });
     }
     function removeImage(id) {
+        $('#' + id).modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#' + id).parents('.photo_aft-bef,.photo_libraryPic').find('.modal-bf-aft').removeClass('is-visible');
         $.ajax({
             url: '/PlayerImages/DeleteImage',
             type: 'GET',
@@ -1808,6 +1813,7 @@
             success: function (result) {
                 //var returnVal = result.playerId;
                 if (result != null) {
+                    $('#' + id).parents('.photo_aft-bef,.photo_libraryPic').find('.modal-bf-aft').removeClass('is-visible');
                     LoadPlayerImages();
                 }
             },

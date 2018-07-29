@@ -430,7 +430,12 @@
     <Compile Include="Models\Repositories\PremiumDashboard\AchievementsRepository.cs" />
     <Compile Include="Models\Repositories\PremiumDashboard\DashboardNotificationsRepository.cs" />
     <Compile Include="Models\Repositories\PremiumDashboard\MemberToolsBenefitsRepository.cs" />
+    <Compile Include="Models\Repositories\PremiumDashboard\PlayerBMIWeightRepository.cs" />
     <Compile Include="Models\Repositories\PremiumDashboard\PlayerDashboardNotificationsRepository.cs" />
+    <Compile Include="Models\Repositories\PremiumDashboard\PlayerDataTotalInchesRepository.cs" />
+    <Compile Include="Models\Repositories\PremiumDashboard\PlayerDataWeeklyShareActivity.cs" />
+    <Compile Include="Models\Repositories\PremiumDashboard\PlayersStatsAtaGlanceShareRepository.cs" />
+    <Compile Include="Models\Repositories\PremiumDashboard\PlayerYourWeightRepository.cs" />
     <Compile Include="Models\Repositories\PremiumDashboard\ProgressChartsRepository.cs" />
     <Compile Include="Models\Repositories\RegistrationRepository.cs" />
     <Compile Include="Models\Repositories\Players\PlayerImagesRespository.cs" />
